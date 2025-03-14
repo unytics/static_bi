@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script type="module" src="static_bi.js"></script>
-  </head>
-  <body>
+<script type="module" src="static_bi.js"></script>
 
-    <data-manager>
-      <data-table name="athletes" file="https://idl.uw.edu/mosaic/data/athletes.parquet"></data-table>
-    </data-manager>
+<data-manager>
 
-    <line-chart table="athletes" dimension="nationality" measure="count(*)" limit="500" order_by="count(*) desc"></line-chart>
+  <data-table
+    name="athletes"
+    file="https://idl.uw.edu/mosaic/data/athletes.parquet"
+  ></data-table>
 
-  </body>
-</html>
+</data-manager>
+
+<line-chart
+  table="athletes"
+  dimension="nationality"
+  measure="count(*)"
+  limit="500"
+  order_by="count(*) desc">
+</line-chart>
