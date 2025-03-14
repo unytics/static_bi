@@ -12,7 +12,7 @@
       <data-table name="athletes" file="https://idl.uw.edu/mosaic/data/athletes.parquet"></data-table>
     </data-manager>
 
-    <line-chart></line-chart>
+    <line-chart table="athletes" dimension="nationality" measure="count(*)" limit="500" order_by="count(*) desc"></line-chart>
 
   </body>
 </html>

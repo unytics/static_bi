@@ -57,6 +57,7 @@ class DataManager extends HTMLElement {
       }
     }
     this.dispatchEvent(new CustomEvent('data-loaded', {
+        detail: this,
         bubbles: true,
         composed: true
     }));
@@ -84,29 +85,40 @@ class LineChart extends HTMLElement {
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = 'INITIALIZING!';
-    document.addEventListener('data-loaded', (event) => {
-      this.render();
+    document.addEventListener('data-loaded', async (event) => {
+      const data = await this.get_data(event.detail);
+      const chart_config = this.build_chart_config(data);
+      this.render(chart_config);
     });
   }
 
-  get_data() {
-    
+  async get_data(data_manager) {
+    const dimension = this.getAttribute('dimension');
+    const measure = this.getAttribute('measure');
+    const table = this.getAttribute('table');
+    const order_by = this.getAttribute('order_by');
+    const limit = this.getAttribute('limit');
+    const query = `
+      select
+        ${dimension} as dimension,
+        ${measure} as measure,
+      from ${table}
+      group by 1
+      order by ${order_by}
+      limit ${limit}
+    `;
+    const data = await data_manager.query(query);
+    return data;
   }
 
-  render() {
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = undefined;
-    }
-    this.shadowRoot.innerHTML = '<div><canvas id="chart"></canvas></div>';
-    this.chartElement = this.shadowRoot.getElementById('chart');
-    this.chart = new chartjs.Chart(this.chartElement, {
+  build_chart_config(data) {
+    return {
       type: 'bar',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: data.map(row => row.dimension),
         datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          label: this.getAttribute('measure'),
+          data: data.map(row => Number(row.measure)),
           borderWidth: 1
         }]
       },
@@ -117,7 +129,17 @@ class LineChart extends HTMLElement {
           }
         }
       }
-    });
+    }
+  }
+
+  render(chart_config) {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
+    this.shadowRoot.innerHTML = '<div><canvas id="chart"></canvas></div>';
+    this.chartElement = this.shadowRoot.getElementById('chart');
+    this.chart = new chartjs.Chart(this.chartElement, chart_config);
   }
 
 
