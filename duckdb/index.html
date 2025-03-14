@@ -4,24 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script type="module" src="static_bi.js"></script>
   </head>
   <body>
-    <button id="load">load</button>
-    <button id="count">count</button>
 
-    <script type="module" src="static_bi.js"></script>
+    <data-manager>
+      <data-table name="athletes" file="https://idl.uw.edu/mosaic/data/athletes.parquet"></data-table>
+    </data-manager>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-
-          const loadButton = document.getElementById('load');
-          loadButton.addEventListener('click', window.duckdb.load);
-          const countButton = document.getElementById('count');
-          countButton.addEventListener('click', window.duckdb.count);
-      });
-    </script>
-
-
+    <line-chart></line-chart>
 
   </body>
 </html>
