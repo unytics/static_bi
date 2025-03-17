@@ -83,7 +83,7 @@ class DataTable extends HTMLElement {
 }
 
 
-class LineChart extends HTMLElement {
+class Chart extends HTMLElement {
 
   constructor() {
     super();
@@ -120,7 +120,7 @@ class LineChart extends HTMLElement {
 
   build_chart_config(data) {
     return {
-      type: 'bar',
+      type: this.chart_type,
       data: {
         labels: data.map(row => row.dimension),
         datasets: [{
@@ -153,9 +153,30 @@ class LineChart extends HTMLElement {
 }
 
 
+
+class LineChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'line';
+  }
+
+}
+
+class BarChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'bar';
+  }
+
+}
+
+
 customElements.define("data-manager", DataManager);
 customElements.define("data-table", DataTable);
 customElements.define("line-chart", LineChart);
+customElements.define("bar-chart", BarChart);
 
 
 document.addEventListener('DOMContentLoaded', function() {

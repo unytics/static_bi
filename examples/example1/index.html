@@ -404,18 +404,18 @@
 <data-manager>
 
   <data-table
-    name="athletes"
-    file="https://idl.uw.edu/mosaic/data/athletes.parquet"
+    name="stocks"
+    file="https://idl.uw.edu/mosaic/data/stocks.parquet"
   ></data-table>
 
 </data-manager>
 
 <line-chart
-  table="athletes"
-  dimension="nationality"
-  measure="count(*)"
+  table="stocks"
+  dimension="strftime(Date, '%Y-%m')"
+  measure="sum(Close)"
   limit="500"
-  order_by="count(*) desc">
+  order_by="strftime(Date, '%Y-%m')">
 </line-chart>
 </div>
 
