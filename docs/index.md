@@ -17,6 +17,12 @@
     file="https://idl.uw.edu/mosaic/data/athletes.parquet"
   ></data-table>
 
+  <data-table
+    name="stocks"
+    file="https://idl.uw.edu/mosaic/data/stocks.parquet"
+  ></data-table>
+
+
 </data-manager>
 
 </div>
