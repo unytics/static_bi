@@ -54,7 +54,7 @@ class DataManager extends HTMLElement {
   }
 
   async load_file(name, file_url) {
-    await this.query(`create table ${name} as from "${file_url}"`);
+    await this.query(`create table if not exists ${name} as from "${file_url}"`);
   }
 
   async load_data() {
