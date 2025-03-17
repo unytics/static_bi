@@ -20,7 +20,7 @@ class DataManager extends HTMLElement {
   }
 
   async init_duckdb() {
-    if (window._db) {
+    if (window._db !== undefined) {
       this.db = window._db;
       console.log('CACHE HIT!');
       return;

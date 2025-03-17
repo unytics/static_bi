@@ -2,7 +2,7 @@ site_name: Static BI
 site_description: "Create Interactive Dashboards from static files"
 site_url: 'https://unytics.io/static_bi/'
 repo_name: 'unytics/staticBI'
-repo_url: 'https://github.com/unytics/staticBI'
+repo_url: 'https://github.com/unytics/static_bi'
 edit_uri: 'edit/main'
 copyright: 'Copyright &copy; 2025 Unytics'
 theme:
