@@ -4,7 +4,7 @@
 
 ## Examples
 
-<script type="module" src="../../dist/staticBI.js"></script>
+<script type="module" src="../../dist/static_bi.js"></script>
 
 <div>
 <data-manager>
