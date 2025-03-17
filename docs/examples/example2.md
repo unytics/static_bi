@@ -14,11 +14,11 @@
 
 </data-manager>
 
-<line-chart
+<bar-chart
   table="athletes"
   dimension="nationality"
   measure="count(*)"
   limit="500"
   order_by="count(*) desc">
-</line-chart>
+</bar-chart>
 </div>
