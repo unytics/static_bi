@@ -13,7 +13,7 @@ theme:
     - content.code.copy
     # - instant
     # - toc.integrate
-    # - navigation.instant
+    - navigation.instant
     # - navigation.path
     # - navigation.tabs
     - navigation.tracking

@@ -1,8 +1,8 @@
-# Welcome to MkDocs
+# Example 2
 
 ## Examples
 
-<script type="module" src="dist/staticBI.js"></script>
+<script type="module" src="../../dist/staticBI.js"></script>
 
 <div>
 <data-manager>
