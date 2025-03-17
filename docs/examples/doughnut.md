@@ -1,6 +1,4 @@
-# Example 2
-
-## Examples
+# Doughtnut Chart
 
 <script type="module" src="../../dist/static_bi.js"></script>
 
@@ -14,11 +12,11 @@
 
 </data-manager>
 
-<bar-chart
+<doughnut-chart
   table="athletes"
   dimension="nationality"
   measure="count(*)"
-  limit="500"
+  limit="10"
   order_by="count(*) desc">
-</bar-chart>
+</doughnut-chart>
 </div>

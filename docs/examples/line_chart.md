@@ -1,8 +1,5 @@
-# Example 1
+# Line Chart
 
-[example2](example2.md)
-
-## Examples
 
 <script type="module" src="../../dist/static_bi.js"></script>
 
