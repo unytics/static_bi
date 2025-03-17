@@ -20,6 +20,12 @@ class DataManager extends HTMLElement {
   }
 
   async init_duckdb() {
+    if (window._db) {
+      this.db = window._db;
+      console.log('CACHE HIT!');
+      return;
+    }
+    console.log('CACHE MISSED!');
     const jsdelivr_bundles = duckdb.getJsDelivrBundles();
     const bundle = await duckdb.selectBundle(jsdelivr_bundles);
     const worker_url = URL.createObjectURL(
@@ -32,6 +38,7 @@ class DataManager extends HTMLElement {
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
+    window._db = this.db;
   }
 
   async query(query) {

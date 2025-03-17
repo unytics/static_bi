@@ -1,5 +1,7 @@
 # Example 1
 
+[example2](example2.md)
+
 ## Examples
 
 <script type="module" src="../../dist/staticBI.js"></script>
