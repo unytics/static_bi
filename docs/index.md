@@ -2,7 +2,7 @@
 
 ## Examples
 
-<script type="module" src="dist/staticBI.js"></script>
+<script type="module" src="dist/static_bi.js"></script>
 
 <div>
 <data-manager>
@@ -14,11 +14,4 @@
 
 </data-manager>
 
-<line-chart
-  table="athletes"
-  dimension="nationality"
-  measure="count(*)"
-  limit="500"
-  order_by="count(*) desc">
-</line-chart>
 </div>
