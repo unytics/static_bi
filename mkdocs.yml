@@ -1,0 +1,35 @@
+site_name: Static BI
+site_description: "Create Interactive Dashboards from static files"
+site_url: 'https://unytics.io/static_bi/'
+repo_name: 'unytics/staticBI'
+repo_url: 'https://github.com/unytics/staticBI'
+edit_uri: 'edit/main'
+copyright: 'Copyright &copy; 2025 Unytics'
+theme:
+  name: material
+  features:
+    - tabs
+    - content.tabs.link
+    - content.code.copy
+    # - instant
+    # - toc.integrate
+    # - navigation.instant
+    # - navigation.path
+    # - navigation.tabs
+    - navigation.tracking
+    - navigation.indexes
+    - navigation.hide
+    # - navigation.expand
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      toc_depth: 4
+      permalink: "¶"
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+plugins: []
