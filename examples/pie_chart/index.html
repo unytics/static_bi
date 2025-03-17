@@ -10,10 +10,10 @@
       
       
       
-        <link rel="canonical" href="https://unytics.io/static_bi/examples/example2/">
+        <link rel="canonical" href="https://unytics.io/static_bi/examples/pie_chart/">
       
       
-        <link rel="prev" href="../example1/">
+        <link rel="prev" href="../line_chart/">
       
       
       
@@ -22,11 +22,14 @@
     
     
       
-        <title>Example 2 - Static BI</title>
+        <title>Pie Chart - Static BI</title>
       
     
     
       <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -55,7 +58,12 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -64,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#example-2" class="md-skip">
+        <a href="#pie-chart" class="md-skip">
           Skip to content
         </a>
       
@@ -100,15 +108,15 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Example 2
+              Pie Chart
             
           </span>
         </div>
       </div>
     </div>
     
+      
     
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -184,7 +192,7 @@
         
   
   <span class="md-ellipsis">
-    Welcome to MkDocs
+    Welcome to Static BI!
     
   </span>
   
@@ -204,6 +212,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -245,11 +257,55 @@
   
   
     <li class="md-nav__item">
-      <a href="../example1/" class="md-nav__link">
+      <a href="../bar_chart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Example 1
+    Bar Chart
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doughnut/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Doughtnut Chart
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../line_chart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Line Chart
     
   </span>
   
@@ -276,56 +332,16 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Example 2
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Example 2
+    Pie Chart
     
   </span>
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -359,23 +375,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -393,8 +392,7 @@
   
 
 
-<h1 id="example-2">Example 2<a class="headerlink" href="#example-2" title="Permanent link">¶</a></h1>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¶</a></h2>
+<h1 id="pie-chart">Pie Chart<a class="headerlink" href="#pie-chart" title="Permanent link">¶</a></h1>
 <script type="module" src="../../dist/static_bi.js"></script>
 
 <div>
@@ -407,13 +405,13 @@
 
 </data-manager>
 
-<bar-chart
+<pie-chart
   table="athletes"
   dimension="nationality"
   measure="count(*)"
-  limit="500"
+  limit="10"
   order_by="count(*) desc">
-</bar-chart>
+</pie-chart>
 </div>
 
 

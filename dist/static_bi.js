@@ -172,11 +172,32 @@ class BarChart extends Chart {
 
 }
 
+class DoughnutChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'doughnut';
+  }
+
+}
+
+class PieChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'pie';
+  }
+
+}
+
+
 
 customElements.define("data-manager", DataManager);
 customElements.define("data-table", DataTable);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
+customElements.define("doughnut-chart", DoughnutChart);
+customElements.define("pie-chart", PieChart);
 
 
 document.addEventListener('DOMContentLoaded', function() {
