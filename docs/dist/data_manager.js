@@ -51,12 +51,12 @@ class DataManager extends HTMLElement {
     await this.query(`create table if not exists ${name} as from "${file_url}"`);
   }
 
-  async describe_table(name) {
-    return await this.query(`describe table ${name}`);
-  }
-
   async show_tables() {
     return await this.query(`show tables`);
+  }
+
+  async describe_table(name) {
+    return await this.query(`describe table ${name}`);
   }
 
   async load_data() {
