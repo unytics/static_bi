@@ -55,6 +55,10 @@ class DataManager extends HTMLElement {
     return await this.query(`describe table ${name}`);
   }
 
+  async show_tables() {
+    return await this.query(`show tables`);
+  }
+
   async load_data() {
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {

@@ -83,6 +83,20 @@ class TableDescriptionChart extends TableChart {
 }
 
 
+class TablesListChart extends TableChart {
+
+  constructor() {
+    super();
+  }
+
+  async get_data(data_manager) {
+    const data = await data_manager.show_tables();
+    return data;
+  }
+
+}
+
+
 
 class Chart extends HTMLElement {
 
@@ -233,6 +247,7 @@ class BarChartGrid extends HTMLElement {
 
 customElements.define("table-chart", TableChart);
 customElements.define("table-description-chart", TableDescriptionChart);
+customElements.define("tables-list-chart", TablesListChart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);

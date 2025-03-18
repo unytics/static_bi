@@ -20,6 +20,18 @@ hide:
 </div>
 
 
+### Tables List
+<div>
+<tables-list-chart></tables-list-chart>
+</div>
+
+
+### Table Description Chart
+<div>
+<table-description-chart table="stocks"></table-description-chart>
+</div>
+
+
 ### Table Chart
 <div>
 <table-chart
@@ -30,15 +42,6 @@ hide:
   order_by="date desc"
 >
 </table-chart>
-</div>
-
-
-### Table Description Chart
-<div>
-<table-description-chart
-  table="stocks"
->
-</table-description-chart>
 </div>
 
 
