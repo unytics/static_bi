@@ -2,22 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://unytics.io/static_bi/</loc>
-         <lastmod>2025-03-17</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/examples/bar_chart/</loc>
-         <lastmod>2025-03-17</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/examples/doughnut/</loc>
-         <lastmod>2025-03-17</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/examples/line_chart/</loc>
-         <lastmod>2025-03-17</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/examples/pie_chart/</loc>
-         <lastmod>2025-03-17</lastmod>
+         <lastmod>2025-03-18</lastmod>
     </url>
 </urlset>

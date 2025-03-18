@@ -1,0 +1,219 @@
+import * as chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.6/+esm';
+import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
+import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
+
+chartjs.Chart.register(...chartjs.registerables);
+
+
+function humanize(value) {
+  if (Number.isInteger(value) || (typeof value === 'bigint')) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  if (value instanceof Date) {
+    return value.toISOString().replace('T00:00:00.000Z', '');
+  }
+  return value;
+}
+
+function markdown2html(markdown_content) {
+  return DOMPurify.sanitize(marked.parse(markdown_content));
+}
+
+
+class DataTable extends HTMLElement {
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
+    this.innerHTML = this.userContent + '\nINITIALIZING!';
+    document.addEventListener('data-loaded', async (event) => {
+      const data = await this.get_data(event.detail);
+      this.render(data);
+    });
+  }
+
+  async get_data(data_manager) {
+    const dimension = this.getAttribute('dimension');
+    const measure = this.getAttribute('measure');
+    const table = this.getAttribute('table');
+    const order_by = this.getAttribute('order_by');
+    const limit = this.getAttribute('limit');
+    const query = `
+      select *
+      from ${table}
+      limit ${limit}
+    `;
+    const data = await data_manager.query(query);
+    return data;
+  }
+
+  render(data) {
+    const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
+    const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
+    this.innerHTML = `
+      <table>
+        <thead><tr>${tableHeader}</tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    `;
+  }
+
+}
+
+
+
+class Chart extends HTMLElement {
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.attachShadow({ mode: 'open' });
+    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
+    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
+    document.addEventListener('data-loaded', async (event) => {
+      const data = await this.get_data(event.detail);
+      const chart_config = this.build_chart_config(data);
+      this.render(chart_config);
+    });
+  }
+
+  async get_data(data_manager) {
+    const dimension = this.getAttribute('dimension');
+    const measure = this.getAttribute('measure');
+    const table = this.getAttribute('table');
+    const order_by = this.getAttribute('order_by');
+    const limit = this.getAttribute('limit');
+    const query = `
+      select
+        ${dimension} as dimension,
+        ${measure} as measure,
+      from ${table}
+      group by 1
+      order by ${order_by}
+      limit ${limit}
+    `;
+    const data = await data_manager.query(query);
+    return data;
+  }
+
+  build_chart_config(data) {
+    return {
+      type: this.chart_type,
+      data: {
+        labels: data.map(row => row.dimension),
+        datasets: [{
+          label: this.getAttribute('measure'),
+          data: data.map(row => Number(row.measure)),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    }
+  }
+
+  render(chart_config) {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
+    this.shadowRoot.innerHTML = this.userContent + '<div><canvas id="chart"></canvas></div>';
+    this.chartElement = this.shadowRoot.getElementById('chart');
+    this.chart = new chartjs.Chart(this.chartElement, chart_config);
+  }
+
+
+}
+
+
+
+class LineChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'line';
+  }
+
+}
+
+class BarChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'bar';
+  }
+
+}
+
+class DoughnutChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'doughnut';
+  }
+
+}
+
+class PieChart extends Chart {
+
+  constructor() {
+    super();
+    this.chart_type = 'pie';
+  }
+
+}
+
+class BarChartGrid extends HTMLElement {
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = 'INITIALIZING!';
+    document.addEventListener('data-loaded', async (event) => {
+      const data = await this.get_dimension_columns(event.detail);
+      const chart_config = this.build_chart_config(data);
+      this.render(chart_config);
+    });
+  }
+
+  async get_dimension_columns(data_manager) {
+    const dimension = this.getAttribute('dimension');
+    const measure = this.getAttribute('measure');
+    const table = this.getAttribute('table');
+    const order_by = this.getAttribute('order_by');
+    const limit = this.getAttribute('limit');
+    const query = `
+      select
+        ${dimension} as dimension,
+        ${measure} as measure,
+      from ${table}
+      group by 1
+      order by ${order_by}
+      limit ${limit}
+    `;
+    const data = await data_manager.query(query);
+    return data;
+  }
+
+}
+
+
+
+customElements.define("data-table", DataTable);
+customElements.define("line-chart", LineChart);
+customElements.define("bar-chart", BarChart);
+customElements.define("doughnut-chart", DoughnutChart);
+customElements.define("pie-chart", PieChart);
