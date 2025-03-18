@@ -1,28 +1,87 @@
+---
+hide:
+  - navigation
+---
+
 # Welcome to Static BI!
 
 ## Examples
 
-- [Bar Chart](examples/bar_chart.md)
-- [Line Chart](examples/line_chart.md)
-- [Doughnut Chart](examples/doughnut_chart.md)
-- [Pie Chart](examples/pie_chart.md)
-
-<script type="module" src="dist/static_bi.js"></script>
 
 <div>
 <data-manager>
 
-  <data-table
-    name="athletes"
-    file="https://idl.uw.edu/mosaic/data/athletes.parquet"
-  ></data-table>
-
-  <data-table
+  <data-manager-table
     name="stocks"
     file="https://idl.uw.edu/mosaic/data/stocks.parquet"
-  ></data-table>
-
+  ></data-manager-table>
 
 </data-manager>
-
 </div>
+
+
+### Data Table
+<div>
+<data-table
+  table="stocks"
+  limit="10"
+>
+</data-table>
+</div>
+
+
+### Line Chart
+<div>
+<line-chart
+  table="stocks"
+  dimension="strftime(Date, '%Y-%m')"
+  measure="sum(Close)"
+  limit="500"
+  order_by="strftime(Date, '%Y-%m')"
+>
+</line-chart>
+</div>
+
+
+### Bar Chart
+<div>
+<bar-chart
+  table="stocks"
+  dimension="Symbol"
+  measure="max(Close)"
+  limit="10"
+  order_by="max(Close) desc"
+>
+</bar-chart>
+</div>
+
+
+### Doughnut Chart
+<div>
+<doughnut-chart
+  table="stocks"
+  dimension="Symbol"
+  measure="max(Close)"
+  limit="10"
+  order_by="max(Close) desc"
+>
+</doughnut-chart>
+</div>
+
+
+### Pie Chart
+<div>
+<pie-chart
+  table="stocks"
+  dimension="Symbol"
+  measure="max(Close)"
+  limit="10"
+  order_by="max(Close) desc"
+>
+</pie-chart>
+</div>
+
+
+
+<script type="module" src="dist/data_manager.js"></script>
+<script type="module" src="dist/charts.js"></script>
