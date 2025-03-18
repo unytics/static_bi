@@ -20,7 +20,7 @@ function markdown2html(markdown_content) {
 }
 
 
-class DataTable extends HTMLElement {
+class TableChart extends HTMLElement {
 
   constructor() {
     super();
@@ -36,15 +36,20 @@ class DataTable extends HTMLElement {
   }
 
   async get_data(data_manager) {
-    const dimension = this.getAttribute('dimension');
-    const measure = this.getAttribute('measure');
     const table = this.getAttribute('table');
+    const dimensions = this.getAttribute('dimensions');
+    const measures = this.getAttribute('measures');
     const order_by = this.getAttribute('order_by');
     const limit = this.getAttribute('limit');
     const query = `
-      select *
+      select
+        ${dimensions ? dimensions + ',' : ''}
+        ${measures ? measures + ',' : ''}
+        ${(!dimensions && !measures) ? '*' : ''}
       from ${table}
-      limit ${limit}
+      ${measures ? 'group by ' + dimensions : ''}
+      ${order_by ? 'order by ' + order_by : ''}
+      ${limit ? 'limit ' + limit : ''}
     `;
     const data = await data_manager.query(query);
     return data;
@@ -59,6 +64,20 @@ class DataTable extends HTMLElement {
         <tbody>${tableRows}</tbody>
       </table>
     `;
+  }
+
+}
+
+class TableDescriptionChart extends TableChart {
+
+  constructor() {
+    super();
+  }
+
+  async get_data(data_manager) {
+    const table = this.getAttribute('table');
+    const data = await data_manager.describe_table(table);
+    return data;
   }
 
 }
@@ -83,9 +102,9 @@ class Chart extends HTMLElement {
   }
 
   async get_data(data_manager) {
+    const table = this.getAttribute('table');
     const dimension = this.getAttribute('dimension');
     const measure = this.getAttribute('measure');
-    const table = this.getAttribute('table');
     const order_by = this.getAttribute('order_by');
     const limit = this.getAttribute('limit');
     const query = `
@@ -212,7 +231,8 @@ class BarChartGrid extends HTMLElement {
 
 
 
-customElements.define("data-table", DataTable);
+customElements.define("table-chart", TableChart);
+customElements.define("table-description-chart", TableDescriptionChart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);

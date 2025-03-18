@@ -35,6 +35,7 @@ class DataManager extends HTMLElement {
   }
 
   async query(query) {
+    console.log(query);
     const conn = await this.db.connect();
     const result = (await conn.query(query)).toArray().map((row) => row.toJSON());
     await conn.close();

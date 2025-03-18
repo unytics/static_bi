@@ -20,13 +20,25 @@ hide:
 </div>
 
 
-### Data Table
+### Table Chart
 <div>
-<data-table
+<table-chart
   table="stocks"
   limit="10"
+  dimensions="date, symbol"
+  measures="sum(volume), sum(close)"
+  order_by="date desc"
 >
-</data-table>
+</table-chart>
+</div>
+
+
+### Table Description Chart
+<div>
+<table-description-chart
+  table="stocks"
+>
+</table-description-chart>
 </div>
 
 
