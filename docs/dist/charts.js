@@ -29,13 +29,32 @@ class TableChart extends HTMLElement {
   connectedCallback() {
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
     this.innerHTML = this.userContent + '\nINITIALIZING!';
-    document.addEventListener('data-loaded', async (event) => {
-      const data = await this.get_data(event.detail);
-      this.render(data);
-    });
+    this.render();
+    document.addEventListener('data-loaded', async (event) => {this.render();});
   }
 
-  async get_data(data_manager) {
+  is_data_manager_ready() {
+    if (window.data_manager === undefined) {
+      return false;
+    }
+    if (!this.getAttribute('table')) {
+      return true;
+    }
+    if (this.getAttribute('table') in window.data_manager.tables) {
+      return true;
+    }
+    return false;
+  }
+
+  async render() {
+    if (!this.is_data_manager_ready) {
+      return;
+    }
+    const data = await this.get_data(window.data_manager);
+    this.generate_html(data);
+  }
+
+  async get_data() {
     const table = this.getAttribute('table');
     const dimensions = this.getAttribute('dimensions');
     const measures = this.getAttribute('measures');
@@ -51,11 +70,11 @@ class TableChart extends HTMLElement {
       ${order_by ? 'order by ' + order_by : ''}
       ${limit ? 'limit ' + limit : ''}
     `;
-    const data = await data_manager.query(query);
+    const data = await window.data_manager.query(query);
     return data;
   }
 
-  render(data) {
+  generate_html(data) {
     const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
     const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
     this.innerHTML = `
@@ -74,9 +93,9 @@ class TableDescriptionChart extends TableChart {
     super();
   }
 
-  async get_data(data_manager) {
+  async get_data() {
     const table = this.getAttribute('table');
-    const data = await data_manager.describe_table(table);
+    const data = await window.data_manager.describe_table(table);
     return data;
   }
 
@@ -89,8 +108,8 @@ class TablesListChart extends TableChart {
     super();
   }
 
-  async get_data(data_manager) {
-    const data = await data_manager.show_tables();
+  async get_data() {
+    const data = await window.data_manager.show_tables();
     return data;
   }
 
@@ -225,12 +244,11 @@ class BarChartGrid extends HTMLElement {
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = 'INITIALIZING!';
-    this.render('BEFORE');
-    document.addEventListener('data-loaded', async (event) => {this.render('AFTER');});
+    this.render();
+    document.addEventListener('data-loaded', async (event) => {this.render();});
   }
 
-  async render(message) {
-    console.log('RENDER ', message);
+  async render() {
     const data_manager_is_not_ready = (
       (window.data_manager === undefined) ||
       !(this.getAttribute('table') in window.data_manager.tables)
@@ -245,6 +263,7 @@ class BarChartGrid extends HTMLElement {
     const dimensions = await window.data_manager.list_dimensions_columns(table);
     this.shadowRoot.innerHTML = dimensions.map(dimension => `
       <bar-chart
+        table="${table}"
         dimension="${dimension}"
         measure="${measure}"
         order_by="${order_by}"
@@ -252,8 +271,6 @@ class BarChartGrid extends HTMLElement {
       >
       </bar-chart>`
     ).join('');
-    console.log('RENDER DONE');
-    console.log(dimensions);
   }
 }
 

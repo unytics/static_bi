@@ -93,7 +93,7 @@ class DataManager extends HTMLElement {
 
   async list_dimensions_columns(table_name) {
     const data = await this.describe_table(table_name);
-    return data.filter(row => typeof row === 'string').map(row => row.name);
+    return data.filter(row => row.column_type === 'VARCHAR').map(row => row.column_name);
   }
 
   async load_data() {

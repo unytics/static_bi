@@ -16,6 +16,11 @@ hide:
     file="https://idl.uw.edu/mosaic/data/stocks.parquet"
   ></data-manager-table>
 
+  <data-manager-table
+    name="rides"
+    file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"
+  ></data-manager-table>
+
 </data-manager>
 </div>
 
@@ -109,6 +114,23 @@ hide:
 </div>
 
 
+
+### Rides Table Description Chart
+<div>
+<table-description-chart table="rides"></table-description-chart>
+</div>
+
+
+### Rides Bar Chart Grid
+<div>
+<bar-chart-grid
+  table="rides"
+  measure="count(*)"
+  limit="10"
+  order_by="count(*) desc"
+>
+</bar-chart-grid>
+</div>
 
 
 <script type="module" src="dist/data_manager.js"></script>
