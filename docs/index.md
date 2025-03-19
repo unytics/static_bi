@@ -97,6 +97,19 @@ hide:
 </div>
 
 
+### Bar Chart Grid
+<div>
+<bar-chart-grid
+  table="stocks"
+  measure="max(Close)"
+  limit="10"
+  order_by="max(Close) desc"
+>
+</bar-chart-grid>
+</div>
+
+
+
 
 <script type="module" src="dist/data_manager.js"></script>
 <script type="module" src="dist/charts.js"></script>

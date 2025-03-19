@@ -108,14 +108,24 @@ class Chart extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
     this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
-    document.addEventListener('data-loaded', async (event) => {
-      const data = await this.get_data(event.detail);
-      const chart_config = this.build_chart_config(data);
-      this.render(chart_config);
-    });
+    this.render();
+    document.addEventListener('data-loaded', async (event) => {this.render();});
   }
 
-  async get_data(data_manager) {
+  async render() {
+    const data_manager_is_not_ready = (
+      (window.data_manager === undefined) ||
+      !(this.getAttribute('table') in window.data_manager.tables)
+    )
+    if (data_manager_is_not_ready) {
+      return;
+    }
+    const data = await this.get_data();
+    const chart_config = this.build_chart_config(data);
+    this.generate_html(chart_config);
+  }
+
+  async get_data() {
     const table = this.getAttribute('table');
     const dimension = this.getAttribute('dimension');
     const measure = this.getAttribute('measure');
@@ -130,7 +140,7 @@ class Chart extends HTMLElement {
       order by ${order_by}
       limit ${limit}
     `;
-    const data = await data_manager.query(query);
+    const data = await window.data_manager.query(query);
     return data;
   }
 
@@ -155,7 +165,7 @@ class Chart extends HTMLElement {
     }
   }
 
-  render(chart_config) {
+  generate_html(chart_config) {
     if (this.chart) {
       this.chart.destroy();
       this.chart = undefined;
@@ -215,32 +225,36 @@ class BarChartGrid extends HTMLElement {
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = 'INITIALIZING!';
-    document.addEventListener('data-loaded', async (event) => {
-      const data = await this.get_dimension_columns(event.detail);
-      const chart_config = this.build_chart_config(data);
-      this.render(chart_config);
-    });
+    this.render('BEFORE');
+    document.addEventListener('data-loaded', async (event) => {this.render('AFTER');});
   }
 
-  async get_dimension_columns(data_manager) {
-    const dimension = this.getAttribute('dimension');
-    const measure = this.getAttribute('measure');
+  async render(message) {
+    console.log('RENDER ', message);
+    const data_manager_is_not_ready = (
+      (window.data_manager === undefined) ||
+      !(this.getAttribute('table') in window.data_manager.tables)
+    )
+    if (data_manager_is_not_ready) {
+      return;
+    }
     const table = this.getAttribute('table');
+    const measure = this.getAttribute('measure');
     const order_by = this.getAttribute('order_by');
     const limit = this.getAttribute('limit');
-    const query = `
-      select
-        ${dimension} as dimension,
-        ${measure} as measure,
-      from ${table}
-      group by 1
-      order by ${order_by}
-      limit ${limit}
-    `;
-    const data = await data_manager.query(query);
-    return data;
+    const dimensions = await window.data_manager.list_dimensions_columns(table);
+    this.shadowRoot.innerHTML = dimensions.map(dimension => `
+      <bar-chart
+        dimension="${dimension}"
+        measure="${measure}"
+        order_by="${order_by}"
+        limit="${limit}"
+      >
+      </bar-chart>`
+    ).join('');
+    console.log('RENDER DONE');
+    console.log(dimensions);
   }
-
 }
 
 
@@ -252,3 +266,4 @@ customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);
 customElements.define("pie-chart", PieChart);
+customElements.define("bar-chart-grid", BarChartGrid);

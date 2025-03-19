@@ -1,6 +1,19 @@
 import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1-dev106.0/+esm";
 
 
+function arrow_table2vectors(arrow_table) {
+  if (!arrow_table) {
+    console.warn("arrow_table is null or undefined.  Returning null.");
+    return null;
+  }
+  const vectors = {};
+  const columns = arrow_table.schema.fields;
+  for (const column of columns) {
+    vectors[column.name] = arrow_table.getChild(column.name).toArray();
+  }
+  return vectors;
+}
+
 class DataManager extends HTMLElement {
 
   constructor() {
@@ -8,17 +21,20 @@ class DataManager extends HTMLElement {
   }
 
   async connectedCallback() {
-    await this.init_duckdb();
-    await this.load_data();
-  }
-
-  async init_duckdb() {
-    if (window._db !== undefined) {
-      this.db = window._db;
+    if (window.data_manager !== undefined) {
       console.log('CACHE HIT!');
       return;
     }
     console.log('CACHE MISSED!');
+    window.data_manager = this;
+    this.db_ready = false;
+    this.tables = {};
+    await this.init_duckdb();
+    this.db_ready = true;
+    await this.load_data();
+  }
+
+  async init_duckdb() {
     const jsdelivr_bundles = duckdb.getJsDelivrBundles();
     const bundle = await duckdb.selectBundle(jsdelivr_bundles);
     const worker_url = URL.createObjectURL(
@@ -31,20 +47,31 @@ class DataManager extends HTMLElement {
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
-    window._db = this.db;
+  }
+
+  async query2arrow_table(query) {
+    const conn = await this.db.connect();
+    const arrow_table = await conn.query(query);
+    await conn.close();
+    return arrow_table;
   }
 
   async query(query) {
-    console.log(query);
-    const conn = await this.db.connect();
-    const result = (await conn.query(query)).toArray().map((row) => row.toJSON());
-    await conn.close();
-    console.log(JSON.stringify(result, (key, value) =>
-        typeof value === 'bigint'
-            ? value.toString()
-            : value // return everything else unchanged
-    , 4))
+    const arrow_table = await this.query2arrow_table(query);
+    const result = arrow_table.toArray().map((row) => row.toJSON());
+    // console.log(JSON.stringify(result, (key, value) =>
+    //     typeof value === 'bigint'
+    //         ? value.toString()
+    //         : value // return everything else unchanged
+    // , 4))
     return result;
+  }
+
+  async query2vectors(query) {
+    const arrow_table = await this.query2arrow_table(query);
+    const vectors = arrow_table2vectors(arrow_table);
+    console.log(vectors);
+    return vectors;
   }
 
   async load_file(name, file_url) {
@@ -59,10 +86,21 @@ class DataManager extends HTMLElement {
     return await this.query(`describe table ${name}`);
   }
 
+  async list_columns(table_name) {
+    const data = await this.describe_table(table_name);
+    return data.map(row => row.name);
+  }
+
+  async list_dimensions_columns(table_name) {
+    const data = await this.describe_table(table_name);
+    return data.filter(row => typeof row === 'string').map(row => row.name);
+  }
+
   async load_data() {
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
         await this.load_file(child.getAttribute('name'), child.getAttribute('file'));
+        this.tables[child.getAttribute('name')] = {file: child.getAttribute('file')};
       }
     }
     this.dispatchEvent(new CustomEvent('data-loaded', {
@@ -87,8 +125,3 @@ class DataManagerTable extends HTMLElement {
 
 customElements.define("data-manager", DataManager);
 customElements.define("data-manager-table", DataManagerTable);
-
-
-document.addEventListener('DOMContentLoaded', function() {
-window.db = document.getElementsByTagName('data-manager')[0];
-});
