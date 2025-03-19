@@ -76,6 +76,13 @@ class DataManager extends HTMLElement {
 
   async load_file(name, file_url) {
     await this.query(`create table if not exists ${name} as from "${file_url}"`);
+    this.tables[name] = {file: file_url};
+    console.log('EMITTED', `data-loaded:${name}`)
+    this.dispatchEvent(new CustomEvent(`data-loaded:${name}`, {
+      detail: this,
+      bubbles: true,
+      composed: true
+    }));
   }
 
   async show_tables() {
@@ -100,7 +107,6 @@ class DataManager extends HTMLElement {
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
         await this.load_file(child.getAttribute('name'), child.getAttribute('file'));
-        this.tables[child.getAttribute('name')] = {file: child.getAttribute('file')};
       }
     }
     this.dispatchEvent(new CustomEvent('data-loaded', {

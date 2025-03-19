@@ -20,38 +20,55 @@ function markdown2html(markdown_content) {
 }
 
 
-class TableChart extends HTMLElement {
+
+class ChartElement extends HTMLElement {
 
   constructor() {
     super();
   }
 
   connectedCallback() {
+    this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.innerHTML = this.userContent + '\nINITIALIZING!';
+    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
     this.render();
-    document.addEventListener('data-loaded', async (event) => {this.render();});
+    const event_to_listen = this.getAttribute('table') ? `data-loaded:${this.getAttribute('table')}` : 'data-loaded';
+    console.log('EVENT TO LISTEN', event_to_listen);
+    document.addEventListener(event_to_listen, async (event) => {this.render();})
+  }
+
+  async render() {
+    if (!this.is_data_manager_ready()) {
+      return;
+    }
+    const data = await this.get_data();
+    this.generate_html(data);
   }
 
   is_data_manager_ready() {
+    const table_name = this.getAttribute('table');
     if (window.data_manager === undefined) {
       return false;
     }
-    if (!this.getAttribute('table')) {
+    if (window.data_manager.db_ready === false) {
+      return false;
+    }
+    if (!table_name) {
       return true;
     }
-    if (this.getAttribute('table') in window.data_manager.tables) {
+    if (table_name in window.data_manager.tables) {
       return true;
     }
     return false;
   }
 
-  async render() {
-    if (!this.is_data_manager_ready) {
-      return;
-    }
-    const data = await this.get_data(window.data_manager);
-    this.generate_html(data);
+}
+
+
+class TableChart extends ChartElement {
+
+  constructor() {
+    super();
   }
 
   async get_data() {
@@ -77,7 +94,7 @@ class TableChart extends HTMLElement {
   generate_html(data) {
     const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
     const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
-    this.innerHTML = `
+    this.shadowRoot.innerHTML = `
       <table>
         <thead><tr>${tableHeader}</tr></thead>
         <tbody>${tableRows}</tbody>
@@ -117,31 +134,10 @@ class TablesListChart extends TableChart {
 
 
 
-class Chart extends HTMLElement {
+class Chart extends ChartElement {
 
   constructor() {
     super();
-  }
-
-  connectedCallback() {
-    this.attachShadow({ mode: 'open' });
-    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
-    this.render();
-    document.addEventListener('data-loaded', async (event) => {this.render();});
-  }
-
-  async render() {
-    const data_manager_is_not_ready = (
-      (window.data_manager === undefined) ||
-      !(this.getAttribute('table') in window.data_manager.tables)
-    )
-    if (data_manager_is_not_ready) {
-      return;
-    }
-    const data = await this.get_data();
-    const chart_config = this.build_chart_config(data);
-    this.generate_html(chart_config);
   }
 
   async get_data() {
@@ -163,8 +159,12 @@ class Chart extends HTMLElement {
     return data;
   }
 
-  build_chart_config(data) {
-    return {
+  generate_html(data) {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
+    const chart_config = {
       type: this.chart_type,
       data: {
         labels: data.map(row => row.dimension),
@@ -181,14 +181,7 @@ class Chart extends HTMLElement {
           }
         }
       }
-    }
-  }
-
-  generate_html(chart_config) {
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = undefined;
-    }
+    };
     this.shadowRoot.innerHTML = this.userContent + '<div><canvas id="chart"></canvas></div>';
     this.chartElement = this.shadowRoot.getElementById('chart');
     this.chart = new chartjs.Chart(this.chartElement, chart_config);
@@ -235,32 +228,23 @@ class PieChart extends Chart {
 
 }
 
-class BarChartGrid extends HTMLElement {
+class BarChartGrid extends ChartElement {
 
   constructor() {
     super();
   }
 
-  connectedCallback() {
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.innerHTML = 'INITIALIZING!';
-    this.render();
-    document.addEventListener('data-loaded', async (event) => {this.render();});
+  async get_data() {
+    const table = this.getAttribute('table');
+    const dimensions = await window.data_manager.list_dimensions_columns(table);
+    return dimensions;
   }
 
-  async render() {
-    const data_manager_is_not_ready = (
-      (window.data_manager === undefined) ||
-      !(this.getAttribute('table') in window.data_manager.tables)
-    )
-    if (data_manager_is_not_ready) {
-      return;
-    }
+  generate_html(dimensions) {
     const table = this.getAttribute('table');
     const measure = this.getAttribute('measure');
     const order_by = this.getAttribute('order_by');
     const limit = this.getAttribute('limit');
-    const dimensions = await window.data_manager.list_dimensions_columns(table);
     this.shadowRoot.innerHTML = dimensions.map(dimension => `
       <bar-chart
         table="${table}"
