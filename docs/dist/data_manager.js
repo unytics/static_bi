@@ -32,6 +32,7 @@ class DataManager extends HTMLElement {
     window.data_manager = this;
     this.db_ready = false;
     this.tables = {};
+    this.filters = [];
     await this.init_duckdb();
     this.db_ready = true;
     await this.load_data();
@@ -60,6 +61,7 @@ class DataManager extends HTMLElement {
   }
 
   async query(query) {
+    console.log('QUERY', query);
     const arrow_table = await this.query2arrow_table(query);
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
@@ -81,14 +83,28 @@ class DataManager extends HTMLElement {
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
-    await this.query(`create view '${name}' as select * from parquet_scan('${name}.parquet')`);
-    this.tables[name] = {file: file_url};
-    this.emit_event(name);
+    await this.query(`create view __${name}__ as select * from parquet_scan('${name}.parquet')`);
+    this.tables[name] = await this.list_columns(`__${name}__`);
+    await this.create_filtered_view(name);
   }
 
   async create_view(name, query) {
-    await this.query(`create view ${name} as ${query}`);
-    this.tables[name] = {sql: query};
+    await this.query(`create view __${name}__ as ${query}`);
+    this.tables[name] = await this.list_columns(`__${name}__`);
+    await this.create_filtered_view(name);
+  }
+
+  async create_filtered_view(name) {
+    console.log('CREATE FILTERED VIEW. Columns', this.tables[name], 'Filters', this.filters);
+    const filters = this.filters.filter((filter) => this.tables[name].includes(filter[0]));
+    console.log('FILTERS', filters);
+    let query = `create or replace view ${name} as select * from __${name}__`;
+    if (filters.length) {
+      console.log('FILTERS', filters);
+      const where_clause = filters.map(([column, operation, value]) => `${column} ${operation} ${(typeof value) === 'string' ? "'" + value + "'" : value}`)
+      query += ` where ${where_clause.join(' and ')}`;
+    }
+    await this.query(query);
     this.emit_event(name);
   }
 
@@ -102,7 +118,7 @@ class DataManager extends HTMLElement {
 
   async list_columns(table_name) {
     const data = await this.describe_table(table_name);
-    return data.map(row => row.name);
+    return data.map(row => row.column_name);
   }
 
   async list_dimensions_columns(table_name) {

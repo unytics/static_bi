@@ -11,14 +11,14 @@ hide:
 <div>
 <data-manager>
 
-  <data-manager-table name="stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
+  <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
   <!-- <data-manager-table name="rides"  file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"></data-manager-table> -->
 
-  <data-manager-view name="stocks2">
+  <data-manager-view name="stocks">
     select
       *,
       strftime(Date, '%Y-%m') as month,
-    from stocks
+    from _stocks
   </data-manager-view>
 
 </data-manager>
