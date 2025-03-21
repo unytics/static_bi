@@ -75,7 +75,17 @@ class DataManager extends HTMLElement {
   }
 
   async load_file(name, file_url) {
-    await this.query(`create table if not exists ${name} as from "${file_url}"`);
+    if (name in this.tables) {
+      return;
+    }
+    // await this.query(`create table ${name} as select * from "${file_url}"`);
+
+    const res = await fetch(file_url);
+    const buffer = await res.arrayBuffer();
+    const uint8_array = new Uint8Array(buffer);
+    await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
+    await this.query(`create view '${name}' as select * from parquet_scan('${name}.parquet')`);
+
     this.tables[name] = {file: file_url};
     console.log('EMITTED', `data-loaded:${name}`)
     this.dispatchEvent(new CustomEvent(`data-loaded:${name}`, {
