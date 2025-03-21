@@ -5,6 +5,10 @@ import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.
 chartjs.Chart.register(...chartjs.registerables);
 
 
+function slugify(text) {
+  return text.replace(/[^\w ]+/g, "").replace(' ', '_');
+}
+
 function humanize(value) {
   if (Number.isInteger(value) || (typeof value === 'bigint')) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -148,14 +152,14 @@ class Chart extends ChartElement {
     const limit = this.getAttribute('limit');
     const query = `
       select
-        ${dimension} as dimension,
-        ${measure} as measure,
+        ${dimension} as ${slugify(dimension)},
+        ${measure} as ${slugify(measure)},
       from ${table}
       group by 1
       order by ${order_by}
       limit ${limit}
     `;
-    const data = await window.data_manager.query(query);
+    const data = await window.data_manager.query2vectors(query);
     return data;
   }
 
@@ -164,15 +168,19 @@ class Chart extends ChartElement {
       this.chart.destroy();
       this.chart = undefined;
     }
+    const labels = Object.values(data)[0];
+    const datasets = Object.entries(data).slice(1).map(([key, value]) => {
+      return {
+        label: key,
+        data: value,
+        borderWidth: 1
+      }
+    });
     const chart_config = {
       type: this.chart_type,
       data: {
-        labels: data.map(row => row.dimension),
-        datasets: [{
-          label: this.getAttribute('measure'),
-          data: data.map(row => Number(row.measure)),
-          borderWidth: 1
-        }]
+        labels: labels,
+        datasets: datasets,
       },
       options: {
         scales: {

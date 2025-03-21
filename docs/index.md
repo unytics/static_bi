@@ -16,10 +16,10 @@ hide:
     file="https://idl.uw.edu/mosaic/data/stocks.parquet"
   ></data-manager-table>
 
-  <data-manager-table
+  <!-- <data-manager-table
     name="rides"
     file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"
-  ></data-manager-table>
+  ></data-manager-table> -->
 
 </data-manager>
 </div>
@@ -48,6 +48,20 @@ hide:
 >
 </table-chart>
 </div>
+
+
+### Line Chart (COUNT)
+<div>
+<line-chart
+  table="stocks"
+  dimension="strftime(Date, '%Y-%m')"
+  measure="count(*)"
+  limit="500"
+  order_by="strftime(Date, '%Y-%m')"
+>
+</line-chart>
+</div>
+
 
 
 ### Line Chart

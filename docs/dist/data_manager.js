@@ -9,10 +9,13 @@ function arrow_table2vectors(arrow_table) {
   const vectors = {};
   const columns = arrow_table.schema.fields;
   for (const column of columns) {
-    vectors[column.name] = arrow_table.getChild(column.name).toArray();
+    vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
+      (value) => (typeof value === 'bigint') ? Number(value) : value
+    );
   }
   return vectors;
 }
+
 
 class DataManager extends HTMLElement {
 
@@ -58,19 +61,14 @@ class DataManager extends HTMLElement {
 
   async query(query) {
     const arrow_table = await this.query2arrow_table(query);
-    const result = arrow_table.toArray().map((row) => row.toJSON());
-    // console.log(JSON.stringify(result, (key, value) =>
-    //     typeof value === 'bigint'
-    //         ? value.toString()
-    //         : value // return everything else unchanged
-    // , 4))
+    const array = arrow_table.toArray();
+    const result = array.map((row) => row.toJSON());
     return result;
   }
 
   async query2vectors(query) {
     const arrow_table = await this.query2arrow_table(query);
     const vectors = arrow_table2vectors(arrow_table);
-    console.log(vectors);
     return vectors;
   }
 
