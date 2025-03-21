@@ -10,7 +10,7 @@ function slugify(text) {
 }
 
 function humanize(value) {
-  if (Number.isInteger(value) || (typeof value === 'bigint')) {
+  if (Number.isInteger(value)) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   if (value instanceof Date) {
@@ -147,18 +147,30 @@ class Chart extends ChartElement {
   async get_data() {
     const table = this.getAttribute('table');
     const dimension = this.getAttribute('dimension');
+    const breakdown_dimension = this.getAttribute('breakdown_dimension');
     const measure = this.getAttribute('measure');
     const order_by = this.getAttribute('order_by');
     const limit = this.getAttribute('limit');
-    const query = `
-      select
-        ${dimension} as ${slugify(dimension)},
-        ${measure} as ${slugify(measure)},
-      from ${table}
-      group by 1
-      order by ${order_by}
-      limit ${limit}
-    `;
+    let query;
+    if (breakdown_dimension) {
+      query = `
+        pivot ${table}
+        on ${breakdown_dimension}
+        using ${measure}
+        group by (${dimension})
+      `;
+    }
+    else {
+      query = `
+        select
+          ${dimension} as ${slugify(dimension)},
+          ${measure} as ${slugify(measure)},
+        from ${table}
+        group by 1
+        order by ${order_by}
+        limit ${limit}
+      `;
+    }
     const data = await window.data_manager.query2vectors(query);
     return data;
   }
@@ -168,7 +180,7 @@ class Chart extends ChartElement {
       this.chart.destroy();
       this.chart = undefined;
     }
-    const labels = Object.values(data)[0];
+    const labels = Object.values(data)[0].map((value) => humanize(value));
     const datasets = Object.entries(data).slice(1).map(([key, value]) => {
       return {
         label: key,

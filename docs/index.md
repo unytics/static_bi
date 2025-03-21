@@ -25,6 +25,18 @@ hide:
 </div>
 
 
+### MultiLine Chart
+<div>
+<line-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+>
+</line-chart>
+</div>
+
+
 ### Tables List
 <div>
 <tables-list-chart></tables-list-chart>
