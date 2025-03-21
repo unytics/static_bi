@@ -7,6 +7,9 @@ hide:
 
 ## Examples
 
+<div id="main" style="width: 600px;height:400px;"></div>
+
+
 
 <div>
 <data-manager>
@@ -181,6 +184,6 @@ hide:
 </bar-chart-grid>
 </div>
 
-
 <script type="module" src="dist/data_manager.js"></script>
-<script type="module" src="dist/charts.js"></script>
+<script type="module" src="dist/echarts.js"></script> -->
+<!-- <script type="module" src="dist/charts.js"></script> -->
