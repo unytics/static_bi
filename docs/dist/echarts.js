@@ -167,10 +167,6 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = undefined;
-    }
     const labels = Object.values(data)[0].map((value) => humanize(value));
     const datasets = Object.entries(data).slice(1).map(([key, value]) => {
       return {
@@ -200,10 +196,17 @@ class Chart extends ChartElement {
     this.chartElement = this.shadowRoot.getElementById('chart');
     this.chart = echarts.init(this.chartElement);
     this.chart.setOption(chart_config);
-    const dimension = this.dimension;
-    const breakdown_dimension = this.breakdown_dimension;
+    const self = this;
     this.chart.on('click', function(params) {
-      console.log(`CLICKED on ${dimension} = ${params.name} and ${breakdown_dimension} = ${params.seriesName}`);
+      const filters = [[self.dimension, '=', params.name]];
+      if(self.breakdown_dimension) {
+        filters.push([self.breakdown_dimension, '=', params.seriesName])
+      }
+      self.dispatchEvent(new CustomEvent('filters_added', {
+        detail: filters,
+        bubbles: true,
+        composed: true
+      }));
     });
     this.chart.on('brushEnd', function (params) {
       if (!params.areas || !params.areas[0]) {

@@ -183,4 +183,3 @@ hide:
 
 <script type="module" src="dist/data_manager.js"></script>
 <script type="module" src="dist/echarts.js"></script> -->
-<!-- <script type="module" src="dist/charts.js"></script> -->

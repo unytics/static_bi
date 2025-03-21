@@ -36,6 +36,7 @@ class DataManager extends HTMLElement {
     await this.init_duckdb();
     this.db_ready = true;
     await this.load_data();
+    document.addEventListener('filters_added', async (event) => {this.add_filters(event.detail);})
   }
 
   async init_duckdb() {
@@ -108,6 +109,13 @@ class DataManager extends HTMLElement {
     this.emit_event(name);
   }
 
+  async add_filters(filters) {
+    this.filters.push(...filters);
+    for (const name of Object.keys(this.tables)) {
+      await this.create_filtered_view(name);
+    }
+  }
+
   async show_tables() {
     return await this.query(`show tables`);
   }
@@ -146,7 +154,7 @@ class DataManager extends HTMLElement {
     this.dispatchEvent(new CustomEvent(event_name, {
       bubbles: true,
       composed: true
-    }))
+    }));
   }
 
 }
