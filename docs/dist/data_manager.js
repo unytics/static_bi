@@ -46,7 +46,7 @@ class DataManager extends HTMLElement {
       })
     );
     const worker = new Worker(worker_url);
-    const logger = new duckdb.ConsoleLogger();
+    const logger = new duckdb.ConsoleLogger(3);
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);

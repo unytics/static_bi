@@ -44,7 +44,6 @@ class ChartElement extends HTMLElement {
     this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
-    console.log('EVENT TO LISTEN', event_to_listen);
     document.addEventListener(event_to_listen, async (event) => {this.render();})
   }
 
@@ -197,7 +196,6 @@ class Chart extends ChartElement {
       yAxis: {},
       series: datasets
     };
-    console.log(chart_config);
     this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
     this.chartElement = this.shadowRoot.getElementById('chart');
     this.chart = echarts.init(this.chartElement);
@@ -206,6 +204,13 @@ class Chart extends ChartElement {
     const breakdown_dimension = this.breakdown_dimension;
     this.chart.on('click', function(params) {
       console.log(`CLICKED on ${dimension} = ${params.name} and ${breakdown_dimension} = ${params.seriesName}`);
+    });
+    this.chart.on('brushEnd', function (params) {
+      if (!params.areas || !params.areas[0]) {
+        return;
+      }
+      const indexes = params.areas[0].coordRange;
+      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
     });
   }
 
