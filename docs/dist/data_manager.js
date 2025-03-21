@@ -72,25 +72,24 @@ class DataManager extends HTMLElement {
     return vectors;
   }
 
-  async load_file(name, file_url) {
+  async create_table(name, file_url) {
     if (name in this.tables) {
       return;
     }
     // await this.query(`create table ${name} as select * from "${file_url}"`);
-
     const res = await fetch(file_url);
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
     await this.query(`create view '${name}' as select * from parquet_scan('${name}.parquet')`);
-
     this.tables[name] = {file: file_url};
-    console.log('EMITTED', `data-loaded:${name}`)
-    this.dispatchEvent(new CustomEvent(`data-loaded:${name}`, {
-      detail: this,
-      bubbles: true,
-      composed: true
-    }));
+    this.emit_event(name);
+  }
+
+  async create_view(name, query) {
+    await this.query(`create view ${name} as ${query}`);
+    this.tables[name] = {sql: query};
+    this.emit_event(name);
   }
 
   async show_tables() {
@@ -114,14 +113,24 @@ class DataManager extends HTMLElement {
   async load_data() {
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
-        await this.load_file(child.getAttribute('name'), child.getAttribute('file'));
+        await this.create_table(child.name, child.file);
       }
     }
-    this.dispatchEvent(new CustomEvent('data-loaded', {
-        detail: this,
-        bubbles: true,
-        composed: true
-    }));
+    for(const child of this.children) {
+      if(child.tagName == 'DATA-MANAGER-VIEW') {
+        await this.create_view(child.name, child.sql);
+      }
+    }
+    this.emit_event();
+  }
+
+  emit_event(name) {
+    const event_name = name ? `data-loaded:${name}` : 'data-loaded';
+    console.log('EMITTED', event_name);
+    this.dispatchEvent(new CustomEvent(event_name, {
+      bubbles: true,
+      composed: true
+    }))
   }
 
 }
@@ -134,8 +143,28 @@ class DataManagerTable extends HTMLElement {
     super();
   }
 
+  connectedCallback() {
+    this.name = this.getAttribute('name');
+    this.file = this.getAttribute('file');
+  }
+
+}
+
+class DataManagerView extends HTMLElement {
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.name = this.getAttribute('name');
+    this.sql = this.textContent;
+    this.textContent = '';
+  }
+
 }
 
 
 customElements.define("data-manager", DataManager);
 customElements.define("data-manager-table", DataManagerTable);
+customElements.define("data-manager-view", DataManagerView);

@@ -7,22 +7,19 @@ hide:
 
 ## Examples
 
-<div id="main" style="width: 600px;height:400px;"></div>
-
-
 
 <div>
 <data-manager>
 
-  <data-manager-table
-    name="stocks"
-    file="https://idl.uw.edu/mosaic/data/stocks.parquet"
-  ></data-manager-table>
+  <data-manager-table name="stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
+  <!-- <data-manager-table name="rides"  file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"></data-manager-table> -->
 
-  <!-- <data-manager-table
-    name="rides"
-    file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"
-  ></data-manager-table> -->
+  <data-manager-view name="stocks2">
+    select
+      *,
+      strftime(Date, '%Y-%m') as month,
+    from stocks
+  </data-manager-view>
 
 </data-manager>
 </div>
@@ -31,8 +28,8 @@ hide:
 ### Stacked Bar Chart
 <div>
 <bar-chart
-  table="stocks"
-  dimension="Date"
+  table="stocks2"
+  dimension="Month"
   breakdown_dimension="Symbol"
   measure="max(close)"
   stacked="true"
