@@ -196,12 +196,17 @@ class Chart extends ChartElement {
       },
       options: {
         scales: {
+          x: {},
           y: {
             beginAtZero: true
           }
         }
       }
     };
+    if (this.getAttribute('stacked') === 'true') {
+      chart_config.options.scales.x.stacked = true;
+      chart_config.options.scales.y.stacked = true;
+    }
     this.shadowRoot.innerHTML = this.userContent + '<div><canvas id="chart"></canvas></div>';
     this.chartElement = this.shadowRoot.getElementById('chart');
     this.chart = new chartjs.Chart(this.chartElement, chart_config);

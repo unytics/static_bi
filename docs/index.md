@@ -25,6 +25,29 @@ hide:
 </div>
 
 
+### Stacked Bar Chart
+<div>
+<bar-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+  stacked="true"
+>
+</bar-chart>
+</div>
+
+### Grouped Bar Chart
+<div>
+<bar-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+>
+</bar-chart>
+</div>
+
 ### MultiLine Chart
 <div>
 <line-chart
