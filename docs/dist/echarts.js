@@ -181,33 +181,25 @@ class Chart extends ChartElement {
     const labels = Object.values(data)[0].map((value) => humanize(value));
     const datasets = Object.entries(data).slice(1).map(([key, value]) => {
       return {
-        label: key,
+        name: key,
+        type: this.chart_type,
         data: value,
-        borderWidth: 1
+        stack: this.getAttribute('stacked') === 'true' ? 'total' : undefined,
+        barWidth: this.getAttribute('stacked') === 'true' ? '60%' : undefined,
       }
     });
 
     const chart_config = {
-      title: {
-          text: 'ECharts Getting Started Example'
-      },
+      title: {},
       tooltip: {},
-      legend: {
-          data: ['sales']
-      },
+      legend: {},
       xAxis: {
-          data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+          data: labels
       },
       yAxis: {},
-      series: [
-          {
-          name: 'sales',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-          }
-      ]
+      series: datasets
     };
-    this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 600px;height:400px;"></div>';
+    this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
     this.chartElement = this.shadowRoot.getElementById('chart');
     this.chart = echarts.init(this.chartElement);
     this.chart.setOption(chart_config);
