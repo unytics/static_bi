@@ -96,12 +96,9 @@ class DataManager extends HTMLElement {
   }
 
   async create_filtered_view(name) {
-    console.log('CREATE FILTERED VIEW. Columns', this.tables[name], 'Filters', this.filters);
     const filters = this.filters.filter((filter) => this.tables[name].includes(filter[0]));
-    console.log('FILTERS', filters);
     let query = `create or replace view ${name} as select * from __${name}__`;
     if (filters.length) {
-      console.log('FILTERS', filters);
       const where_clause = filters.map(([column, operation, value]) => `${column} ${operation} ${(typeof value) === 'string' ? "'" + value + "'" : value}`)
       query += ` where ${where_clause.join(' and ')}`;
     }

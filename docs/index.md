@@ -28,8 +28,8 @@ hide:
 ### Stacked Bar Chart
 <div>
 <bar-chart
-  table="stocks2"
-  dimension="Month"
+  table="stocks"
+  dimension="Date"
   breakdown_dimension="Symbol"
   measure="max(close)"
   stacked="true"
