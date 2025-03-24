@@ -3,6 +3,9 @@ import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
 import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
 
 
+let FILTERS = [];
+
+
 function slugify(text) {
   return text.replace(/[^\w ]+/g, "").replace(' ', '_');
 }
@@ -20,6 +23,17 @@ function humanize(value) {
 function markdown2html(markdown_content) {
   return DOMPurify.sanitize(marked.parse(markdown_content));
 }
+
+function add_filters(new_filters) {
+  // Remove existing filters with the same column as new_filters
+  const new_columns = new Set(new_filters.map((f) => f[0]));
+  FILTERS = FILTERS.filter((f) => !new_columns.has(f[0]));
+
+  FILTERS.push(...new_filters);
+
+  document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
+}
+
 
 
 
@@ -44,7 +58,20 @@ class ChartElement extends HTMLElement {
     this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
-    document.addEventListener(event_to_listen, async (event) => {this.render();})
+    document.addEventListener(event_to_listen, async (event) => {this.render();});
+    document.addEventListener(('filters-added'), async (event) => {this.render();});
+  }
+
+  get table_columns() {
+    return window.data_manager.tables[this.table];
+  }
+
+  async get_data() {
+    throw new Error('Not implemented');
+  }
+
+  generate_html(data) {
+    throw new Error('Not implemented');
   }
 
   async render() {
@@ -143,6 +170,24 @@ class Chart extends ChartElement {
 
   async get_data() {
     let query;
+    const filters_not_to_apply = [];
+    const filters_to_apply = [];
+    for(const [column, operation, value] of FILTERS) {
+      if(!this.table_columns.includes(column)) {
+        continue;
+      }
+      if(column === this.dimension) {
+        filters_not_to_apply.push([column, operation, value]);
+      }
+      else {
+        filters_to_apply.push([column, operation, value]);
+      }
+    }
+    let where = '';
+    if (filters_to_apply.length) {
+      const where_clause = filters_to_apply.map(([column, operation, value]) => `${column} ${operation} ${(typeof value) === 'string' ? "'" + value + "'" : value}`)
+      where = ` where ${where_clause.join(' and ')}`;
+    }
     if (this.breakdown_dimension) {
       query = `
         pivot ${this.table}
@@ -157,6 +202,7 @@ class Chart extends ChartElement {
           ${this.dimension} as ${slugify(this.dimension)},
           ${this.measure} as ${slugify(this.measure)},
         from ${this.table}
+        ${where}
         group by 1
         order by ${this.order_by}
         limit ${this.limit}
@@ -202,11 +248,7 @@ class Chart extends ChartElement {
       if(self.breakdown_dimension) {
         filters.push([self.breakdown_dimension, '=', params.seriesName])
       }
-      self.dispatchEvent(new CustomEvent('filters_added', {
-        detail: filters,
-        bubbles: true,
-        composed: true
-      }));
+      add_filters(filters);
     });
     this.chart.on('brushEnd', function (params) {
       if (!params.areas || !params.areas[0]) {

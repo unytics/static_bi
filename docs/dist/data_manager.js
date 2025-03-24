@@ -36,7 +36,6 @@ class DataManager extends HTMLElement {
     await this.init_duckdb();
     this.db_ready = true;
     await this.load_data();
-    document.addEventListener('filters_added', async (event) => {this.add_filters(event.detail);})
   }
 
   async init_duckdb() {
@@ -84,33 +83,15 @@ class DataManager extends HTMLElement {
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
-    await this.query(`create view __${name}__ as select * from parquet_scan('${name}.parquet')`);
-    this.tables[name] = await this.list_columns(`__${name}__`);
-    await this.create_filtered_view(name);
-  }
-
-  async create_view(name, query) {
-    await this.query(`create view __${name}__ as ${query}`);
-    this.tables[name] = await this.list_columns(`__${name}__`);
-    await this.create_filtered_view(name);
-  }
-
-  async create_filtered_view(name) {
-    const filters = this.filters.filter((filter) => this.tables[name].includes(filter[0]));
-    let query = `create or replace view ${name} as select * from __${name}__`;
-    if (filters.length) {
-      const where_clause = filters.map(([column, operation, value]) => `${column} ${operation} ${(typeof value) === 'string' ? "'" + value + "'" : value}`)
-      query += ` where ${where_clause.join(' and ')}`;
-    }
-    await this.query(query);
+    await this.query(`create view ${name} as select * from parquet_scan('${name}.parquet')`);
+    this.tables[name] = await this.list_columns(`${name}`);
     this.emit_event(name);
   }
 
-  async add_filters(filters) {
-    this.filters.push(...filters);
-    for (const name of Object.keys(this.tables)) {
-      await this.create_filtered_view(name);
-    }
+  async create_view(name, query) {
+    await this.query(`create view ${name} as ${query}`);
+    this.tables[name] = await this.list_columns(`${name}`);
+    this.emit_event(name);
   }
 
   async show_tables() {
