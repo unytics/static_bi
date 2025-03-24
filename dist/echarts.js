@@ -1,8 +1,6 @@
-import * as chartjs from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.6/+esm';
+import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
 import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
 import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
-
-chartjs.Chart.register(...chartjs.registerables);
 
 
 function slugify(text) {
@@ -32,12 +30,20 @@ class ChartElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.table = this.getAttribute('table');
+    this.dimension = this.getAttribute('dimension');
+    this.dimensions = this.getAttribute('dimensions');
+    this.breakdown_dimension = this.getAttribute('breakdown_dimension');
+    this.measure = this.getAttribute('measure');
+    this.measures = this.getAttribute('measures');
+    this.limit = this.getAttribute('limit');
+    this.order_by = this.getAttribute('order_by');
+    this.stacked = this.getAttribute('stacked');
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
     this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
     this.render();
-    const event_to_listen = this.getAttribute('table') ? `data-loaded:${this.getAttribute('table')}` : 'data-loaded';
-    console.log('EVENT TO LISTEN', event_to_listen);
+    const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
     document.addEventListener(event_to_listen, async (event) => {this.render();})
   }
 
@@ -50,17 +56,16 @@ class ChartElement extends HTMLElement {
   }
 
   is_data_manager_ready() {
-    const table_name = this.getAttribute('table');
     if (window.data_manager === undefined) {
       return false;
     }
     if (window.data_manager.db_ready === false) {
       return false;
     }
-    if (!table_name) {
+    if (!this.table) {
       return true;
     }
-    if (table_name in window.data_manager.tables) {
+    if (this.table in window.data_manager.tables) {
       return true;
     }
     return false;
@@ -76,20 +81,15 @@ class TableChart extends ChartElement {
   }
 
   async get_data() {
-    const table = this.getAttribute('table');
-    const dimensions = this.getAttribute('dimensions');
-    const measures = this.getAttribute('measures');
-    const order_by = this.getAttribute('order_by');
-    const limit = this.getAttribute('limit');
     const query = `
       select
-        ${dimensions ? dimensions + ',' : ''}
-        ${measures ? measures + ',' : ''}
-        ${(!dimensions && !measures) ? '*' : ''}
-      from ${table}
-      ${measures ? 'group by ' + dimensions : ''}
-      ${order_by ? 'order by ' + order_by : ''}
-      ${limit ? 'limit ' + limit : ''}
+        ${this.dimensions ? this.dimensions + ',' : ''}
+        ${this.measures ? this.measures + ',' : ''}
+        ${(!this.dimensions && !this.measures) ? '*' : ''}
+      from ${this.table}
+      ${this.measures ? 'group by ' + this.dimensions : ''}
+      ${this.order_by ? 'order by ' + this.order_by : ''}
+      ${this.limit ? 'limit ' + this.limit : ''}
     `;
     const data = await window.data_manager.query(query);
     return data;
@@ -115,9 +115,7 @@ class TableDescriptionChart extends TableChart {
   }
 
   async get_data() {
-    const table = this.getAttribute('table');
-    const data = await window.data_manager.describe_table(table);
-    return data;
+    return await window.data_manager.describe_table(this.table);
   }
 
 }
@@ -130,8 +128,7 @@ class TablesListChart extends TableChart {
   }
 
   async get_data() {
-    const data = await window.data_manager.show_tables();
-    return data;
+    return await window.data_manager.show_tables();
   }
 
 }
@@ -145,30 +142,24 @@ class Chart extends ChartElement {
   }
 
   async get_data() {
-    const table = this.getAttribute('table');
-    const dimension = this.getAttribute('dimension');
-    const breakdown_dimension = this.getAttribute('breakdown_dimension');
-    const measure = this.getAttribute('measure');
-    const order_by = this.getAttribute('order_by');
-    const limit = this.getAttribute('limit');
     let query;
-    if (breakdown_dimension) {
+    if (this.breakdown_dimension) {
       query = `
-        pivot ${table}
-        on ${breakdown_dimension}
-        using ${measure}
-        group by (${dimension})
+        pivot ${this.table}
+        on ${this.breakdown_dimension}
+        using ${this.measure}
+        group by (${this.dimension})
       `;
     }
     else {
       query = `
         select
-          ${dimension} as ${slugify(dimension)},
-          ${measure} as ${slugify(measure)},
-        from ${table}
+          ${this.dimension} as ${slugify(this.dimension)},
+          ${this.measure} as ${slugify(this.measure)},
+        from ${this.table}
         group by 1
-        order by ${order_by}
-        limit ${limit}
+        order by ${this.order_by}
+        limit ${this.limit}
       `;
     }
     const data = await window.data_manager.query2vectors(query);
@@ -176,42 +167,55 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = undefined;
-    }
     const labels = Object.values(data)[0].map((value) => humanize(value));
     const datasets = Object.entries(data).slice(1).map(([key, value]) => {
       return {
-        label: key,
+        name: key,
+        type: this.chart_type,
         data: value,
-        borderWidth: 1
+        stack: this.stacked === 'true' ? 'total' : undefined,
+        barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
     });
-    const chart_config = {
-      type: this.chart_type,
-      data: {
-        labels: labels,
-        datasets: datasets,
-      },
-      options: {
-        scales: {
-          x: {},
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    };
-    if (this.getAttribute('stacked') === 'true') {
-      chart_config.options.scales.x.stacked = true;
-      chart_config.options.scales.y.stacked = true;
-    }
-    this.shadowRoot.innerHTML = this.userContent + '<div><canvas id="chart"></canvas></div>';
-    this.chartElement = this.shadowRoot.getElementById('chart');
-    this.chart = new chartjs.Chart(this.chartElement, chart_config);
-  }
 
+    const chart_config = {
+      title: {},
+      tooltip: {},
+      legend: {},
+      brush: {
+        toolbox: ['lineX'],
+        xAxisIndex: 0
+      },
+      xAxis: {
+          data: labels
+      },
+      yAxis: {},
+      series: datasets
+    };
+    this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
+    this.chartElement = this.shadowRoot.getElementById('chart');
+    this.chart = echarts.init(this.chartElement);
+    this.chart.setOption(chart_config);
+    const self = this;
+    this.chart.on('click', function(params) {
+      const filters = [[self.dimension, '=', params.name]];
+      if(self.breakdown_dimension) {
+        filters.push([self.breakdown_dimension, '=', params.seriesName])
+      }
+      self.dispatchEvent(new CustomEvent('filters_added', {
+        detail: filters,
+        bubbles: true,
+        composed: true
+      }));
+    });
+    this.chart.on('brushEnd', function (params) {
+      if (!params.areas || !params.areas[0]) {
+        return;
+      }
+      const indexes = params.areas[0].coordRange;
+      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
+    });
+  }
 
 }
 
@@ -260,23 +264,17 @@ class BarChartGrid extends ChartElement {
   }
 
   async get_data() {
-    const table = this.getAttribute('table');
-    const dimensions = await window.data_manager.list_dimensions_columns(table);
-    return dimensions;
+    return await window.data_manager.list_dimensions_columns(this.table);
   }
 
   generate_html(dimensions) {
-    const table = this.getAttribute('table');
-    const measure = this.getAttribute('measure');
-    const order_by = this.getAttribute('order_by');
-    const limit = this.getAttribute('limit');
     this.shadowRoot.innerHTML = dimensions.map(dimension => `
       <bar-chart
-        table="${table}"
+        table="${this.table}"
         dimension="${dimension}"
-        measure="${measure}"
-        order_by="${order_by}"
-        limit="${limit}"
+        measure="${this.measure}"
+        order_by="${this.order_by}"
+        limit="${this.limit}"
       >
       </bar-chart>`
     ).join('');

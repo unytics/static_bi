@@ -246,6 +246,33 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#stacked-bar-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stacked Bar Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grouped-bar-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grouped Bar Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiline-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiLine Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tables-list" class="md-nav__link">
     <span class="md-ellipsis">
       Tables List
@@ -267,6 +294,15 @@
   <a href="#table-chart" class="md-nav__link">
     <span class="md-ellipsis">
       Table Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-chart-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      Line Chart (COUNT)
     </span>
   </a>
   
@@ -387,6 +423,33 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#stacked-bar-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stacked Bar Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grouped-bar-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grouped Bar Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiline-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiLine Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tables-list" class="md-nav__link">
     <span class="md-ellipsis">
       Tables List
@@ -408,6 +471,15 @@
   <a href="#table-chart" class="md-nav__link">
     <span class="md-ellipsis">
       Table Chart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-chart-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      Line Chart (COUNT)
     </span>
   </a>
   
@@ -507,17 +579,51 @@
 <div>
 <data-manager>
 
-  <data-manager-table
-    name="stocks"
-    file="https://idl.uw.edu/mosaic/data/stocks.parquet"
-  ></data-manager-table>
+  <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
+  <!-- <data-manager-table name="rides"  file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"></data-manager-table> -->
 
-  <data-manager-table
-    name="rides"
-    file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"
-  ></data-manager-table>
+  <data-manager-view name="stocks">
+    select
+      *,
+      strftime(Date, '%Y-%m') as month,
+    from _stocks
+  </data-manager-view>
 
 </data-manager>
+</div>
+
+<h3 id="stacked-bar-chart">Stacked Bar Chart<a class="headerlink" href="#stacked-bar-chart" title="Permanent link">¶</a></h3>
+<div>
+<bar-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+  stacked="true"
+>
+</bar-chart>
+</div>
+
+<h3 id="grouped-bar-chart">Grouped Bar Chart<a class="headerlink" href="#grouped-bar-chart" title="Permanent link">¶</a></h3>
+<div>
+<bar-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+>
+</bar-chart>
+</div>
+
+<h3 id="multiline-chart">MultiLine Chart<a class="headerlink" href="#multiline-chart" title="Permanent link">¶</a></h3>
+<div>
+<line-chart
+  table="stocks"
+  dimension="Date"
+  breakdown_dimension="Symbol"
+  measure="max(close)"
+>
+</line-chart>
 </div>
 
 <h3 id="tables-list">Tables List<a class="headerlink" href="#tables-list" title="Permanent link">¶</a></h3>
@@ -540,6 +646,18 @@
   order_by="date desc"
 >
 </table-chart>
+</div>
+
+<h3 id="line-chart-count">Line Chart (COUNT)<a class="headerlink" href="#line-chart-count" title="Permanent link">¶</a></h3>
+<div>
+<line-chart
+  table="stocks"
+  dimension="strftime(Date, '%Y-%m')"
+  measure="count(*)"
+  limit="500"
+  order_by="strftime(Date, '%Y-%m')"
+>
+</line-chart>
 </div>
 
 <h3 id="line-chart">Line Chart<a class="headerlink" href="#line-chart" title="Permanent link">¶</a></h3>
@@ -618,7 +736,8 @@
 </div>
 
 <script type="module" src="dist/data_manager.js"></script>
-<script type="module" src="dist/charts.js"></script>
+<script type="module" src="dist/echarts.js"></script>
+<p>--&gt;</p>
 
 
 
