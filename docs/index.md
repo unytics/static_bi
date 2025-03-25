@@ -29,8 +29,9 @@ hide:
 <div>
 <bar-chart
   table="stocks"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
   stacked="true"
 >
 </bar-chart>
@@ -40,8 +41,9 @@ hide:
 <div>
 <bar-chart
   table="stocks"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
 >
 </bar-chart>
 </div>
@@ -50,8 +52,9 @@ hide:
 <div>
 <line-chart
   table="stocks"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
 >
 </line-chart>
 </div>
@@ -73,9 +76,9 @@ hide:
 <div>
 <table-chart
   table="stocks"
-  limit="10"
-  dimensions="date, symbol"
   measures="sum(volume), sum(close)"
+  by="date, symbol"
+  limit="10"
   order_by="date desc"
 >
 </table-chart>
@@ -86,8 +89,8 @@ hide:
 <div>
 <line-chart
   table="stocks"
-  dimension="strftime(Date, '%Y-%m')"
   measure="count(*)"
+  by="strftime(Date, '%Y-%m')"
   limit="500"
   order_by="strftime(Date, '%Y-%m')"
 >
@@ -100,8 +103,8 @@ hide:
 <div>
 <line-chart
   table="stocks"
-  dimension="strftime(Date, '%Y-%m')"
   measure="sum(Close)"
+  by="strftime(Date, '%Y-%m')"
   limit="500"
   order_by="strftime(Date, '%Y-%m')"
 >
@@ -113,8 +116,8 @@ hide:
 <div>
 <bar-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -126,8 +129,8 @@ hide:
 <div>
 <doughnut-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -139,8 +142,8 @@ hide:
 <div>
 <pie-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -153,8 +156,8 @@ hide:
 <bar-chart-grid
   table="stocks"
   measure="max(Close)"
-  limit="10"
   order_by="max(Close) desc"
+  limit="10"
 >
 </bar-chart-grid>
 </div>

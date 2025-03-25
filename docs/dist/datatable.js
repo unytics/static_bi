@@ -13,11 +13,11 @@ class TableChart extends ChartElement {
     async get_data() {
       const query = `
         select
-          ${this.dimensions ? this.dimensions + ',' : ''}
+          ${this.by ? this.by + ',' : ''}
           ${this.measures ? this.measures + ',' : ''}
-          ${(!this.dimensions && !this.measures) ? '*' : ''}
+          ${(!this.by && !this.measures) ? '*' : ''}
         from ${this.table}
-        ${this.measures ? 'group by ' + this.dimensions : ''}
+        ${this.measures ? 'group by ' + this.by : ''}
         ${this.order_by ? 'order by ' + this.order_by : ''}
         ${this.limit ? 'limit ' + this.limit : ''}
       `;

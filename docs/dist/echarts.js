@@ -18,7 +18,7 @@ class Chart extends ChartElement {
 
   async get_data() {
     let query;
-    if (this.breakdown_dimension) {
+    if (this.breakdown_by) {
       query = `
         with __table__ as (
           select *
@@ -27,15 +27,15 @@ class Chart extends ChartElement {
         )
 
         pivot __table__
-        on ${this.breakdown_dimension}
+        on ${this.breakdown_by}
         using ${this.measure}
-        group by (${this.dimension})
+        group by (${this.by})
       `;
     }
     else {
       query = `
         select
-          ${this.dimension} as ${slugify(this.dimension)},
+          ${this.by} as ${slugify(this.by)},
           ${this.measure} as ${slugify(this.measure)},
         from ${this.table}
         ${this.where_clause}
@@ -82,9 +82,9 @@ class Chart extends ChartElement {
     const self = this;
     this.chart.on('click', function(params) {
       console.log('CLICK', params);
-      self.set_filter([self.dimension, '=', params.name]);
-      // if(self.breakdown_dimension) {
-      //   self.filters.push([self.breakdown_dimension, '=', params.seriesName])
+      self.set_filter([self.by, '=', params.name]);
+      // if(self.breakdown_by) {
+      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
       // }
     });
     this.chart.getZr().on('click', function(event) {
@@ -152,11 +152,11 @@ class BarChartGrid extends ChartElement {
     return await window.data_manager.list_dimensions_columns(this.table);
   }
 
-  generate_html(dimensions) {
-    this.shadowRoot.innerHTML = dimensions.map(dimension => `
+  generate_html(dimension_columns) {
+    this.shadowRoot.innerHTML = dimension_columns.map(column => `
       <bar-chart
         table="${this.table}"
-        dimension="${dimension}"
+        by="${column}"
         measure="${this.measure}"
         order_by="${this.order_by}"
         limit="${this.limit}"
