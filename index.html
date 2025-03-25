@@ -246,6 +246,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stacked-bar-chart" class="md-nav__link">
     <span class="md-ellipsis">
       Stacked Bar Chart
@@ -423,6 +432,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stacked-bar-chart" class="md-nav__link">
     <span class="md-ellipsis">
       Stacked Bar Chart
@@ -592,13 +610,40 @@
 </data-manager>
 </div>
 
+<h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">¶</a></h3>
+<div>
+
+
+  <bar-chart
+    table="stocks"
+    measure="max(Close)"
+    by="Symbol"
+    limit="10"
+    order_by="max(Close) desc"
+    style="width: 49%; display: inline-block;"
+  >
+  </bar-chart>
+
+  <line-chart
+    table="stocks"
+    measure="max(close)"
+    by="Date"
+    breakdown_by="Symbol"
+    style="width: 49%; display: inline-block;"
+  >
+  </line-chart>
+
+
+
+</div>
+
 <h3 id="stacked-bar-chart">Stacked Bar Chart<a class="headerlink" href="#stacked-bar-chart" title="Permanent link">¶</a></h3>
 <div>
 <bar-chart
   table="stocks"
-  dimension="Date"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
   stacked="true"
 >
 </bar-chart>
@@ -608,9 +653,9 @@
 <div>
 <bar-chart
   table="stocks"
-  dimension="Date"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
 >
 </bar-chart>
 </div>
@@ -619,9 +664,9 @@
 <div>
 <line-chart
   table="stocks"
-  dimension="Date"
-  breakdown_dimension="Symbol"
   measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
 >
 </line-chart>
 </div>
@@ -640,9 +685,9 @@
 <div>
 <table-chart
   table="stocks"
-  limit="10"
-  dimensions="date, symbol"
   measures="sum(volume), sum(close)"
+  by="date, symbol"
+  limit="10"
   order_by="date desc"
 >
 </table-chart>
@@ -652,8 +697,8 @@
 <div>
 <line-chart
   table="stocks"
-  dimension="strftime(Date, '%Y-%m')"
   measure="count(*)"
+  by="strftime(Date, '%Y-%m')"
   limit="500"
   order_by="strftime(Date, '%Y-%m')"
 >
@@ -664,8 +709,8 @@
 <div>
 <line-chart
   table="stocks"
-  dimension="strftime(Date, '%Y-%m')"
   measure="sum(Close)"
+  by="strftime(Date, '%Y-%m')"
   limit="500"
   order_by="strftime(Date, '%Y-%m')"
 >
@@ -676,8 +721,8 @@
 <div>
 <bar-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -688,8 +733,8 @@
 <div>
 <doughnut-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -700,8 +745,8 @@
 <div>
 <pie-chart
   table="stocks"
-  dimension="Symbol"
   measure="max(Close)"
+  by="Symbol"
   limit="10"
   order_by="max(Close) desc"
 >
@@ -713,8 +758,8 @@
 <bar-chart-grid
   table="stocks"
   measure="max(Close)"
-  limit="10"
   order_by="max(Close) desc"
+  limit="10"
 >
 </bar-chart-grid>
 </div>
@@ -737,7 +782,7 @@
 
 <script type="module" src="dist/data_manager.js"></script>
 <script type="module" src="dist/echarts.js"></script>
-<p>--&gt;</p>
+<script type="module" src="dist/datatable.js"></script>
 
 
 

@@ -1,137 +1,12 @@
+import {
+  ChartElement,
+  humanize,
+  slugify,
+} from './base_chart.js';
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
-import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
-import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
-
-
-function slugify(text) {
-  return text.replace(/[^\w ]+/g, "").replace(' ', '_');
-}
-
-function humanize(value) {
-  if (Number.isInteger(value)) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  if (value instanceof Date) {
-    return value.toISOString().replace('T00:00:00.000Z', '');
-  }
-  return value;
-}
-
-function markdown2html(markdown_content) {
-  return DOMPurify.sanitize(marked.parse(markdown_content));
-}
 
 
 
-class ChartElement extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.table = this.getAttribute('table');
-    this.dimension = this.getAttribute('dimension');
-    this.dimensions = this.getAttribute('dimensions');
-    this.breakdown_dimension = this.getAttribute('breakdown_dimension');
-    this.measure = this.getAttribute('measure');
-    this.measures = this.getAttribute('measures');
-    this.limit = this.getAttribute('limit');
-    this.order_by = this.getAttribute('order_by');
-    this.stacked = this.getAttribute('stacked');
-    this.attachShadow({ mode: 'open' });
-    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
-    this.render();
-    const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
-    document.addEventListener(event_to_listen, async (event) => {this.render();})
-  }
-
-  async render() {
-    if (!this.is_data_manager_ready()) {
-      return;
-    }
-    const data = await this.get_data();
-    this.generate_html(data);
-  }
-
-  is_data_manager_ready() {
-    if (window.data_manager === undefined) {
-      return false;
-    }
-    if (window.data_manager.db_ready === false) {
-      return false;
-    }
-    if (!this.table) {
-      return true;
-    }
-    if (this.table in window.data_manager.tables) {
-      return true;
-    }
-    return false;
-  }
-
-}
-
-
-class TableChart extends ChartElement {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    const query = `
-      select
-        ${this.dimensions ? this.dimensions + ',' : ''}
-        ${this.measures ? this.measures + ',' : ''}
-        ${(!this.dimensions && !this.measures) ? '*' : ''}
-      from ${this.table}
-      ${this.measures ? 'group by ' + this.dimensions : ''}
-      ${this.order_by ? 'order by ' + this.order_by : ''}
-      ${this.limit ? 'limit ' + this.limit : ''}
-    `;
-    const data = await window.data_manager.query(query);
-    return data;
-  }
-
-  generate_html(data) {
-    const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
-    const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
-    this.shadowRoot.innerHTML = `
-      <table>
-        <thead><tr>${tableHeader}</tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-    `;
-  }
-
-}
-
-class TableDescriptionChart extends TableChart {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    return await window.data_manager.describe_table(this.table);
-  }
-
-}
-
-
-class TablesListChart extends TableChart {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    return await window.data_manager.show_tables();
-  }
-
-}
 
 
 
@@ -143,20 +18,27 @@ class Chart extends ChartElement {
 
   async get_data() {
     let query;
-    if (this.breakdown_dimension) {
+    if (this.breakdown_by) {
       query = `
-        pivot ${this.table}
-        on ${this.breakdown_dimension}
+        with __table__ as (
+          select *
+          from ${this.table}
+          ${this.where_clause}
+        )
+
+        pivot __table__
+        on ${this.breakdown_by}
         using ${this.measure}
-        group by (${this.dimension})
+        group by (${this.by})
       `;
     }
     else {
       query = `
         select
-          ${this.dimension} as ${slugify(this.dimension)},
+          ${this.by} as ${slugify(this.by)},
           ${this.measure} as ${slugify(this.measure)},
         from ${this.table}
+        ${this.where_clause}
         group by 1
         order by ${this.order_by}
         limit ${this.limit}
@@ -168,11 +50,12 @@ class Chart extends ChartElement {
 
   generate_html(data) {
     const labels = Object.values(data)[0].map((value) => humanize(value));
-    const datasets = Object.entries(data).slice(1).map(([key, value]) => {
+    let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
+    const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
       return {
-        name: key,
+        name: serie,
         type: this.chart_type,
-        data: value,
+        data: values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v),
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
@@ -197,16 +80,21 @@ class Chart extends ChartElement {
     this.chart = echarts.init(this.chartElement);
     this.chart.setOption(chart_config);
     const self = this;
+    window.addEventListener('resize', function() {
+      self.chart.resize();
+    });
     this.chart.on('click', function(params) {
-      const filters = [[self.dimension, '=', params.name]];
-      if(self.breakdown_dimension) {
-        filters.push([self.breakdown_dimension, '=', params.seriesName])
+      console.log('CLICK', params);
+      self.set_filter([self.by, '=', params.name]);
+      // if(self.breakdown_by) {
+      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
+      // }
+    });
+    this.chart.getZr().on('click', function(event) {
+      if ((!event.target) && self.filter) {
+        // Reset filter if click nowhere
+        self.set_filter();
       }
-      self.dispatchEvent(new CustomEvent('filters_added', {
-        detail: filters,
-        bubbles: true,
-        composed: true
-      }));
     });
     this.chart.on('brushEnd', function (params) {
       if (!params.areas || !params.areas[0]) {
@@ -267,11 +155,11 @@ class BarChartGrid extends ChartElement {
     return await window.data_manager.list_dimensions_columns(this.table);
   }
 
-  generate_html(dimensions) {
-    this.shadowRoot.innerHTML = dimensions.map(dimension => `
+  generate_html(dimension_columns) {
+    this.shadowRoot.innerHTML = dimension_columns.map(column => `
       <bar-chart
         table="${this.table}"
-        dimension="${dimension}"
+        by="${column}"
         measure="${this.measure}"
         order_by="${this.order_by}"
         limit="${this.limit}"
@@ -281,11 +169,6 @@ class BarChartGrid extends ChartElement {
   }
 }
 
-
-
-customElements.define("table-chart", TableChart);
-customElements.define("table-description-chart", TableDescriptionChart);
-customElements.define("tables-list-chart", TablesListChart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);
