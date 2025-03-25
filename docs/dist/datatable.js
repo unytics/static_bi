@@ -1,8 +1,5 @@
 import {
     ChartElement,
-    // FILTERS,
-    list_chart_filters,
-    // add_filters,
     humanize,
     slugify,
   } from './base_chart.js';

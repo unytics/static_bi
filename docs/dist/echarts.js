@@ -1,8 +1,5 @@
 import {
   ChartElement,
-  // FILTERS,
-  list_chart_filters,
-  // add_filters,
   humanize,
   slugify,
 } from './base_chart.js';
@@ -21,14 +18,15 @@ class Chart extends ChartElement {
 
   async get_data() {
     let query;
-    const filters_to_apply = list_chart_filters().filter((f) => f !== this.filter);
-    let where = '';
-    if (filters_to_apply.length) {
-      where = ` where ${filters_to_apply.join(' and ')}`;
-    }
     if (this.breakdown_dimension) {
       query = `
-        pivot ${this.table}
+        with __table__ as (
+          select *
+          from ${this.table}
+          ${this.where_clause}
+        )
+
+        pivot __table__
         on ${this.breakdown_dimension}
         using ${this.measure}
         group by (${this.dimension})
@@ -40,7 +38,7 @@ class Chart extends ChartElement {
           ${this.dimension} as ${slugify(this.dimension)},
           ${this.measure} as ${slugify(this.measure)},
         from ${this.table}
-        ${where}
+        ${this.where_clause}
         group by 1
         order by ${this.order_by}
         limit ${this.limit}
@@ -52,11 +50,12 @@ class Chart extends ChartElement {
 
   generate_html(data) {
     const labels = Object.values(data)[0].map((value) => humanize(value));
+    let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
     const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
       return {
         name: serie,
         type: this.chart_type,
-        data: values,
+        data: values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v),
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
@@ -83,7 +82,7 @@ class Chart extends ChartElement {
     const self = this;
     this.chart.on('click', function(params) {
       console.log('CLICK', params);
-      self.set_filter(`${self.dimension} = '${params.name}'`);
+      self.set_filter([self.dimension, '=', params.name]);
       // if(self.breakdown_dimension) {
       //   self.filters.push([self.breakdown_dimension, '=', params.seriesName])
       // }

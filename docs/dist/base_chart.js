@@ -35,12 +35,6 @@ function add_filters(new_filters) {
 const CHART_ELEMENTS = [];
 
 
-function list_chart_filters() {
-  return CHART_ELEMENTS.map((chart) => chart.filter).filter((f) => f !== undefined);
-}
-
-
-
 
 class ChartElement extends HTMLElement {
 
@@ -106,15 +100,32 @@ class ChartElement extends HTMLElement {
   }
 
   set_filter(filter) {
-    this.filter = filter;
+    if (this.filter !== undefined && filter !== undefined && filter[0] === this.filter[0] && filter[1] === this.filter[1] && filter[1] === this.filter[1] && filter[2] === this.filter[2]) {
+      this.filter = undefined;
+    }
+    else {
+      this.filter = filter;
+    }
     document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
   }
 
-  get filter_as_string() {
-    if (this.filter === undefined) {
+  get where_clause() {
+    const columns = this.table_columns;
+    const filters = CHART_ELEMENTS
+    .filter((chart) =>
+      (chart!== this) &&
+      (chart.filter !== undefined) &&
+      columns.includes(chart.filter[0])
+    );
+    if (!filters.length) {
       return '';
     }
-    return this
+    return 'where ' + filters
+    .map(
+      (chart) =>
+      `${chart.filter[0]} ${chart.filter[1]} ${typeof chart.filter[2] === 'string' ? `'${chart.filter[2]}'` : chart.filter[2]}`
+    )
+    .join(' and ');
   }
 
 }
@@ -123,9 +134,6 @@ class ChartElement extends HTMLElement {
 
 export {
   ChartElement,
-  // FILTERS,
-  list_chart_filters,
-  // add_filters,
   humanize,
   slugify,
 };
