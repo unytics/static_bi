@@ -1,164 +1,15 @@
+import {
+  ChartElement,
+  // FILTERS,
+  list_chart_filters,
+  // add_filters,
+  humanize,
+  slugify,
+} from './base_chart.js';
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
-import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
-import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
-
-
-let FILTERS = [];
-
-
-function slugify(text) {
-  return text.replace(/[^\w ]+/g, "").replace(' ', '_');
-}
-
-function humanize(value) {
-  if (Number.isInteger(value)) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  if (value instanceof Date) {
-    return value.toISOString().replace('T00:00:00.000Z', '');
-  }
-  return value;
-}
-
-function markdown2html(markdown_content) {
-  return DOMPurify.sanitize(marked.parse(markdown_content));
-}
-
-function add_filters(new_filters) {
-  // Remove existing filters with the same column as new_filters
-  const new_columns = new Set(new_filters.map((f) => f[0]));
-  FILTERS = FILTERS.filter((f) => !new_columns.has(f[0]));
-
-  FILTERS.push(...new_filters);
-
-  document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
-}
 
 
 
-
-class ChartElement extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.table = this.getAttribute('table');
-    this.dimension = this.getAttribute('dimension');
-    this.dimensions = this.getAttribute('dimensions');
-    this.breakdown_dimension = this.getAttribute('breakdown_dimension');
-    this.measure = this.getAttribute('measure');
-    this.measures = this.getAttribute('measures');
-    this.limit = this.getAttribute('limit');
-    this.order_by = this.getAttribute('order_by');
-    this.stacked = this.getAttribute('stacked');
-    this.attachShadow({ mode: 'open' });
-    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
-    this.render();
-    const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
-    document.addEventListener(event_to_listen, async (event) => {this.render();});
-    document.addEventListener(('filters-added'), async (event) => {this.render();});
-  }
-
-  get table_columns() {
-    return window.data_manager.tables[this.table];
-  }
-
-  async get_data() {
-    throw new Error('Not implemented');
-  }
-
-  generate_html(data) {
-    throw new Error('Not implemented');
-  }
-
-  async render() {
-    if (!this.is_data_manager_ready()) {
-      return;
-    }
-    const data = await this.get_data();
-    this.generate_html(data);
-  }
-
-  is_data_manager_ready() {
-    if (window.data_manager === undefined) {
-      return false;
-    }
-    if (window.data_manager.db_ready === false) {
-      return false;
-    }
-    if (!this.table) {
-      return true;
-    }
-    if (this.table in window.data_manager.tables) {
-      return true;
-    }
-    return false;
-  }
-
-}
-
-
-class TableChart extends ChartElement {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    const query = `
-      select
-        ${this.dimensions ? this.dimensions + ',' : ''}
-        ${this.measures ? this.measures + ',' : ''}
-        ${(!this.dimensions && !this.measures) ? '*' : ''}
-      from ${this.table}
-      ${this.measures ? 'group by ' + this.dimensions : ''}
-      ${this.order_by ? 'order by ' + this.order_by : ''}
-      ${this.limit ? 'limit ' + this.limit : ''}
-    `;
-    const data = await window.data_manager.query(query);
-    return data;
-  }
-
-  generate_html(data) {
-    const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
-    const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
-    this.shadowRoot.innerHTML = `
-      <table>
-        <thead><tr>${tableHeader}</tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-    `;
-  }
-
-}
-
-class TableDescriptionChart extends TableChart {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    return await window.data_manager.describe_table(this.table);
-  }
-
-}
-
-
-class TablesListChart extends TableChart {
-
-  constructor() {
-    super();
-  }
-
-  async get_data() {
-    return await window.data_manager.show_tables();
-  }
-
-}
 
 
 
@@ -170,23 +21,10 @@ class Chart extends ChartElement {
 
   async get_data() {
     let query;
-    const filters_not_to_apply = [];
-    const filters_to_apply = [];
-    for(const [column, operation, value] of FILTERS) {
-      if(!this.table_columns.includes(column)) {
-        continue;
-      }
-      if(column === this.dimension) {
-        filters_not_to_apply.push([column, operation, value]);
-      }
-      else {
-        filters_to_apply.push([column, operation, value]);
-      }
-    }
+    const filters_to_apply = list_chart_filters().filter((f) => f !== this.filter);
     let where = '';
     if (filters_to_apply.length) {
-      const where_clause = filters_to_apply.map(([column, operation, value]) => `${column} ${operation} ${(typeof value) === 'string' ? "'" + value + "'" : value}`)
-      where = ` where ${where_clause.join(' and ')}`;
+      where = ` where ${filters_to_apply.join(' and ')}`;
     }
     if (this.breakdown_dimension) {
       query = `
@@ -214,11 +52,11 @@ class Chart extends ChartElement {
 
   generate_html(data) {
     const labels = Object.values(data)[0].map((value) => humanize(value));
-    const datasets = Object.entries(data).slice(1).map(([key, value]) => {
+    const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
       return {
-        name: key,
+        name: serie,
         type: this.chart_type,
-        data: value,
+        data: values,
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
@@ -244,11 +82,17 @@ class Chart extends ChartElement {
     this.chart.setOption(chart_config);
     const self = this;
     this.chart.on('click', function(params) {
-      const filters = [[self.dimension, '=', params.name]];
-      if(self.breakdown_dimension) {
-        filters.push([self.breakdown_dimension, '=', params.seriesName])
+      console.log('CLICK', params);
+      self.set_filter(`${self.dimension} = '${params.name}'`);
+      // if(self.breakdown_dimension) {
+      //   self.filters.push([self.breakdown_dimension, '=', params.seriesName])
+      // }
+    });
+    this.chart.getZr().on('click', function(event) {
+      if ((!event.target) && self.filter) {
+        // Reset filter if click nowhere
+        self.set_filter();
       }
-      add_filters(filters);
     });
     this.chart.on('brushEnd', function (params) {
       if (!params.areas || !params.areas[0]) {
@@ -323,11 +167,6 @@ class BarChartGrid extends ChartElement {
   }
 }
 
-
-
-customElements.define("table-chart", TableChart);
-customElements.define("table-description-chart", TableDescriptionChart);
-customElements.define("tables-list-chart", TablesListChart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);

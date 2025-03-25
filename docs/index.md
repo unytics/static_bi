@@ -182,4 +182,5 @@ hide:
 </div>
 
 <script type="module" src="dist/data_manager.js"></script>
-<script type="module" src="dist/echarts.js"></script> -->
+<script type="module" src="dist/echarts.js"></script>
+<script type="module" src="dist/datatable.js"></script>
