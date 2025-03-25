@@ -25,6 +25,35 @@ hide:
 </div>
 
 
+### Dashboard
+
+<div>
+
+
+  <bar-chart
+    table="stocks"
+    measure="max(Close)"
+    by="Symbol"
+    limit="10"
+    order_by="max(Close) desc"
+    style="width: 49%; display: inline-block;"
+  >
+  </bar-chart>
+
+  <line-chart
+    table="stocks"
+    measure="max(close)"
+    by="Date"
+    breakdown_by="Symbol"
+    style="width: 49%; display: inline-block;"
+  >
+  </line-chart>
+
+
+
+</div>
+
+
 ### Stacked Bar Chart
 <div>
 <bar-chart

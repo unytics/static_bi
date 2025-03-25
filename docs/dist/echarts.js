@@ -80,6 +80,9 @@ class Chart extends ChartElement {
     this.chart = echarts.init(this.chartElement);
     this.chart.setOption(chart_config);
     const self = this;
+    window.addEventListener('resize', function() {
+      self.chart.resize();
+    });
     this.chart.on('click', function(params) {
       console.log('CLICK', params);
       self.set_filter([self.by, '=', params.name]);
