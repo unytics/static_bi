@@ -70,7 +70,8 @@ class Chart extends ChartElement {
         xAxisIndex: 0
       },
       xAxis: {
-          data: labels
+        // type: this.by === 'date' ? 'time' : 'category',
+        data: labels
       },
       yAxis: {},
       series: datasets

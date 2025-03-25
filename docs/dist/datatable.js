@@ -17,7 +17,7 @@ class TableChart extends ChartElement {
           ${this.measures ? this.measures + ',' : ''}
           ${(!this.by && !this.measures) ? '*' : ''}
         from ${this.table}
-        ${this.measures ? 'group by ' + this.by : ''}
+        ${this.measures && this.by ? 'group by ' + this.by : ''}
         ${this.order_by ? 'order by ' + this.order_by : ''}
         ${this.limit ? 'limit ' + this.limit : ''}
       `;

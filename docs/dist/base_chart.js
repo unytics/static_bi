@@ -21,16 +21,6 @@ function markdown2html(markdown_content) {
   return DOMPurify.sanitize(marked.parse(markdown_content));
 }
 
-function add_filters(new_filters) {
-  // Remove existing filters with the same column as new_filters
-  const new_columns = new Set(new_filters.map((f) => f[0]));
-  FILTERS = FILTERS.filter((f) => !new_columns.has(f[0]));
-
-  FILTERS.push(...new_filters);
-
-  document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
-}
-
 
 const CHART_ELEMENTS = [];
 

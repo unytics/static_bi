@@ -1,4 +1,20 @@
 import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1-dev106.0/+esm";
+import { tableFromIPC } from "https://cdn.jsdelivr.net/npm/@uwdata/flechette/+esm";
+
+
+// FROM https://github.com/uwdata/mosaic/blob/main/packages/core/src/connectors/wasm.js#L6
+function getArrowIPC(con, query) {
+  return new Promise((resolve, reject) => {
+    con.useUnsafe(async (bindings, conn) => {
+      try {
+        const buffer = await bindings.runQuery(conn, query);
+        resolve(buffer);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
 
 
 function arrow_table2vectors(arrow_table) {
@@ -6,13 +22,25 @@ function arrow_table2vectors(arrow_table) {
     console.warn("arrow_table is null or undefined.  Returning null.");
     return null;
   }
-  const vectors = {};
-  const columns = arrow_table.schema.fields;
-  for (const column of columns) {
-    vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
-      (value) => (typeof value === 'bigint') ? Number(value) : value
-    );
-  }
+  const flechette_table = tableFromIPC(arrow_table.tableToIPC(), { useDate: true });
+  const vectors = flechette_table.toColumns();
+  console.log('vectors', vectors);
+
+  // const vectors = {};
+  // const columns = arrow_table.schema.fields;
+  // for (const column of columns) {
+  //   // vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
+  //   //   (value) => (typeof value === 'bigint') ? Number(value) : value
+  //   // );
+  //   vectors[column.name] = arrow_table.getChild(column.name).toArray().map((v) => arrow_value2js(v));
+  //   console.log(column.name, column.type);
+  //   // for (let i = 0; i < vectors[column.name].length; i++) {
+  //   //   console.log(`${vectors[column.name].get(i)}`);
+  //   // }
+
+  // }
+  // console.log('vectors', vectors);
+  // console.log('type', Number(Object.values(vectors)[Object.values(vectors).length-1][0]));
   return vectors;
 }
 
@@ -65,12 +93,21 @@ class DataManager extends HTMLElement {
     const arrow_table = await this.query2arrow_table(query);
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
+    console.log('RESULT', result);
     return result;
   }
 
   async query2vectors(query) {
-    const arrow_table = await this.query2arrow_table(query);
-    const vectors = arrow_table2vectors(arrow_table);
+    // const arrow_table = await this.query2arrow_table(query);
+    const conn = await this.db.connect();
+    const tableIPC = await getArrowIPC(conn, query);
+    const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
+    const vectors = flechette_table.toColumns();
+    for(const key of Object.keys(vectors).slice(1)) {
+      vectors[key] = Array.from(vectors[key]);
+    }
+    console.log('vectors', vectors);
+    // const vectors = arrow_table2vectors(arrow_table);
     return vectors;
   }
 
