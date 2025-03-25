@@ -44,7 +44,7 @@ class Chart extends ChartElement {
         limit ${this.limit}
       `;
     }
-    const data = await window.data_manager.query2vectors(query);
+    const data = await window.data_manager.query2columns(query);
     return data;
   }
 
@@ -65,6 +65,7 @@ class Chart extends ChartElement {
       title: {},
       tooltip: {},
       legend: {},
+      animation: false,
       brush: {
         toolbox: ['lineX'],
         xAxisIndex: 0

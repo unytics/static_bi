@@ -79,35 +79,23 @@ class DataManager extends HTMLElement {
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
-  }
-
-  async query2arrow_table(query) {
-    const conn = await this.db.connect();
-    const arrow_table = await conn.query(query);
-    await conn.close();
-    return arrow_table;
+    this.conn = await this.db.connect();
   }
 
   async query(query) {
-    console.log('QUERY', query);
-    const arrow_table = await this.query2arrow_table(query);
+    const arrow_table = await this.conn.query(query);
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
-    console.log('RESULT', result);
     return result;
   }
 
-  async query2vectors(query) {
-    // const arrow_table = await this.query2arrow_table(query);
-    const conn = await this.db.connect();
-    const tableIPC = await getArrowIPC(conn, query);
+  async query2columns(query) {
+    const tableIPC = await getArrowIPC(this.conn, query);
     const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
     const vectors = flechette_table.toColumns();
     for(const key of Object.keys(vectors).slice(1)) {
       vectors[key] = Array.from(vectors[key]);
     }
-    console.log('vectors', vectors);
-    // const vectors = arrow_table2vectors(arrow_table);
     return vectors;
   }
 
