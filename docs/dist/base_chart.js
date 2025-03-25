@@ -44,7 +44,7 @@ class ChartElement extends HTMLElement {
 
   connectedCallback() {
     this.table = this.getAttribute('table');
-    this.dimension = this.getAttribute('dimension');
+    this.dimension = this.getAttribute('dimension') || 'date';
     this.dimensions = this.getAttribute('dimensions');
     this.breakdown_dimension = this.getAttribute('breakdown_dimension');
     this.measure = this.getAttribute('measure');

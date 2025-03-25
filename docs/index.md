@@ -29,7 +29,6 @@ hide:
 <div>
 <bar-chart
   table="stocks"
-  dimension="Date"
   breakdown_dimension="Symbol"
   measure="max(close)"
   stacked="true"
@@ -41,7 +40,6 @@ hide:
 <div>
 <bar-chart
   table="stocks"
-  dimension="Date"
   breakdown_dimension="Symbol"
   measure="max(close)"
 >
@@ -52,7 +50,6 @@ hide:
 <div>
 <line-chart
   table="stocks"
-  dimension="Date"
   breakdown_dimension="Symbol"
   measure="max(close)"
 >
