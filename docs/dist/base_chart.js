@@ -32,6 +32,10 @@ class ChartElement extends HTMLElement {
     super();
   }
 
+  get rerender_when_filter_changes() {
+    return true;
+  }
+
   connectedCallback() {
     this.table = this.getAttribute('table');
     this.by = this.getAttribute('by');
@@ -49,7 +53,9 @@ class ChartElement extends HTMLElement {
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
     document.addEventListener(event_to_listen, async (event) => {this.render();});
-    document.addEventListener(('filters-added'), async (event) => {this.render();});
+    if (this.rerender_when_filter_changes) {
+      document.addEventListener(('filters-added'), async (event) => {this.render();});
+    }
     CHART_ELEMENTS.push(this);
   }
 

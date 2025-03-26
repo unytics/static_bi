@@ -68,8 +68,8 @@ class Chart extends ChartElement {
     });
 
     const chart_config = {
-      title: {},
-      tooltip: this.by === 'date' ? {trigger: 'axis', position: function (pt) {return [pt[0], '10%'];}} : {},
+      title: {text: `${this.measure} by ${this.by}`},
+      tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
       animation: false,
@@ -78,6 +78,7 @@ class Chart extends ChartElement {
         xAxisIndex: 0
       },
       xAxis: this.is_horizontal ? {} : {
+        name: this.by,
         type: this.by === 'date' ? 'time' : 'category',
         data: this.by === 'date' ? undefined : labels,
       },
@@ -164,7 +165,14 @@ class BarChartGrid extends ChartElement {
     super();
   }
 
+  get rerender_when_filter_changes() {
+    return false;
+  }
+
   async get_data() {
+    if (this.by) {
+      return this.by.split(',').map((by) => by.trim());
+    }
     return await window.data_manager.list_dimensions_columns(this.table);
   }
 
@@ -176,6 +184,8 @@ class BarChartGrid extends ChartElement {
         measure="${this.measure}"
         order_by="${this.order_by}"
         limit="${this.limit}"
+        ${this.is_horizontal ? 'horizontal="true"' : ''}
+        style="width: 32%; display: inline-block;"
       >
       </bar-chart>`
     ).join('');

@@ -1,12 +1,59 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
+
 # Stats
 
 <div>
 <data-manager>
 
-  <data-manager-table name="stats" file="../data/stats_000000000000.parquet"></data-manager-table>
+  <data-manager-table name="stats" file="../data/2025-03-26_stats.parquet"></data-manager-table>
 
 </data-manager>
 </div>
+
+
+### Nb users
+<div>
+<line-chart
+  table="stats"
+  measure="count(distinct user)"
+  by="strftime(date, '%Y-%m')"
+  order_by="strftime(date, '%Y-%m')"
+>
+</line-chart>
+</div>
+
+### Bar Chart Grid (by user)
+<div>
+<bar-chart-grid
+  table="stats"
+  measure="count(distinct user)"
+  by="bigfunction, is_service_account, domain, status, project"
+  order_by="count(distinct user) desc"
+  limit="10"
+  horizontal="true"
+>
+</bar-chart-grid>
+</div>
+
+
+### Bar Chart Grid (by nb days)
+<div>
+<bar-chart-grid
+  table="stats"
+  measure="count(distinct date)"
+  by="bigfunction, is_service_account, domain, user, status, project"
+  order_by="count(distinct date) desc"
+  limit="10"
+  horizontal="true"
+>
+</bar-chart-grid>
+</div>
+
 
 
 ### Table Description Chart
@@ -16,13 +63,14 @@
 </div>
 
 
+
 ### Horitonal Bar Chart by user
 <div>
 <bar-chart
   table="stats"
-  measure="sum(elapsed_hours)"
+  measure="count(distinct date)"
   by="project"
-  order_by="sum(elapsed_hours) desc"
+  order_by="count(distinct date) desc"
   limit="10"
   horizontal="true"
 >

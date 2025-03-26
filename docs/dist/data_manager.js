@@ -104,7 +104,7 @@ class DataManager extends HTMLElement {
       return;
     }
     // await this.query(`create table ${name} as select * from "${file_url}"`);
-    const res = await fetch(file_url);
+    const res = await fetch(file_url, { cache: "force-cache" });
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
