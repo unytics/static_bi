@@ -21,16 +21,6 @@ function markdown2html(markdown_content) {
   return DOMPurify.sanitize(marked.parse(markdown_content));
 }
 
-function add_filters(new_filters) {
-  // Remove existing filters with the same column as new_filters
-  const new_columns = new Set(new_filters.map((f) => f[0]));
-  FILTERS = FILTERS.filter((f) => !new_columns.has(f[0]));
-
-  FILTERS.push(...new_filters);
-
-  document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
-}
-
 
 const CHART_ELEMENTS = [];
 
@@ -42,6 +32,10 @@ class ChartElement extends HTMLElement {
     super();
   }
 
+  get rerender_when_filter_changes() {
+    return true;
+  }
+
   connectedCallback() {
     this.table = this.getAttribute('table');
     this.by = this.getAttribute('by');
@@ -51,6 +45,7 @@ class ChartElement extends HTMLElement {
     this.limit = this.getAttribute('limit');
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.getAttribute('stacked');
+    this.is_horizontal = this.getAttribute('horizontal') === "true";
     this.filter = undefined;
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
@@ -58,7 +53,9 @@ class ChartElement extends HTMLElement {
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
     document.addEventListener(event_to_listen, async (event) => {this.render();});
-    document.addEventListener(('filters-added'), async (event) => {this.render();});
+    if (this.rerender_when_filter_changes) {
+      document.addEventListener(('filters-added'), async (event) => {this.render();});
+    }
     CHART_ELEMENTS.push(this);
   }
 

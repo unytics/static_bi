@@ -44,35 +44,49 @@ class Chart extends ChartElement {
         limit ${this.limit}
       `;
     }
-    const data = await window.data_manager.query2vectors(query);
+    const data = await window.data_manager.query2columns(query);
     return data;
   }
 
   generate_html(data) {
     const labels = Object.values(data)[0].map((value) => humanize(value));
+    // console.log('labels', labels);
+    // console.log('first label is date', typeof labels[0].getMonth === 'function')
     let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
     const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
       return {
         name: serie,
         type: this.chart_type,
-        data: values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v),
+        data: this.by === 'date' ? (
+          values.map((v, k) => [labels[k], v])
+        ) : (
+          values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v)
+        ),
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
     });
 
     const chart_config = {
-      title: {},
-      tooltip: {},
+      title: {text: `${this.measure} by ${this.by}`},
+      tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
       legend: {},
+      grid: {containLabel: true},
+      animation: false,
       brush: {
         toolbox: ['lineX'],
         xAxisIndex: 0
       },
-      xAxis: {
-          data: labels
+      xAxis: this.is_horizontal ? {} : {
+        name: this.by,
+        type: this.by === 'date' ? 'time' : 'category',
+        data: this.by === 'date' ? undefined : labels,
       },
-      yAxis: {},
+      yAxis: this.is_horizontal ? {
+        type: this.by === 'date' ? 'time' : 'category',
+        data: this.by === 'date' ? undefined : labels,
+        inverse: true,
+      } : {},
       series: datasets
     };
     this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
@@ -151,7 +165,14 @@ class BarChartGrid extends ChartElement {
     super();
   }
 
+  get rerender_when_filter_changes() {
+    return false;
+  }
+
   async get_data() {
+    if (this.by) {
+      return this.by.split(',').map((by) => by.trim());
+    }
     return await window.data_manager.list_dimensions_columns(this.table);
   }
 
@@ -163,6 +184,8 @@ class BarChartGrid extends ChartElement {
         measure="${this.measure}"
         order_by="${this.order_by}"
         limit="${this.limit}"
+        ${this.is_horizontal ? 'horizontal="true"' : ''}
+        style="width: 32%; display: inline-block;"
       >
       </bar-chart>`
     ).join('');

@@ -1,4 +1,20 @@
 import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1-dev106.0/+esm";
+import { tableFromIPC } from "https://cdn.jsdelivr.net/npm/@uwdata/flechette/+esm";
+
+
+// FROM https://github.com/uwdata/mosaic/blob/main/packages/core/src/connectors/wasm.js#L6
+function getArrowIPC(con, query) {
+  return new Promise((resolve, reject) => {
+    con.useUnsafe(async (bindings, conn) => {
+      try {
+        const buffer = await bindings.runQuery(conn, query);
+        resolve(buffer);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
 
 
 function arrow_table2vectors(arrow_table) {
@@ -6,13 +22,25 @@ function arrow_table2vectors(arrow_table) {
     console.warn("arrow_table is null or undefined.  Returning null.");
     return null;
   }
-  const vectors = {};
-  const columns = arrow_table.schema.fields;
-  for (const column of columns) {
-    vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
-      (value) => (typeof value === 'bigint') ? Number(value) : value
-    );
-  }
+  const flechette_table = tableFromIPC(arrow_table.tableToIPC(), { useDate: true });
+  const vectors = flechette_table.toColumns();
+  console.log('vectors', vectors);
+
+  // const vectors = {};
+  // const columns = arrow_table.schema.fields;
+  // for (const column of columns) {
+  //   // vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
+  //   //   (value) => (typeof value === 'bigint') ? Number(value) : value
+  //   // );
+  //   vectors[column.name] = arrow_table.getChild(column.name).toArray().map((v) => arrow_value2js(v));
+  //   console.log(column.name, column.type);
+  //   // for (let i = 0; i < vectors[column.name].length; i++) {
+  //   //   console.log(`${vectors[column.name].get(i)}`);
+  //   // }
+
+  // }
+  // console.log('vectors', vectors);
+  // console.log('type', Number(Object.values(vectors)[Object.values(vectors).length-1][0]));
   return vectors;
 }
 
@@ -51,26 +79,23 @@ class DataManager extends HTMLElement {
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
-  }
-
-  async query2arrow_table(query) {
-    const conn = await this.db.connect();
-    const arrow_table = await conn.query(query);
-    await conn.close();
-    return arrow_table;
+    this.conn = await this.db.connect();
   }
 
   async query(query) {
-    console.log('QUERY', query);
-    const arrow_table = await this.query2arrow_table(query);
+    const arrow_table = await this.conn.query(query);
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
     return result;
   }
 
-  async query2vectors(query) {
-    const arrow_table = await this.query2arrow_table(query);
-    const vectors = arrow_table2vectors(arrow_table);
+  async query2columns(query) {
+    const tableIPC = await getArrowIPC(this.conn, query);
+    const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
+    const vectors = flechette_table.toColumns();
+    for(const key of Object.keys(vectors).slice(1)) {
+      vectors[key] = Array.from(vectors[key]);
+    }
     return vectors;
   }
 
@@ -79,7 +104,7 @@ class DataManager extends HTMLElement {
       return;
     }
     // await this.query(`create table ${name} as select * from "${file_url}"`);
-    const res = await fetch(file_url);
+    const res = await fetch(file_url, { cache: "force-cache" });
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);

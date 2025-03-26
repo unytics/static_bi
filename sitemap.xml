@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://unytics.io/static_bi/</loc>
-         <lastmod>2025-03-25</lastmod>
+         <lastmod>2025-03-26</lastmod>
+    </url>
+    <url>
+         <loc>https://unytics.io/static_bi/stats/</loc>
+         <lastmod>2025-03-26</lastmod>
     </url>
 </urlset>
