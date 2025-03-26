@@ -50,12 +50,18 @@ class Chart extends ChartElement {
 
   generate_html(data) {
     const labels = Object.values(data)[0].map((value) => humanize(value));
+    // console.log('labels', labels);
+    // console.log('first label is date', typeof labels[0].getMonth === 'function')
     let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
     const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
       return {
         name: serie,
         type: this.chart_type,
-        data: values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v),
+        data: this.by === 'date' ? (
+          values.map((v, k) => [labels[k], v])
+        ) : (
+          values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v)
+        ),
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
       }
@@ -63,18 +69,21 @@ class Chart extends ChartElement {
 
     const chart_config = {
       title: {},
-      tooltip: {},
+      tooltip: this.by === 'date' ? {trigger: 'axis', position: function (pt) {return [pt[0], '10%'];}} : {},
       legend: {},
       animation: false,
       brush: {
         toolbox: ['lineX'],
         xAxisIndex: 0
       },
-      xAxis: {
-        // type: this.by === 'date' ? 'time' : 'category',
-        data: labels
+      xAxis: this.is_horizontal ? {} : {
+        type: this.by === 'date' ? 'time' : 'category',
+        data: this.by === 'date' ? undefined : labels,
       },
-      yAxis: {},
+      yAxis: this.is_horizontal ? {
+        type: this.by === 'date' ? 'time' : 'category',
+        data: this.by === 'date' ? undefined : labels,
+      } : {},
       series: datasets
     };
     this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';

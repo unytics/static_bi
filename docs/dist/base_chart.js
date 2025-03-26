@@ -41,6 +41,7 @@ class ChartElement extends HTMLElement {
     this.limit = this.getAttribute('limit');
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.getAttribute('stacked');
+    this.is_horizontal = this.getAttribute('horizontal') === "true";
     this.filter = undefined;
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
