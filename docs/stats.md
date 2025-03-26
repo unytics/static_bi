@@ -20,9 +20,9 @@
 <div>
 <bar-chart
   table="stats"
-  measure="sum(nb_calls)"
-  by="domain"
-  order_by="sum(nb_calls) desc"
+  measure="sum(elapsed_hours)"
+  by="project"
+  order_by="sum(elapsed_hours) desc"
   limit="10"
   horizontal="true"
 >
@@ -78,7 +78,6 @@
   measure="sum(nb_calls)"
   by="date"
   order_by="date"
-  limit="10"
 >
 </line-chart>
 </div>
