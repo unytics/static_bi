@@ -71,6 +71,7 @@ class Chart extends ChartElement {
       title: {},
       tooltip: this.by === 'date' ? {trigger: 'axis', position: function (pt) {return [pt[0], '10%'];}} : {},
       legend: {},
+      grid: {containLabel: true},
       animation: false,
       brush: {
         toolbox: ['lineX'],
@@ -83,6 +84,7 @@ class Chart extends ChartElement {
       yAxis: this.is_horizontal ? {
         type: this.by === 'date' ? 'time' : 'category',
         data: this.by === 'date' ? undefined : labels,
+        inverse: true,
       } : {},
       series: datasets
     };
