@@ -87,6 +87,7 @@ class DataManager extends HTMLElement {
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
     conn.close();
+    console.log('CONN CLOSED');
     return result;
   }
 
@@ -99,6 +100,7 @@ class DataManager extends HTMLElement {
       vectors[key] = Array.from(vectors[key]);
     }
     conn.close();
+    console.log('CONN CLOSED');
     return vectors;
   }
 
