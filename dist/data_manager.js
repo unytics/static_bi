@@ -79,23 +79,26 @@ class DataManager extends HTMLElement {
     this.db = new duckdb.AsyncDuckDB(logger, worker);
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
-    this.conn = await this.db.connect();
   }
 
   async query(query) {
-    const arrow_table = await this.conn.query(query);
+    const conn = await this.db.connect();
+    const arrow_table = await conn.query(query);
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
+    conn.close();
     return result;
   }
 
   async query2columns(query) {
-    const tableIPC = await getArrowIPC(this.conn, query);
+    const conn = await this.db.connect();
+    const tableIPC = await getArrowIPC(conn, query);
     const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
     const vectors = flechette_table.toColumns();
     for(const key of Object.keys(vectors).slice(1)) {
       vectors[key] = Array.from(vectors[key]);
     }
+    conn.close();
     return vectors;
   }
 
