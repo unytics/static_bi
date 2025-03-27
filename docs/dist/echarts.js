@@ -49,6 +49,9 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
+    if (this.chart) {
+      echarts.dispose(this.chart);
+    }
     const labels = Object.values(data)[0].map((value) => humanize(value));
     // console.log('labels', labels);
     // console.log('first label is date', typeof labels[0].getMonth === 'function')
