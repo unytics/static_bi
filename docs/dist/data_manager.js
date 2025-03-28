@@ -17,34 +17,6 @@ function getArrowIPC(con, query) {
 }
 
 
-function arrow_table2vectors(arrow_table) {
-  if (!arrow_table) {
-    console.warn("arrow_table is null or undefined.  Returning null.");
-    return null;
-  }
-  const flechette_table = tableFromIPC(arrow_table.tableToIPC(), { useDate: true });
-  const vectors = flechette_table.toColumns();
-  console.log('vectors', vectors);
-
-  // const vectors = {};
-  // const columns = arrow_table.schema.fields;
-  // for (const column of columns) {
-  //   // vectors[column.name] = arrow_table.getChild(column.name).toJSON().map(
-  //   //   (value) => (typeof value === 'bigint') ? Number(value) : value
-  //   // );
-  //   vectors[column.name] = arrow_table.getChild(column.name).toArray().map((v) => arrow_value2js(v));
-  //   console.log(column.name, column.type);
-  //   // for (let i = 0; i < vectors[column.name].length; i++) {
-  //   //   console.log(`${vectors[column.name].get(i)}`);
-  //   // }
-
-  // }
-  // console.log('vectors', vectors);
-  // console.log('type', Number(Object.values(vectors)[Object.values(vectors).length-1][0]));
-  return vectors;
-}
-
-
 class DataManager extends HTMLElement {
 
   constructor() {
