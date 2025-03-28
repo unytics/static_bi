@@ -57,15 +57,18 @@ class Chart extends ChartElement {
     if (this.breakdown_by) {
       query = `
         with __table__ as (
-          select *
+          select
+            ${this.by} as by,
+            ${this.breakdown_by} as breakdown_by,
+            ${this.measure} as measure,
           from ${this.table}
           ${this.where_clause}
+          group by 1, 2
         )
 
         pivot __table__
-        on ${this.breakdown_by}
-        using ${this.measure}
-        group by (${this.by})
+        on breakdown_by
+        using any_value(measure)
       `;
     }
     else {
@@ -85,15 +88,22 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    const label_column = Object.keys(data)[0];
+    const columns = Object.keys(data);
+    const label_column = columns[0];
     const labels = Object.values(data)[0];
     let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
         name: serie_name,
         type: this.chart_type,
-        encode: this.is_horizontal ? {y: label_column} : {x: label_column},
+        encode: this.is_horizontal ? {
+          x: columns[k + 1],
+          y: label_column,
+        } : {
+          x: label_column,
+          y: columns[k + 1],
+        },
         stack: this.stacked === 'true' ? 'total' : undefined,
-        barWidth: this.stacked === 'true' ? '60%' : undefined,
+        // barWidth: this.stacked === 'true' ? '60%' : undefined,
         itemStyle: clicked_index !== -1 ? {
           color: (param) => param.dataIndex === clicked_index ? SELECTED_COLOR : DEFAULT_COLORS[k]
         } : {},

@@ -10,6 +10,7 @@ function getArrowIPC(con, query) {
         const buffer = await bindings.runQuery(conn, query);
         resolve(buffer);
       } catch (error) {
+        console.error('ERROR in QUERY', query);
         reject(error);
       }
     });
@@ -62,6 +63,7 @@ class DataManager extends HTMLElement {
   }
 
   async query2columns(query) {
+    // console.log(query);
     const tableIPC = await getArrowIPC(this.conn, query);
     const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
     return flechette_table.toColumns();
