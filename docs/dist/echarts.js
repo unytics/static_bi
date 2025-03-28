@@ -28,7 +28,6 @@ class Chart extends ChartElement {
       self.chart.resize();
     });
     this.chart.on('click', function(params) {
-      console.log('CLICK', params);
       self.set_filter([self.by, '=', params.name]);
       // if(self.breakdown_by) {
       //   self.filters.push([self.breakdown_by, '=', params.seriesName])

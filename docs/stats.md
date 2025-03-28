@@ -41,18 +41,6 @@ hide:
 </div>
 
 
-### Bar Chart Grid (by nb days)
-<div>
-<bar-chart-grid
-  table="stats"
-  measure="count(distinct date)"
-  by="bigfunction, is_service_account, domain, user, status, project"
-  order_by="count(distinct date) desc"
-  limit="10"
-  horizontal="true"
->
-</bar-chart-grid>
-</div>
 
 
 
