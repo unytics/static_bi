@@ -16,6 +16,42 @@ class Chart extends ChartElement {
     super();
   }
 
+  init_html() {
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = '<div id="chart" style="width: 100%; height:400px;"></div>';
+    this.chartElement = this.shadowRoot.getElementById('chart');
+    this.chart = echarts.init(this.chartElement);
+
+    const self = this;
+    window.addEventListener('resize', function() {
+      self.chart.resize();
+    });
+    this.chart.on('click', function(params) {
+      console.log('CLICK', params);
+      self.set_filter([self.by, '=', params.name]);
+      // if(self.breakdown_by) {
+      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
+      // }
+    });
+    this.chart.getZr().on('click', function(event) {
+      if ((!event.target) && self.filter) {
+        // Reset filter if click nowhere
+        self.set_filter();
+      }
+    });
+    this.chart.on('brushEnd', function (params) {
+      if (!params.areas || !params.areas[0]) {
+        return;
+      }
+      const indexes = params.areas[0].coordRange;
+      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
+    });
+  }
+
+  show_loading() {
+    this.chart.showLoading();
+  }
+
   async get_data() {
     let query;
     if (this.breakdown_by) {
@@ -49,9 +85,6 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    if (this.chart) {
-      echarts.dispose(this.chart);
-    }
     const labels = Object.values(data)[0].map((value) => humanize(value));
     // console.log('labels', labels);
     // console.log('first label is date', typeof labels[0].getMonth === 'function')
@@ -92,34 +125,9 @@ class Chart extends ChartElement {
       } : {},
       series: datasets
     };
-    this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
-    this.chartElement = this.shadowRoot.getElementById('chart');
-    this.chart = echarts.init(this.chartElement);
-    this.chart.setOption(chart_config);
-    const self = this;
-    window.addEventListener('resize', function() {
-      self.chart.resize();
-    });
-    this.chart.on('click', function(params) {
-      console.log('CLICK', params);
-      self.set_filter([self.by, '=', params.name]);
-      // if(self.breakdown_by) {
-      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
-      // }
-    });
-    this.chart.getZr().on('click', function(event) {
-      if ((!event.target) && self.filter) {
-        // Reset filter if click nowhere
-        self.set_filter();
-      }
-    });
-    this.chart.on('brushEnd', function (params) {
-      if (!params.areas || !params.areas[0]) {
-        return;
-      }
-      const indexes = params.areas[0].coordRange;
-      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
-    });
+    this.chart.setOption(chart_config, true);
+    this.chart.hideLoading();
+
   }
 
 }

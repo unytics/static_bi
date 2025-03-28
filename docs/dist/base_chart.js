@@ -47,9 +47,7 @@ class ChartElement extends HTMLElement {
     this.stacked = this.getAttribute('stacked');
     this.is_horizontal = this.getAttribute('horizontal') === "true";
     this.filter = undefined;
-    this.attachShadow({ mode: 'open' });
-    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
+    this.init_html();
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
     document.addEventListener(event_to_listen, async (event) => {this.render();});
@@ -57,6 +55,12 @@ class ChartElement extends HTMLElement {
       document.addEventListener(('filters-added'), async (event) => {this.render();});
     }
     CHART_ELEMENTS.push(this);
+  }
+
+  init_html() {
+    this.attachShadow({ mode: 'open' });
+    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
+    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
   }
 
   get table_columns() {
@@ -71,7 +75,12 @@ class ChartElement extends HTMLElement {
     throw new Error('Not implemented');
   }
 
+  show_loading() {
+    this.shadowRoot.innerHTML = this.userContent + '\nLOADING...';
+  }
+
   async render() {
+    this.show_loading();
     if (!this.is_data_manager_ready()) {
       return;
     }
