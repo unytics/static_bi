@@ -15,6 +15,7 @@ class Chart extends ChartElement {
 
   constructor() {
     super();
+    this.chart_type = this.getAttribute('type');
   }
 
   init_html() {
@@ -216,6 +217,7 @@ class BarChartGrid extends ChartElement {
   }
 }
 
+customElements.define("generic-chart", Chart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);
