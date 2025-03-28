@@ -92,11 +92,7 @@ class DataManager extends HTMLElement {
   async query2columns(query) {
     const tableIPC = await getArrowIPC(this.conn, query);
     const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
-    const vectors = flechette_table.toColumns();
-    for(const key of Object.keys(vectors).slice(1)) {
-      vectors[key] = Array.from(vectors[key]);
-    }
-    return vectors;
+    return flechette_table.toColumns();
   }
 
   async create_table(name, file_url) {

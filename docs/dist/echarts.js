@@ -6,7 +6,8 @@ import {
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
 
 
-
+const DEFAULT_COLORS = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+const SELECTED_COLOR = '#a90000';
 
 
 
@@ -85,49 +86,49 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    const labels = Object.values(data)[0].map((value) => humanize(value));
-    // console.log('labels', labels);
-    // console.log('first label is date', typeof labels[0].getMonth === 'function')
+    const label_column = Object.keys(data)[0];
+    const labels = Object.values(data)[0];
     let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
-    const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
-      return {
-        name: serie,
+    const series = Object.keys(data).slice(1).map((serie_name, k) => ({
+        name: serie_name,
         type: this.chart_type,
-        data: this.by === 'date' ? (
-          values.map((v, k) => [labels[k], v])
-        ) : (
-          values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v)
-        ),
+        encode: this.is_horizontal ? {y: label_column} : {x: label_column},
         stack: this.stacked === 'true' ? 'total' : undefined,
         barWidth: this.stacked === 'true' ? '60%' : undefined,
-      }
-    });
+        itemStyle: clicked_index !== -1 ? {
+          color: (param) => param.dataIndex === clicked_index ? SELECTED_COLOR : DEFAULT_COLORS[k]
+        } : {},
+      })
+    );
 
     const chart_config = {
+      dataset: {source: data},
       title: {text: `${this.measure} by ${this.by}`},
       tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
       animation: false,
-      brush: {
+      brush: this.is_horizontal ? {
+        toolbox: ['lineY'],
+        xAxisIndex: 1,
+      } : {
         toolbox: ['lineX'],
-        xAxisIndex: 0
+        xAxisIndex: 0,
       },
       xAxis: this.is_horizontal ? {} : {
         name: this.by,
         type: this.by === 'date' ? 'time' : 'category',
-        data: this.by === 'date' ? undefined : labels,
       },
       yAxis: this.is_horizontal ? {
+        name: this.by,
         type: this.by === 'date' ? 'time' : 'category',
-        data: this.by === 'date' ? undefined : labels,
         inverse: true,
       } : {},
-      series: datasets
+      series: series,
+
     };
     this.chart.setOption(chart_config, true);
     this.chart.hideLoading();
-
   }
 
 }
