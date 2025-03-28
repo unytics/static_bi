@@ -104,6 +104,7 @@ class Chart extends ChartElement {
         },
         stack: this.stacked === 'true' ? 'total' : undefined,
         // barWidth: this.stacked === 'true' ? '60%' : undefined,
+        barWidth: '90%',
         itemStyle: clicked_index !== -1 ? {
           color: (param) => param.dataIndex === clicked_index ? SELECTED_COLOR : DEFAULT_COLORS[k]
         } : {},
@@ -112,7 +113,7 @@ class Chart extends ChartElement {
 
     const chart_config = {
       dataset: {source: data},
-      title: {text: `${this.measure} by ${this.by}`},
+      // title: {text: `${this.measure} by ${this.by}`, bottom: 0},
       tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
@@ -130,6 +131,8 @@ class Chart extends ChartElement {
       },
       yAxis: this.is_horizontal ? {
         name: this.by,
+        nameLocation: 'start',
+        nameTextStyle: {align: 'right', fontWeight: 'bold'},
         type: this.by === 'date' ? 'time' : 'category',
         inverse: true,
       } : {},
