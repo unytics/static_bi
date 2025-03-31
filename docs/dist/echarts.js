@@ -57,18 +57,29 @@ class Chart extends ChartElement {
     let query;
     if (this.breakdown_by) {
       query = `
-        with __table__ as (
+        with
+
+        __top_groups__ as (
+          select ${this.breakdown_by} as top_group
+          from ${this.table}
+          ${this.where_clause}
+          group by 1
+          order by ${this.measure} desc
+          limit ${this.breakdown_limit}
+        ),
+
+        __groups__ as (
           select
             ${this.by} as by,
             ${this.breakdown_by} as breakdown_by,
             ${this.measure} as measure,
           from ${this.table}
-          ${this.where_clause}
+          ${this.where_clause} and ${this.breakdown_by} in (select top_group from __top_groups__)
           group by 1, 2
           order by ${this.order_by}
         )
 
-        pivot __table__
+        pivot __groups__
         on breakdown_by
         using any_value(measure)
       `;

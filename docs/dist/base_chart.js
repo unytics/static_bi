@@ -79,6 +79,7 @@ class ChartElement extends HTMLElement {
     this.measure = this.getAttribute('measure');
     this.measures = this.getAttribute('measures');
     this.limit = this.getAttribute('limit');
+    this.breakdown_limit = this.getAttribute('breakdown_limit') || 6;
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.getAttribute('stacked');
     this.is_horizontal = this.getAttribute('horizontal') === "true";
@@ -182,7 +183,7 @@ class ChartElement extends HTMLElement {
       // && columns.includes(chart.filter[0])
     );
     if (!filters.length) {
-      return '';
+      return 'where 1 = 1';
     }
     const clause = 'where ' + filters
     .map((chart) => filter2string(chart.filter))

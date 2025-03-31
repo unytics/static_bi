@@ -25,8 +25,6 @@ hide:
 
 
 
-
-
 <bar-chart-grid
   table="stats"
   measure="count(distinct user)"
