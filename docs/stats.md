@@ -20,94 +20,51 @@ hide:
 
 
 
-=== "Nb Users"
 
-    ## hey
+## hey
 
-    <div class="grid cards" markdown>
+<div class="grid cards" markdown>
 
-    -   <bar-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="strftime(date, '%Y-%m')"
-          breakdown_by="user_month_profile"
-          order_by="date"
-          stacked="true">
-        </bar-chart>
-
-    -   <bar-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="date"
-          breakdown_by="user_month_profile"
-          order_by="date"
-          stacked="true">
-        </bar-chart>
-
-    -   <line-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="strftime(date, '%Y-%m')"
-          order_by="strftime(date, '%Y-%m')">
-        </line-chart>
-
-    </div>
-
-
-
-    <bar-chart-grid
+-   <bar-chart
       table="stats"
       measure="count(distinct user)"
-      by="user_month_profile, bigfunction, domain, status, project"
-      order_by="count(distinct user) desc"
-      limit="10"
-      horizontal="true">
-    </bar-chart-grid>
+      by="strftime(date, '%Y-%m')"
+      breakdown_by="user_month_profile"
+      order_by="date"
+      stacked="true">
+    </bar-chart>
 
-
-=== "Nb Days"
-
-
-    ## ho
-
-    <div class="grid cards" markdown>
-
-    -   <bar-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="strftime(date, '%Y-%m')"
-          breakdown_by="user_month_profile"
-          order_by="date"
-          stacked="true">
-        </bar-chart>
-
-    -   <line-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="strftime(date, '%Y-%m')"
-          order_by="strftime(date, '%Y-%m')">
-        </line-chart>
-
-    -   <line-chart
-          table="stats"
-          measure="count(distinct user)"
-          by="date"
-          order_by="date">
-        </line-chart>
-
-
-    </div>
-
-
-
-    <bar-chart-grid
+-   <bar-chart
       table="stats"
       measure="count(distinct user)"
-      by="user_month_profile, bigfunction, domain, status, project"
-      order_by="count(distinct user) desc"
-      limit="10"
-      horizontal="true">
-    </bar-chart-grid>
+      by="date"
+      breakdown_by="user_month_profile"
+      order_by="date"
+      stacked="true">
+    </bar-chart>
+
+-   <line-chart
+      table="stats"
+      measure="count(distinct user)"
+      by="strftime(date, '%Y-%m')"
+      order_by="strftime(date, '%Y-%m')">
+    </line-chart>
+
+</div>
+
+
+
+<bar-chart-grid
+  table="stats"
+  measure="count(distinct user)"
+  by="user_month_profile, bigfunction, domain, status, project"
+  order_by="count(distinct user) desc"
+  limit="10"
+  horizontal="true">
+</bar-chart-grid>
+
+
+
 
 ---
 

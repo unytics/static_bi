@@ -210,18 +210,44 @@ class BarChartGrid extends ChartElement {
   }
 
   generate_html(dimension_columns) {
-    this.shadowRoot.innerHTML = dimension_columns.map(column => `
-      <bar-chart
-        table="${this.table}"
-        by="${column}"
-        measure="${this.measure}"
-        order_by="${this.order_by}"
-        limit="${this.limit}"
-        ${this.is_horizontal ? 'horizontal="true"' : ''}
-        style="width: 32%; display: inline-block;"
-      >
-      </bar-chart>`
-    ).join('');
+    const sheet = new CSSStyleSheet;
+    sheet.replaceSync(`
+      #container {
+        display: grid;
+        grid-gap: .4rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+        margin: 1em 0;
+      }
+
+      bar-chart {
+        display: inline-block;
+        border: .05rem solid #00000012;
+        padding: .8rem;
+        transition: border 0.25s, box-shadow 0.25s;
+      }
+
+      bar-chart:hover {
+        border-color: #0000;
+        box-shadow: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
+      }
+
+    `);
+    this.shadowRoot.adoptedStyleSheets.push(sheet);
+    this.shadowRoot.innerHTML = (
+      '<div id="container">' +
+      dimension_columns.map(column => `
+        <bar-chart
+          table="${this.table}"
+          by="${column}"
+          measure="${this.measure}"
+          order_by="${this.order_by}"
+          limit="${this.limit}"
+          ${this.is_horizontal ? 'horizontal="true"' : ''}
+        >
+        </bar-chart>`
+      ).join('') +
+      '</div>'
+    );
   }
 }
 
