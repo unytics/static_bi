@@ -212,9 +212,12 @@ class BarChartGrid extends ChartElement {
     super();
     this.addEventListener('custom-select', (event) => {
       this.breakdown_by = this.breakdown_by === event.detail ? undefined : event.detail;
-      const line_chart = this.shadowRoot.getElementById('line');
-      line_chart.breakdown_by = this.breakdown_by;
-      line_chart.render();
+      const ids_to_render = ['line-month', 'line-day'];
+      for (const id of ids_to_render) {
+        const elem = this.shadowRoot.getElementById(id);
+        elem.breakdown_by = this.breakdown_by;
+        elem.render();
+      }
     });
   }
 
@@ -232,21 +235,21 @@ class BarChartGrid extends ChartElement {
   generate_html(dimension_columns) {
     const sheet = new CSSStyleSheet;
     sheet.replaceSync(`
-      #container {
+      .container {
         display: grid;
         grid-gap: .4rem;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
         margin: 1em 0;
       }
 
-      bar-chart {
+      line-chart, bar-chart {
         display: inline-block;
         border: .05rem solid #00000012;
         padding: .8rem;
         transition: border 0.25s, box-shadow 0.25s;
       }
 
-      bar-chart:hover {
+      line-chart:hover, bar-chart:hover {
         border-color: #0000;
         box-shadow: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
       }
@@ -255,16 +258,26 @@ class BarChartGrid extends ChartElement {
     this.shadowRoot.adoptedStyleSheets.push(sheet);
     this.shadowRoot.innerHTML = (
       `
-      <line-chart
-        id="line"
-        table="${this.table}"
-        measure="${this.measure}"
-        by="date"
-        ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-        order_by="date">
-      </line-chart>
+      <div class="container">
+        <line-chart
+          id="line-month"
+          table="${this.table}"
+          measure="${this.measure}"
+          by="strftime(date, '%Y-%m')"
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
+          order_by="strftime(date, '%Y-%m')">
+        </line-chart>
+        <line-chart
+          id="line-day"
+          table="${this.table}"
+          measure="${this.measure}"
+          by="date"
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
+          order_by="date">
+        </line-chart>
+      </div>
       ` +
-      '<div id="container">' +
+      '<div class="container">' +
       dimension_columns.map(column => `
         <bar-chart
           table="${this.table}"
