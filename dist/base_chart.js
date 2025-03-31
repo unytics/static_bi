@@ -21,8 +21,44 @@ function markdown2html(markdown_content) {
   return DOMPurify.sanitize(marked.parse(markdown_content));
 }
 
+function filter2string(filter) {
+  const [dimension, operator, value] = filter;
+  let value_as_string;
+  if (typeof value === 'string') {
+    value_as_string = `'${value}'`;
+  }
+  else if (typeof Array.isArray(value)) {
+    value_as_string = (
+      '(' +
+      value.map((v) => (typeof v === 'string') ? `'${v}'` : `${v}`).join(', ') +
+      ')'
+    )
+
+  }
+  else {
+    value_as_string = `${value}`;
+  }
+  return `${dimension} ${operator} ${value_as_string}`;
+}
+
 
 const CHART_ELEMENTS = [];
+
+let IS_CONTROL_KEY_DOWN = false;
+
+document.addEventListener('keydown', (event) => {
+  if (event.keyCode === 17) {
+    IS_CONTROL_KEY_DOWN = true;
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.keyCode === 17) {
+    IS_CONTROL_KEY_DOWN = false;
+  }
+});
+
+
 
 
 
@@ -47,16 +83,21 @@ class ChartElement extends HTMLElement {
     this.stacked = this.getAttribute('stacked');
     this.is_horizontal = this.getAttribute('horizontal') === "true";
     this.filter = undefined;
+    this.init_html();
+    this.render();
+    const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
+    document.addEventListener(event_to_listen, (event) => {this.render();});
+    if (this.rerender_when_filter_changes) {
+      document.addEventListener(('filters-added'), (event) => {this.render();});
+    }
+    // this.addEventListener("visibilitychange", (event) => {this.render();});
+    CHART_ELEMENTS.push(this);
+  }
+
+  init_html() {
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
     this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
-    this.render();
-    const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
-    document.addEventListener(event_to_listen, async (event) => {this.render();});
-    if (this.rerender_when_filter_changes) {
-      document.addEventListener(('filters-added'), async (event) => {this.render();});
-    }
-    CHART_ELEMENTS.push(this);
   }
 
   get table_columns() {
@@ -71,7 +112,16 @@ class ChartElement extends HTMLElement {
     throw new Error('Not implemented');
   }
 
+  show_loading() {
+    this.shadowRoot.innerHTML = this.userContent + '\nLOADING...';
+  }
+
   async render() {
+    // if (this.checkVisibility() === false) {
+    //   console.log('DO NOT RENDER!');
+    //   return;
+    // }
+    this.show_loading();
     if (!this.is_data_manager_ready()) {
       return;
     }
@@ -96,11 +146,28 @@ class ChartElement extends HTMLElement {
   }
 
   set_filter(filter) {
-    if (this.filter !== undefined && filter !== undefined && filter[0] === this.filter[0] && filter[1] === this.filter[1] && filter[1] === this.filter[1] && filter[2] === this.filter[2]) {
+    if ((this.filter === undefined) || (filter === undefined)) {
+      this.filter = filter;
+    }
+    else if (filter[0] === this.filter[0] && filter[1] === this.filter[1] && filter[2] === this.filter[2]) {
       this.filter = undefined;
     }
-    else {
+    else if (!IS_CONTROL_KEY_DOWN) {
       this.filter = filter;
+    }
+    else {
+      this.filter[1] = 'in';
+      if (Array.isArray(this.filter[2])) {
+        if (this.filter[2].includes(filter[2])) {
+          this.filter[2] = this.filter[2].filter((v) => v != filter[2]);
+        }
+        else {
+          this.filter[2].push(filter[2]);
+        }
+      }
+      else {
+        this.filter[2] = [this.filter[2], filter[2]];
+      }
     }
     document.dispatchEvent(new CustomEvent('filters-added', {bubbles: true, composed: true}));
   }
@@ -110,18 +177,16 @@ class ChartElement extends HTMLElement {
     const filters = CHART_ELEMENTS
     .filter((chart) =>
       (chart!== this) &&
-      (chart.filter !== undefined) &&
-      columns.includes(chart.filter[0])
+      (chart.filter !== undefined)
+      // && columns.includes(chart.filter[0])
     );
     if (!filters.length) {
       return '';
     }
-    return 'where ' + filters
-    .map(
-      (chart) =>
-      `${chart.filter[0]} ${chart.filter[1]} ${typeof chart.filter[2] === 'string' ? `'${chart.filter[2]}'` : chart.filter[2]}`
-    )
+    const clause = 'where ' + filters
+    .map((chart) => filter2string(chart.filter))
     .join(' and ');
+    return clause;
   }
 
 }

@@ -6,7 +6,8 @@ import {
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
 
 
-
+const DEFAULT_COLORS = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+const SELECTED_COLOR = '#a90000';
 
 
 
@@ -14,6 +15,42 @@ class Chart extends ChartElement {
 
   constructor() {
     super();
+    this.chart_type = this.getAttribute('type');
+  }
+
+  init_html() {
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = '<div id="chart" style="width: 100%; height:400px;"></div>';
+    this.chartElement = this.shadowRoot.getElementById('chart');
+    this.chart = echarts.init(this.chartElement);
+
+    const self = this;
+    window.addEventListener('resize', function() {
+      self.chart.resize();
+    });
+    this.chart.on('click', function(params) {
+      self.set_filter([self.by, '=', params.name]);
+      // if(self.breakdown_by) {
+      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
+      // }
+    });
+    this.chart.getZr().on('click', function(event) {
+      if ((!event.target) && self.filter) {
+        // Reset filter if click nowhere
+        self.set_filter();
+      }
+    });
+    this.chart.on('brushEnd', function (params) {
+      if (!params.areas || !params.areas[0]) {
+        return;
+      }
+      const indexes = params.areas[0].coordRange;
+      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
+    });
+  }
+
+  show_loading() {
+    this.chart.showLoading();
   }
 
   async get_data() {
@@ -21,15 +58,18 @@ class Chart extends ChartElement {
     if (this.breakdown_by) {
       query = `
         with __table__ as (
-          select *
+          select
+            ${this.by} as by,
+            ${this.breakdown_by} as breakdown_by,
+            ${this.measure} as measure,
           from ${this.table}
           ${this.where_clause}
+          group by 1, 2
         )
 
         pivot __table__
-        on ${this.breakdown_by}
-        using ${this.measure}
-        group by (${this.by})
+        on breakdown_by
+        using any_value(measure)
       `;
     }
     else {
@@ -49,78 +89,67 @@ class Chart extends ChartElement {
   }
 
   generate_html(data) {
-    if (this.chart) {
-      echarts.dispose(this.chart);
-      console.log('DISPOSE');
-    }
-    const labels = Object.values(data)[0].map((value) => humanize(value));
-    // console.log('labels', labels);
-    // console.log('first label is date', typeof labels[0].getMonth === 'function')
-    let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
-    const datasets = Object.entries(data).slice(1).map(([serie, values]) => {
-      return {
-        name: serie,
-        type: this.chart_type,
-        data: this.by === 'date' ? (
-          values.map((v, k) => [labels[k], v])
-        ) : (
-          values.map((v, k) => k === clicked_index ? {value: v, itemStyle: {color: '#a90000'}} : v)
-        ),
-        stack: this.stacked === 'true' ? 'total' : undefined,
-        barWidth: this.stacked === 'true' ? '60%' : undefined,
+    const columns = Object.keys(data);
+    const label_column = columns[0];
+    const labels = Object.values(data)[0];
+    let clicked_indexes = [];
+    if (this.filter !== undefined) {
+      if (Array.isArray(this.filter[2])) {
+        clicked_indexes = labels.map((label, i) => (this.filter[2].includes(label)) ? i : '').filter(String);
       }
-    });
+      else {
+        clicked_indexes = [labels.findIndex((label) => label === this.filter[2])];
+      }
+    }
+    const series = Object.keys(data).slice(1).map((serie_name, k) => ({
+        name: serie_name,
+        type: this.chart_type,
+        encode: this.is_horizontal ? {
+          x: columns[k + 1],
+          y: label_column,
+        } : {
+          x: label_column,
+          y: columns[k + 1],
+        },
+        stack: this.stacked === 'true' ? 'total' : undefined,
+        // barWidth: this.stacked === 'true' ? '60%' : undefined,
+        barWidth: '90%',
+        itemStyle: clicked_indexes.length ? {
+          color: (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
+        } : {},
+      })
+    );
 
     const chart_config = {
-      title: {text: `${this.measure} by ${this.by}`},
+      dataset: {source: data},
+      // title: {text: `${this.measure} by ${this.by}`, bottom: 0},
       tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
       animation: false,
-      brush: {
+      brush: this.is_horizontal ? {
+        toolbox: ['lineY'],
+        xAxisIndex: 1,
+      } : {
         toolbox: ['lineX'],
-        xAxisIndex: 0
+        xAxisIndex: 0,
       },
       xAxis: this.is_horizontal ? {} : {
         name: this.by,
         type: this.by === 'date' ? 'time' : 'category',
-        data: this.by === 'date' ? undefined : labels,
       },
       yAxis: this.is_horizontal ? {
+        name: this.by,
+        nameLocation: 'start',
+        nameTextStyle: {align: 'right', fontWeight: 'bold'},
         type: this.by === 'date' ? 'time' : 'category',
-        data: this.by === 'date' ? undefined : labels,
         inverse: true,
       } : {},
-      series: datasets
+      series: series,
+
     };
-    this.shadowRoot.innerHTML = this.userContent + '<div id="chart" style="width: 100%; height:400px;"></div>';
-    this.chartElement = this.shadowRoot.getElementById('chart');
-    this.chart = echarts.init(this.chartElement);
-    this.chart.setOption(chart_config);
-    const self = this;
-    window.addEventListener('resize', function() {
-      self.chart.resize();
-    });
-    this.chart.on('click', function(params) {
-      console.log('CLICK', params);
-      self.set_filter([self.by, '=', params.name]);
-      // if(self.breakdown_by) {
-      //   self.filters.push([self.breakdown_by, '=', params.seriesName])
-      // }
-    });
-    this.chart.getZr().on('click', function(event) {
-      if ((!event.target) && self.filter) {
-        // Reset filter if click nowhere
-        self.set_filter();
-      }
-    });
-    this.chart.on('brushEnd', function (params) {
-      if (!params.areas || !params.areas[0]) {
-        return;
-      }
-      const indexes = params.areas[0].coordRange;
-      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
-    });
+    this.chart.setOption(chart_config, true);
+    this.chart.hideLoading();
   }
 
 }
@@ -181,21 +210,48 @@ class BarChartGrid extends ChartElement {
   }
 
   generate_html(dimension_columns) {
-    this.shadowRoot.innerHTML = dimension_columns.map(column => `
-      <bar-chart
-        table="${this.table}"
-        by="${column}"
-        measure="${this.measure}"
-        order_by="${this.order_by}"
-        limit="${this.limit}"
-        ${this.is_horizontal ? 'horizontal="true"' : ''}
-        style="width: 32%; display: inline-block;"
-      >
-      </bar-chart>`
-    ).join('');
+    const sheet = new CSSStyleSheet;
+    sheet.replaceSync(`
+      #container {
+        display: grid;
+        grid-gap: .4rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+        margin: 1em 0;
+      }
+
+      bar-chart {
+        display: inline-block;
+        border: .05rem solid #00000012;
+        padding: .8rem;
+        transition: border 0.25s, box-shadow 0.25s;
+      }
+
+      bar-chart:hover {
+        border-color: #0000;
+        box-shadow: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
+      }
+
+    `);
+    this.shadowRoot.adoptedStyleSheets.push(sheet);
+    this.shadowRoot.innerHTML = (
+      '<div id="container">' +
+      dimension_columns.map(column => `
+        <bar-chart
+          table="${this.table}"
+          by="${column}"
+          measure="${this.measure}"
+          order_by="${this.order_by}"
+          limit="${this.limit}"
+          ${this.is_horizontal ? 'horizontal="true"' : ''}
+        >
+        </bar-chart>`
+      ).join('') +
+      '</div>'
+    );
   }
 }
 
+customElements.define("generic-chart", Chart);
 customElements.define("line-chart", LineChart);
 customElements.define("bar-chart", BarChart);
 customElements.define("doughnut-chart", DoughnutChart);
