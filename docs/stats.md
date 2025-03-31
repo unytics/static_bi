@@ -10,50 +10,107 @@ hide:
 <div>
 <data-manager>
 
-  <data-manager-table name="stats" file="../data/2025-03-28/stats_000000000000.parquet"></data-manager-table>
+  <data-manager-table name="stats" file="../data/2025-03-28e/stats_000000000000.parquet"></data-manager-table>
 
 </data-manager>
 </div>
 
 
-<div style="width: 32%; display: inline-block;">
-<bar-chart
-  table="stats"
-  measure="count(distinct user)"
-  by="strftime(date, '%Y-%m')"
-  breakdown_by="user_month_profile"
-  order_by="date"
-  stacked="true"
->
-</bar-chart>
-</div>
 
 
-<div style="width: 32%; display: inline-block;">
-<line-chart
-  table="stats"
-  measure="count(distinct user)"
-  by="strftime(date, '%Y-%m')"
-  order_by="strftime(date, '%Y-%m')"
->
-</line-chart>
-</div>
 
-### Bar Chart Grid (by user)
-<div>
-<bar-chart-grid
-  table="stats"
-  measure="count(distinct user)"
-  by="user_month_profile, bigfunction, is_service_account, domain, status, project"
-  order_by="count(distinct user) desc"
-  limit="10"
-  horizontal="true"
->
-</bar-chart-grid>
-</div>
 
+=== "Nb Users"
+
+    ## hey
+
+    <div class="grid cards" markdown>
+
+    -   <bar-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="strftime(date, '%Y-%m')"
+          breakdown_by="user_month_profile"
+          order_by="date"
+          stacked="true">
+        </bar-chart>
+
+    -   <bar-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="date"
+          breakdown_by="user_month_profile"
+          order_by="date"
+          stacked="true">
+        </bar-chart>
+
+    -   <line-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="strftime(date, '%Y-%m')"
+          order_by="strftime(date, '%Y-%m')">
+        </line-chart>
+
+    </div>
+
+
+
+    <bar-chart-grid
+      table="stats"
+      measure="count(distinct user)"
+      by="user_month_profile, bigfunction, domain, status, project"
+      order_by="count(distinct user) desc"
+      limit="10"
+      horizontal="true">
+    </bar-chart-grid>
+
+
+=== "Nb Days"
+
+
+    ## ho
+
+    <div class="grid cards" markdown>
+
+    -   <bar-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="strftime(date, '%Y-%m')"
+          breakdown_by="user_month_profile"
+          order_by="date"
+          stacked="true">
+        </bar-chart>
+
+    -   <line-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="strftime(date, '%Y-%m')"
+          order_by="strftime(date, '%Y-%m')">
+        </line-chart>
+
+    -   <line-chart
+          table="stats"
+          measure="count(distinct user)"
+          by="date"
+          order_by="date">
+        </line-chart>
+
+
+    </div>
+
+
+
+    <bar-chart-grid
+      table="stats"
+      measure="count(distinct user)"
+      by="user_month_profile, bigfunction, domain, status, project"
+      order_by="count(distinct user) desc"
+      limit="10"
+      horizontal="true">
+    </bar-chart-grid>
 
 ---
+
 
 
 ### Table Description Chart

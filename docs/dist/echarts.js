@@ -92,7 +92,15 @@ class Chart extends ChartElement {
     const columns = Object.keys(data);
     const label_column = columns[0];
     const labels = Object.values(data)[0];
-    let clicked_index = this.filter !== undefined ? labels.findIndex(label => label === this.filter[2]) : -1;
+    let clicked_indexes = [];
+    if (this.filter !== undefined) {
+      if (Array.isArray(this.filter[2])) {
+        clicked_indexes = labels.map((label, i) => (this.filter[2].includes(label)) ? i : '').filter(String);
+      }
+      else {
+        clicked_indexes = [labels.findIndex((label) => label === this.filter[2])];
+      }
+    }
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
         name: serie_name,
         type: this.chart_type,
@@ -106,8 +114,8 @@ class Chart extends ChartElement {
         stack: this.stacked === 'true' ? 'total' : undefined,
         // barWidth: this.stacked === 'true' ? '60%' : undefined,
         barWidth: '90%',
-        itemStyle: clicked_index !== -1 ? {
-          color: (param) => param.dataIndex === clicked_index ? SELECTED_COLOR : DEFAULT_COLORS[k]
+        itemStyle: clicked_indexes.length ? {
+          color: (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
         } : {},
       })
     );
