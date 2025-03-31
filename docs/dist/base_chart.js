@@ -82,6 +82,7 @@ class ChartElement extends HTMLElement {
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.getAttribute('stacked');
     this.is_horizontal = this.getAttribute('horizontal') === "true";
+    this.select_tool = this.getAttribute('select_tool');
     this.filter = undefined;
     this.init_html();
     this.render();

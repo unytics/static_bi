@@ -23,34 +23,7 @@ hide:
 
 ## hey
 
-<div class="grid cards" markdown>
 
--   <bar-chart
-      table="stats"
-      measure="count(distinct user)"
-      by="strftime(date, '%Y-%m')"
-      breakdown_by="user_month_profile"
-      order_by="date"
-      stacked="true">
-    </bar-chart>
-
--   <bar-chart
-      table="stats"
-      measure="count(distinct user)"
-      by="date"
-      breakdown_by="user_month_profile"
-      order_by="date"
-      stacked="true">
-    </bar-chart>
-
--   <line-chart
-      table="stats"
-      measure="count(distinct user)"
-      by="strftime(date, '%Y-%m')"
-      order_by="strftime(date, '%Y-%m')">
-    </line-chart>
-
-</div>
 
 
 
@@ -59,7 +32,7 @@ hide:
   measure="count(distinct user)"
   by="user_month_profile, bigfunction, domain, status, project"
   order_by="count(distinct user) desc"
-  limit="10"
+  limit="15"
   horizontal="true">
 </bar-chart-grid>
 
