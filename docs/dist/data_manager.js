@@ -69,6 +69,11 @@ class DataManager extends HTMLElement {
     return flechette_table.toColumns();
   }
 
+  async query2value(query) {
+    const columns = await this.query2columns(query);
+    return Object.values(columns)[0][0];
+  }
+
   async create_table(name, file_url) {
     if (name in this.tables) {
       return;

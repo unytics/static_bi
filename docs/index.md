@@ -25,6 +25,12 @@ hide:
 </div>
 
 
+
+### Score Cards
+<score-card title="Nb Symbols" table="stocks" measure="count(distinct Symbol)"></score-card>
+<score-card table="stocks" measure="max(Close)" format='#,##0.0,"k"'></score-card>
+
+
 ### Dashboard
 
 <div>
@@ -213,3 +219,4 @@ hide:
 <script type="module" src="dist/data_manager.js"></script>
 <script type="module" src="dist/echarts.js"></script>
 <script type="module" src="dist/datatable.js"></script>
+<script type="module" src="dist/score_cards.js"></script>

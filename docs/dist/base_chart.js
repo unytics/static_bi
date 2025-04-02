@@ -7,6 +7,10 @@ function slugify(text) {
   return text.replace(/[^\w ]+/g, "").replace(' ', '_');
 }
 
+function titleify(text) {
+  return text.replace(/[^\w ]+/g, " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+}
+
 function humanize(value) {
   if (Number.isInteger(value)) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -199,4 +203,5 @@ export {
   ChartElement,
   humanize,
   slugify,
+  titleify,
 };
