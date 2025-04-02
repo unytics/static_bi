@@ -27,37 +27,53 @@ hide:
 
 
 ### Score Cards
-<score-card title="Nb Symbols" table="stocks" measure="count(distinct Symbol)"></score-card>
-<score-card table="stocks" measure="max(Close)" format='#,##0.0,"k"'></score-card>
+
+<score-card
+  title="Nb Symbols"
+  table="stocks"
+  value="count(distinct Symbol)">
+</score-card>
+<score-card
+  title="Highest Close"
+  table="stocks"
+  value="max(Close)"
+  format='#,##0.0,"k"'>
+</score-card>
+<score-card
+  title="Symbol with highest close"
+  table="stocks"
+  value="Symbol"
+  order_by="max(Close) desc">
+</score-card>
+<score-card
+  title="Date of highest close"
+  table="stocks"
+  value="Date"
+  order_by="max(Close) desc"
+  format='yyyy-mm-dd'>
+</score-card>
 
 
 ### Dashboard
 
-<div>
+
+<bar-chart
+  table="stocks"
+  measure="max(Close)"
+  by="Symbol"
+  limit="10"
+  order_by="max(Close) desc"
+  style="width: 49%; display: inline-block;">
+</bar-chart>
+<line-chart
+  table="stocks"
+  measure="max(close)"
+  by="Date"
+  breakdown_by="Symbol"
+  style="width: 49%; display: inline-block;">
+</line-chart>
 
 
-  <bar-chart
-    table="stocks"
-    measure="max(Close)"
-    by="Symbol"
-    limit="10"
-    order_by="max(Close) desc"
-    style="width: 49%; display: inline-block;"
-  >
-  </bar-chart>
-
-  <line-chart
-    table="stocks"
-    measure="max(close)"
-    by="Date"
-    breakdown_by="Symbol"
-    style="width: 49%; display: inline-block;"
-  >
-  </line-chart>
-
-
-
-</div>
 
 
 ### Stacked Bar Chart

@@ -5,20 +5,26 @@ import {
 
 import ssf from 'https://cdn.jsdelivr.net/npm/ssf@0.11.2/+esm';
 
+// https://customformats.com/
+// https://docs.evidence.dev/core-concepts/formatting
+
 
 
 class ScoreCard extends ChartElement {
 
   constructor() {
     super();
+    this.value = this.getAttribute('value');
     this.format = this.getAttribute('format');
   }
 
   async get_data() {
     const query = `
-      select ${this.measure}
+      select ${this.value}
       from ${this.table}
       ${this.where_clause}
+      ${this.order_by ? 'group by 1' : ''}
+      ${this.order_by ? 'order by ' + this.order_by : ''}
     `;
     const data = await window.data_manager.query2value(query);
     return data;
@@ -45,7 +51,7 @@ class ScoreCard extends ChartElement {
         font-weight: 500;
       }
     `;
-    const title = titleify(this.title || this.measure);
+    const title = titleify(this.title || this.value);
     const formatted_value = this.format ? ssf.format(this.format, data) : data;
     this.shadowRoot.innerHTML = `
       <style>${style}</style>
