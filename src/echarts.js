@@ -96,7 +96,7 @@ class Chart extends ChartElement {
         limit ${this.limit}
       `;
     }
-    const data = await window.data_manager.query2columns(query);
+    const data = await window.db.query2columns(query);
     return data;
   }
 
@@ -240,7 +240,7 @@ class BarChartGrid extends ChartElement {
     if (this.by) {
       return this.by.split(',').map((by) => by.trim());
     }
-    return await window.data_manager.list_dimensions_columns(this.table);
+    return await window.db.list_dimensions_columns(this.table);
   }
 
   generate_html(dimension_columns) {

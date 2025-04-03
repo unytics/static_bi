@@ -1,32 +1,15 @@
 import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1-dev106.0/+esm";
 import { tableFromIPC } from "https://cdn.jsdelivr.net/npm/@uwdata/flechette/+esm";
 
-
-
-
-class DataManager extends HTMLElement {
+class DuckDB {
 
   constructor() {
-    super();
+    this.db_ready = false;
+    this.tables = {};
+    this.filters = [];
   }
 
-  async connectedCallback() {
-    if (window.data_manager === undefined) {
-      console.log('CACHE MISSED!');
-      window.data_manager = this;
-      this.db_ready = false;
-      this.tables = {};
-      this.filters = [];
-      await this.init_duckdb();
-      this.db_ready = true;
-    }
-    else {
-      console.log('CACHE HIT!');
-    }
-    await this.load_data();
-  }
-
-  async init_duckdb() {
+  async init() {
     const jsdelivr_bundles = duckdb.getJsDelivrBundles();
     const bundle = await duckdb.selectBundle(jsdelivr_bundles);
     const worker_url = URL.createObjectURL(
@@ -40,6 +23,7 @@ class DataManager extends HTMLElement {
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
     this.conn = await this.db.connect();
+    this.db_ready = true;
   }
 
   async query(query) {
@@ -87,7 +71,6 @@ class DataManager extends HTMLElement {
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
     await this.query(`create view ${name} as select * from parquet_scan('${name}.parquet')`);
     this.tables[name] = await this.list_columns(`${name}`);
-    this.emit_event(name);
   }
 
   async create_view(name, query) {
@@ -96,7 +79,6 @@ class DataManager extends HTMLElement {
     }
     await this.query(`create view ${name} as ${query}`);
     this.tables[name] = await this.list_columns(`${name}`);
-    this.emit_event(name);
   }
 
   async show_tables() {
@@ -117,15 +99,35 @@ class DataManager extends HTMLElement {
     return data.filter(row => row.column_type === 'VARCHAR').map(row => row.column_name);
   }
 
-  async load_data() {
+}
+
+
+class DataManager extends HTMLElement {
+
+  constructor() {
+    super();
+  }
+
+  async connectedCallback() {
+    if (window.db === undefined) {
+      console.log('CACHE MISSED!');
+      window.db = new DuckDB();
+      await window.db.init();
+    }
+    else {
+      console.log('CACHE HIT!');
+    }
+
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
-        await this.create_table(child.name, child.file);
+        await window.db.create_table(child.name, child.file);
+        this.emit_event(child.name);
       }
     }
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-VIEW') {
-        await this.create_view(child.name, child.sql);
+        await window.db.create_view(child.name, child.sql);
+        this.emit_event(child.name);
       }
     }
     this.emit_event();

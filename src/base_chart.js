@@ -107,7 +107,7 @@ class ChartElement extends HTMLElement {
   }
 
   get table_columns() {
-    return window.data_manager.tables[this.table];
+    return window.db.tables[this.table];
   }
 
   async get_data() {
@@ -128,24 +128,24 @@ class ChartElement extends HTMLElement {
     //   return;
     // }
     this.show_loading();
-    if (!this.is_data_manager_ready()) {
+    if (!this.is_db_ready()) {
       return;
     }
     const data = await this.get_data();
     this.generate_html(data);
   }
 
-  is_data_manager_ready() {
-    if (window.data_manager === undefined) {
+  is_db_ready() {
+    if (window.db === undefined) {
       return false;
     }
-    if (window.data_manager.db_ready === false) {
+    if (window.db.db_ready === false) {
       return false;
     }
     if (!this.table) {
       return true;
     }
-    if (this.table in window.data_manager.tables) {
+    if (this.table in window.db.tables) {
       return true;
     }
     return false;

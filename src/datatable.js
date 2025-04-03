@@ -21,7 +21,7 @@ class TableChart extends ChartElement {
         ${this.order_by ? 'order by ' + this.order_by : ''}
         ${this.limit ? 'limit ' + this.limit : ''}
       `;
-      const data = await window.data_manager.query(query);
+      const data = await window.db.query(query);
       return data;
     }
 
@@ -45,7 +45,7 @@ class TableChart extends ChartElement {
     }
 
     async get_data() {
-      return await window.data_manager.describe_table(this.table);
+      return await window.db.describe_table(this.table);
     }
 
   }
@@ -58,7 +58,7 @@ class TableChart extends ChartElement {
     }
 
     async get_data() {
-      return await window.data_manager.show_tables();
+      return await window.db.show_tables();
     }
 
   }

@@ -26,7 +26,7 @@ class ScoreCard extends ChartElement {
       ${this.order_by ? 'group by 1' : ''}
       ${this.order_by ? 'order by ' + this.order_by : ''}
     `;
-    const data = await window.data_manager.query2value(query);
+    const data = await window.db.query2value(query);
     return data;
   }
 
