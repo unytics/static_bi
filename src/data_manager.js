@@ -2,20 +2,6 @@ import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1
 import { tableFromIPC } from "https://cdn.jsdelivr.net/npm/@uwdata/flechette/+esm";
 
 
-// FROM https://github.com/uwdata/mosaic/blob/main/packages/core/src/connectors/wasm.js#L6
-function getArrowIPC(con, query) {
-  return new Promise((resolve, reject) => {
-    con.useUnsafe(async (bindings, conn) => {
-      try {
-        const buffer = await bindings.runQuery(conn, query);
-        resolve(buffer);
-      } catch (error) {
-        console.error('ERROR in QUERY', query);
-        reject(error);
-      }
-    });
-  });
-}
 
 
 class DataManager extends HTMLElement {
@@ -63,9 +49,24 @@ class DataManager extends HTMLElement {
     return result;
   }
 
+  query2ipc(query) {
+    // FROM https://github.com/uwdata/mosaic/blob/main/packages/core/src/connectors/wasm.js#L6
+    return new Promise((resolve, reject) => {
+      this.conn.useUnsafe(async (bindings, conn) => {
+        try {
+          const buffer = await bindings.runQuery(conn, query);
+          resolve(buffer);
+        } catch (error) {
+          console.error('ERROR in QUERY', query);
+          reject(error);
+        }
+      });
+    });
+  }
+
   async query2columns(query) {
     // console.log(query);
-    const tableIPC = await getArrowIPC(this.conn, query);
+    const tableIPC = await this.query2ipc(query);
     const flechette_table = await tableFromIPC(tableIPC, { useDate: true,  useBigInt: false, useDecimalInt: false, useProxy: false });
     return flechette_table.toColumns();
   }
