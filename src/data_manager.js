@@ -170,8 +170,3 @@ class DataManagerView extends HTMLElement {
 customElements.define("data-manager", DataManager);
 customElements.define("data-manager-table", DataManagerTable);
 customElements.define("data-manager-view", DataManagerView);
-
-
-document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOM fully loaded and parsed");
-});

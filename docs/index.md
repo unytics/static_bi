@@ -8,19 +8,15 @@ hide:
 ## Examples
 
 
-<div>
 <data-manager>
-
   <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
-  <data-manager-view name="stocks">
+  <data-manager-view name="stocks" style="display: none">
     select
       *,
       strftime(Date, '%Y-%m') as month,
     from _stocks
   </data-manager-view>
-
 </data-manager>
-</div>
 
 
 
