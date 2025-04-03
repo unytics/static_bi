@@ -7,6 +7,10 @@ function slugify(text) {
   return text.replace(/[^\w ]+/g, "").replace(' ', '_');
 }
 
+function titleify(text) {
+  return text.replace(/[^\w ]+/g, " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+}
+
 function humanize(value) {
   if (Number.isInteger(value)) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -79,9 +83,11 @@ class ChartElement extends HTMLElement {
     this.measure = this.getAttribute('measure');
     this.measures = this.getAttribute('measures');
     this.limit = this.getAttribute('limit');
+    this.breakdown_limit = this.getAttribute('breakdown_limit') || 6;
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.getAttribute('stacked');
     this.is_horizontal = this.getAttribute('horizontal') === "true";
+    this.select_tool = this.getAttribute('select_tool');
     this.filter = undefined;
     this.init_html();
     this.render();
@@ -181,7 +187,7 @@ class ChartElement extends HTMLElement {
       // && columns.includes(chart.filter[0])
     );
     if (!filters.length) {
-      return '';
+      return 'where 1 = 1';
     }
     const clause = 'where ' + filters
     .map((chart) => filter2string(chart.filter))
@@ -197,4 +203,5 @@ export {
   ChartElement,
   humanize,
   slugify,
+  titleify,
 };
