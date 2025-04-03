@@ -232,7 +232,7 @@ hide:
 </bar-chart-grid>
 </div>
 
-<script type="module" src="../dist/data_manager.js"></script>
-<script type="module" src="../dist/echarts.js"></script>
-<script type="module" src="../dist/datatable.js"></script>
-<script type="module" src="../dist/score_cards.js"></script>
+<script type="module" src="../src/data_manager.js"></script>
+<script type="module" src="../src/echarts.js"></script>
+<script type="module" src="../src/datatable.js"></script>
+<script type="module" src="../src/score_cards.js"></script>
