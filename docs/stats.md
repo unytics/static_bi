@@ -10,7 +10,7 @@ hide:
 <div>
 <data-manager>
 
-  <data-manager-table name="stats" file="../data/2025-03-28e/stats_000000000000.parquet"></data-manager-table>
+  <data-manager-table name="stats" file="../data/2025-03-28_stats.parquet"></data-manager-table>
 
 </data-manager>
 </div>

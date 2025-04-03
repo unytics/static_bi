@@ -25,17 +25,18 @@ class DataManager extends HTMLElement {
   }
 
   async connectedCallback() {
-    if (window.data_manager !== undefined) {
-      console.log('CACHE HIT!');
-      return;
+    if (window.data_manager === undefined) {
+      console.log('CACHE MISSED!');
+      window.data_manager = this;
+      this.db_ready = false;
+      this.tables = {};
+      this.filters = [];
+      await this.init_duckdb();
+      this.db_ready = true;
     }
-    console.log('CACHE MISSED!');
-    window.data_manager = this;
-    this.db_ready = false;
-    this.tables = {};
-    this.filters = [];
-    await this.init_duckdb();
-    this.db_ready = true;
+    else {
+      console.log('CACHE HIT!');
+    }
     await this.load_data();
   }
 
@@ -89,6 +90,9 @@ class DataManager extends HTMLElement {
   }
 
   async create_view(name, query) {
+    if (name in this.tables) {
+      return;
+    }
     await this.query(`create view ${name} as ${query}`);
     this.tables[name] = await this.list_columns(`${name}`);
     this.emit_event(name);
