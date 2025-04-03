@@ -501,20 +501,15 @@
 
 <h1 id="welcome-to-static-bi">Welcome to Static BI!<a class="headerlink" href="#welcome-to-static-bi" title="Permanent link">¶</a></h1>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¶</a></h2>
-<div>
-<data-manager>
-
+<p><data-manager>
   <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
-  <data-manager-view name="stocks">
+  <data-manager-view name="stocks" style="display: none">
     select
       *,
       strftime(Date, '%Y-%m') as month,
     from _stocks
   </data-manager-view>
-
-</data-manager>
-</div>
-
+</data-manager></p>
 <h3 id="score-cards">Score Cards<a class="headerlink" href="#score-cards" title="Permanent link">¶</a></h3>
 <p><score-card
   title="Nb Symbols"
