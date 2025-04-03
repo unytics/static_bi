@@ -120,14 +120,18 @@ class DataManager extends HTMLElement {
 
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
-        await window.db.create_table(child.name, child.file);
-        this.emit_event(child.name);
+        const name = child.getAttribute('name');
+        const file = child.getAttribute('file');
+        await window.db.create_table(name, file);
+        this.emit_event(name);
       }
     }
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-VIEW') {
-        await window.db.create_view(child.name, child.sql);
-        this.emit_event(child.name);
+        const name = child.getAttribute('name');
+        const sql = child.textContent;
+        await window.db.create_view(name, sql);
+        this.emit_event(name);
       }
     }
     this.emit_event();
@@ -152,11 +156,6 @@ class DataManagerTable extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
-    this.name = this.getAttribute('name');
-    this.file = this.getAttribute('file');
-  }
-
 }
 
 class DataManagerView extends HTMLElement {
@@ -165,15 +164,14 @@ class DataManagerView extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
-    this.name = this.getAttribute('name');
-    this.sql = this.textContent;
-    this.textContent = '';
-  }
-
 }
 
 
 customElements.define("data-manager", DataManager);
 customElements.define("data-manager-table", DataManagerTable);
 customElements.define("data-manager-view", DataManagerView);
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("DOM fully loaded and parsed");
+});
