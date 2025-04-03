@@ -12,8 +12,6 @@ hide:
 <data-manager>
 
   <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
-  <!-- <data-manager-table name="rides"  file="https://idl.uw.edu/mosaic-datasets/data/nyc-rides-2010.parquet"></data-manager-table> -->
-
   <data-manager-view name="stocks">
     select
       *,
