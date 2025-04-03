@@ -120,6 +120,7 @@ class DataManager extends HTMLElement {
 
     for(const child of this.children) {
       if(child.tagName == 'DATA-MANAGER-TABLE') {
+        console.log('child name', child.name, 'child attribute name', child.getAttribute('name'));
         await window.db.create_table(child.name, child.file);
         this.emit_event(child.name);
       }
