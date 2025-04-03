@@ -5,6 +5,8 @@ repo_name: 'unytics/static_bi'
 repo_url: 'https://github.com/unytics/static_bi'
 edit_uri: 'edit/main'
 copyright: 'Copyright &copy; 2025 Unytics'
+docs_dir: '..'
+site_dir: '../..'
 theme:
   name: material
   palette:
