@@ -42,7 +42,8 @@ hide:
 </div>
 
 
-<script type="module" src="../../src/duckdb.js"></script>
-<script type="module" src="../../src/data_manager.js"></script>
-<script type="module" src="../../src/echarts.js"></script>
-<script type="module" src="../../src/datatable.js"></script>
+<script type="module" src="../../src/database_connectors/duckdb.js"></script>
+<script type="module" src="../../src/data_components/source_tables.js"></script>
+<script type="module" src="../../src/visualization_components/echarts.js"></script>
+<script type="module" src="../../src/visualization_components/datatable.js"></script>
+<script type="module" src="../../src/visualization_components/score_cards.js"></script>
