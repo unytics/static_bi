@@ -28,7 +28,10 @@ class Chart extends ChartElement {
       self.chart.resize();
     });
     this.chart.on('click', function(params) {
-      self.set_filter([self.by, '=', params.name]);
+      console.log('CLICK', params);
+      if (params.name) {
+        self.set_filter([self.by, '=', params.name]);
+      }
       // if(self.breakdown_by) {
       //   self.filters.push([self.breakdown_by, '=', params.seriesName])
       // }
@@ -86,8 +89,8 @@ class Chart extends ChartElement {
     else {
       query = `
         select
-          ${this.by} as ${slugify(this.by)},
-          ${this.measure} as ${slugify(this.measure)},
+          ${this.by} as by,
+          ${this.measure} as measure,
         from ${this.table}
         ${this.where_clause}
         group by 1
@@ -115,7 +118,7 @@ class Chart extends ChartElement {
       }
     }
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
-        name: serie_name,
+        name: Object.keys(data).length > 2 ? serie_name : undefined,
         type: this.chart_type,
         symbol: 'none',
         encode: this.is_horizontal ? {
@@ -148,8 +151,14 @@ class Chart extends ChartElement {
       //   toolbox: ['lineX'],
       //   xAxisIndex: 0,
       // },
-      xAxis: this.is_horizontal ? {} : {
+      xAxis: this.is_horizontal ? {
+        name: this.measure,
+        nameLocation: 'middle',
+        nameTextStyle: {padding: [10, 0, 0, 0], fontWeight: 'bold'},
+      } : {
         name: this.by,
+        nameLocation: 'middle',
+        nameTextStyle: {padding: [10, 0, 0, 0], fontWeight: 'bold'},
         type: label_type,
       },
       yAxis: this.is_horizontal ? {
@@ -158,7 +167,10 @@ class Chart extends ChartElement {
         nameTextStyle: {align: 'right', fontWeight: 'bold'},
         type: label_type,
         inverse: true,
-      } : {},
+      } : {
+        name: this.measure,
+        nameTextStyle: {align: 'right', fontWeight: 'bold'},
+      },
       series: series,
       toolbox: this.select_tool ? {
         feature: {
