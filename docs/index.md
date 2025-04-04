@@ -8,15 +8,13 @@ hide:
 ## Examples
 
 
-<data-manager>
-  <data-manager-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></data-manager-table>
-  <data-manager-view name="stocks" style="display: none">
-    select
-      *,
-      strftime(Date, '%Y-%m') as month,
-    from _stocks
-  </data-manager-view>
-</data-manager>
+<source-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></source-table>
+<source-view name="stocks" style="display: none">
+  select
+    *,
+    strftime(Date, '%Y-%m') as month,
+  from _stocks
+</source-view>
 
 
 
@@ -226,6 +224,7 @@ hide:
 </bar-chart-grid>
 </div>
 
+<script type="module" src="../src/duckdb.js"></script>
 <script type="module" src="../src/data_manager.js"></script>
 <script type="module" src="../src/echarts.js"></script>
 <script type="module" src="../src/datatable.js"></script>

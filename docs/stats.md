@@ -7,9 +7,7 @@ hide:
 
 # Stats
 
-<data-manager>
-  <data-manager-table name="stats" file="../data/2025-03-28_stats.parquet"></data-manager-table>
-</data-manager>
+<source-table name="stats" file="../data/2025-03-28_stats.parquet"></source-table>
 
 
 
@@ -44,6 +42,7 @@ hide:
 </div>
 
 
+<script type="module" src="../../src/duckdb.js"></script>
 <script type="module" src="../../src/data_manager.js"></script>
 <script type="module" src="../../src/echarts.js"></script>
 <script type="module" src="../../src/datatable.js"></script>
