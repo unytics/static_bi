@@ -1,6 +1,5 @@
 import {
   ChartElement,
-  humanize,
   slugify,
 } from './base_chart.js';
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
