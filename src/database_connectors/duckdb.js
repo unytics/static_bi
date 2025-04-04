@@ -4,7 +4,6 @@ import { tableFromIPC } from "https://cdn.jsdelivr.net/npm/@uwdata/flechette/+es
 class DuckDB {
 
   constructor() {
-    this.db_ready = false;
     this.tables = {};
     this.filters = [];
   }
@@ -23,7 +22,6 @@ class DuckDB {
     await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     URL.revokeObjectURL(worker_url);
     this.conn = await this.db.connect();
-    this.db_ready = true;
   }
 
   async query(query) {
@@ -64,6 +62,9 @@ class DuckDB {
     if (name in this.tables) {
       return;
     }
+    if (!file_url) {
+        console.error('Undefined or null file url');
+    }
     // await this.query(`create table ${name} as select * from "${file_url}"`);
     const res = await fetch(file_url, { cache: "force-cache" });
     const buffer = await res.arrayBuffer();
@@ -102,71 +103,13 @@ class DuckDB {
 }
 
 
-class DataManager extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
-  async connectedCallback() {
-    if (window.db === undefined) {
-      console.log('CACHE MISSED!');
-      window.db = new DuckDB();
-      await window.db.init();
-    }
-    else {
-      console.log('CACHE HIT!');
-    }
-
-    for(const child of this.children) {
-      if(child.tagName == 'DATA-MANAGER-TABLE') {
-        const name = child.getAttribute('name');
-        const file = child.getAttribute('file');
-        await window.db.create_table(name, file);
-        this.emit_event(name);
-      }
-    }
-    for(const child of this.children) {
-      if(child.tagName == 'DATA-MANAGER-VIEW') {
-        const name = child.getAttribute('name');
-        const sql = child.textContent;
-        await window.db.create_view(name, sql);
-        this.emit_event(name);
-      }
-    }
-    this.emit_event();
-  }
-
-  emit_event(name) {
-    const event_name = name ? `data-loaded:${name}` : 'data-loaded';
-    console.log('EMITTED', event_name);
-    this.dispatchEvent(new CustomEvent(event_name, {
-      bubbles: true,
-      composed: true
-    }));
-  }
-
+if (window.db === undefined) {
+    console.log('INIT DUCKDB');
+    const db = new DuckDB();
+    await db.init();
+    window.db = db;
+    document.dispatchEvent(new CustomEvent(`db-ready`, {bubbles: true, composed: true}));
 }
-
-
-
-class DataManagerTable extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
+else {
+    console.log('DUCKDB ALREADY INITIALIZED!');
 }
-
-class DataManagerView extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
-}
-
-
-customElements.define("data-manager", DataManager);
-customElements.define("data-manager-table", DataManagerTable);
-customElements.define("data-manager-view", DataManagerView);

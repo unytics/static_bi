@@ -428,9 +428,7 @@
 
 
 <h1 id="stats">Stats<a class="headerlink" href="#stats" title="Permanent link">¶</a></h1>
-<p><data-manager>
-  <data-manager-table name="stats" file="../data/2025-03-28_stats.parquet"></data-manager-table>
-</data-manager></p>
+<p><source-table name="stats" file="../data/2025-03-28_stats.parquet"></source-table></p>
 <h2 id="hey">hey<a class="headerlink" href="#hey" title="Permanent link">¶</a></h2>
 <p><bar-chart-grid
   table="stats"
@@ -446,9 +444,11 @@
 <table-description-chart table="stats"></table-description-chart>
 </div>
 
-<script type="module" src="../../src/data_manager.js"></script>
-<script type="module" src="../../src/echarts.js"></script>
-<script type="module" src="../../src/datatable.js"></script>
+<script type="module" src="../../src/database_connectors/duckdb.js"></script>
+<script type="module" src="../../src/data_components/source_tables.js"></script>
+<script type="module" src="../../src/visualization_components/echarts.js"></script>
+<script type="module" src="../../src/visualization_components/datatable.js"></script>
+<script type="module" src="../../src/visualization_components/score_cards.js"></script>
 
 
 
