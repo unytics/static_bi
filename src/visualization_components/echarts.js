@@ -104,6 +104,7 @@ class Chart extends ChartElement {
     const columns = Object.keys(data);
     const label_column = columns[0];
     const labels = Object.values(data)[0];
+    const label_type = labels[0] instanceof Date ? 'time' : 'category';
     const self = this;
     let clicked_indexes = [];
     if (this.filter !== undefined) {
@@ -117,6 +118,7 @@ class Chart extends ChartElement {
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
         name: serie_name,
         type: this.chart_type,
+        symbol: 'none',
         encode: this.is_horizontal ? {
           x: columns[k + 1],
           y: label_column,
@@ -149,13 +151,13 @@ class Chart extends ChartElement {
       // },
       xAxis: this.is_horizontal ? {} : {
         name: this.by,
-        type: this.by === 'date' ? 'time' : 'category',
+        type: label_type,
       },
       yAxis: this.is_horizontal ? {
         name: this.by,
         nameLocation: 'start',
         nameTextStyle: {align: 'right', fontWeight: 'bold'},
-        type: this.by === 'date' ? 'time' : 'category',
+        type: label_type,
         inverse: true,
       } : {},
       series: series,
@@ -274,9 +276,9 @@ class BarChartGrid extends ChartElement {
           id="line-month"
           table="${this.table}"
           measure="${this.measure}"
-          by="strftime(date, '%Y-%m')"
+          by="date_trunc('month', date)"
           ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-          order_by="strftime(date, '%Y-%m')">
+          order_by="date_trunc('month', date)">
         </line-chart>
         <line-chart
           id="line-day"

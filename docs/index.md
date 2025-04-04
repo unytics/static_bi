@@ -8,11 +8,15 @@ hide:
 ## Examples
 
 
+COLUMNS SUMMARY AVEC TYPE POUR DECIDER DE SI TIME OU AUTRE CHOSE
+
+
+
 <source-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></source-table>
 <source-view name="stocks" style="display: none">
   select
     *,
-    strftime(Date, '%Y-%m') as month,
+    date_trunc('month', Date) as month,
   from _stocks
 </source-view>
 
@@ -133,9 +137,9 @@ hide:
 <line-chart
   table="stocks"
   measure="count(*)"
-  by="strftime(Date, '%Y-%m')"
+  by="month"
   limit="500"
-  order_by="strftime(Date, '%Y-%m')"
+  order_by="month"
 >
 </line-chart>
 </div>
@@ -147,9 +151,9 @@ hide:
 <line-chart
   table="stocks"
   measure="sum(Close)"
-  by="strftime(Date, '%Y-%m')"
+  by="month"
   limit="500"
-  order_by="strftime(Date, '%Y-%m')"
+  order_by="month"
 >
 </line-chart>
 </div>
@@ -165,32 +169,6 @@ hide:
   order_by="max(Close) desc"
 >
 </bar-chart>
-</div>
-
-
-### Doughnut Chart
-<div>
-<doughnut-chart
-  table="stocks"
-  measure="max(Close)"
-  by="Symbol"
-  limit="10"
-  order_by="max(Close) desc"
->
-</doughnut-chart>
-</div>
-
-
-### Pie Chart
-<div>
-<pie-chart
-  table="stocks"
-  measure="max(Close)"
-  by="Symbol"
-  limit="10"
-  order_by="max(Close) desc"
->
-</pie-chart>
 </div>
 
 

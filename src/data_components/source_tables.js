@@ -39,12 +39,9 @@ class SourceView extends HTMLElement {
     this.name = this.getAttribute('name');
     this.sql = this.textContent;
     this.source_tables = extractTableNames(this.sql);
-    console.log(`SQL OF VIEW ${this.name}`, this.sql);
-    console.log(`SOURCE TABLES OF VIEW ${this.name}`, this.source_tables);
     const loaded = await this.load();
     if (!loaded) {
       for (const table of this.source_tables) {
-        console.log('ADD LISTENER', `data-loaded:${table}`);
         document.addEventListener(`data-loaded:${table}`, (event) => {this.load();});
       }
     }
