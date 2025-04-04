@@ -42,11 +42,13 @@ class Chart extends ChartElement {
       }
     });
     this.chart.on('brushEnd', function (params) {
+      console.log('BRUSH', params);
       if (!params.areas || !params.areas[0]) {
         return;
       }
       const indexes = params.areas[0].coordRange;
-      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
+      console.log('indexes', indexes);
+      // console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
     });
   }
 
@@ -139,17 +141,17 @@ class Chart extends ChartElement {
     const chart_config = {
       dataset: {source: data},
       // title: {text: `${this.measure} by ${this.by}`, bottom: 0},
-      tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
+      tooltip: (this.chart_type === 'line') || (label_type === 'time') ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
       animation: false,
-      // brush: this.is_horizontal ? {
-      //   toolbox: ['lineY'],
-      //   xAxisIndex: 1,
-      // } : {
-      //   toolbox: ['lineX'],
-      //   xAxisIndex: 0,
-      // },
+      brush: this.is_horizontal ? {
+        toolbox: ['lineY'],
+        xAxisIndex: 1,
+      } : {
+        toolbox: ['lineX'],
+        xAxisIndex: 0,
+      },
       xAxis: this.is_horizontal ? {
         name: this.measure,
         nameLocation: 'middle',
