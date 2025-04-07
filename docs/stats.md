@@ -15,11 +15,13 @@ hide:
 
 
 
-
+<date-picker></date-picker>
 
 
 
 ## hey
+
+<input type="date" id="my-date-picker" name="my-date" />
 
 
 
@@ -45,8 +47,9 @@ hide:
 </div>
 
 
-<script type="module" src="../../src/database_connectors/duckdb.js"></script>
-<script type="module" src="../../src/data_components/source_tables.js"></script>
-<script type="module" src="../../src/visualization_components/echarts.js"></script>
-<script type="module" src="../../src/visualization_components/datatable.js"></script>
-<script type="module" src="../../src/visualization_components/score_cards.js"></script>
+<script type="module" src="../../src/connectors/duckdb.js"></script>
+<script type="module" src="../../src/components/data/source_tables.js"></script>
+<script type="module" src="../../src/components/visualization/echarts.js"></script>
+<script type="module" src="../../src/components/visualization/datatable.js"></script>
+<script type="module" src="../../src/components/visualization/score_cards.js"></script>
+<script type="module" src="../../src/components/controls/date_controls.js"></script>
