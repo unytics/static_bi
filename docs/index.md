@@ -8,18 +8,11 @@ hide:
 ## Examples
 
 
-COLUMNS SUMMARY AVEC TYPE POUR DECIDER DE SI TIME OU AUTRE CHOSE
-
-
-
-<source-table name="_stocks" file="https://idl.uw.edu/mosaic/data/stocks.parquet"></source-table>
-<source-view name="stocks" style="display: none">
-  select
-    *,
-    date_trunc('month', Date) as month,
-  from _stocks
-</source-view>
-
+<source-table
+  name="stocks"
+  file="https://idl.uw.edu/mosaic/data/stocks.parquet"
+  columns="*, date_trunc('month', Date) as month">
+</source-table>
 
 
 ### Score Cards
@@ -141,8 +134,6 @@ COLUMNS SUMMARY AVEC TYPE POUR DECIDER DE SI TIME OU AUTRE CHOSE
   table="stocks"
   measure="count(*)"
   by="month"
-  limit="500"
-  order_by="month"
 >
 </line-chart>
 </div>

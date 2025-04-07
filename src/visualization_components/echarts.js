@@ -14,6 +14,7 @@ class Chart extends ChartElement {
   constructor() {
     super();
     this.chart_type = this.getAttribute('type');
+    this.order_by = this.getAttribute('order_by') || 'by';
   }
 
   init_html() {
@@ -242,6 +243,9 @@ class BarChart extends Chart {
   constructor() {
     super();
     this.chart_type = 'bar';
+    this.order_by = (
+      this.getAttribute('order_by') || (this.is_horizontal ? 'measure desc' : 'by')
+    );
   }
 
 }
@@ -339,7 +343,7 @@ class BarChartGrid extends ChartElement {
           table="${this.table}"
           by="${column}"
           measure="${this.measure}"
-          order_by="${this.order_by}"
+          order_by="${this.getAttribute('order_by') || ''}"
           limit="${this.limit}"
           ${this.is_horizontal ? 'horizontal="true"' : ''}
           select_tool="${column}"

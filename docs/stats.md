@@ -27,7 +27,6 @@ hide:
   table="stats"
   measure="count(distinct user)"
   by="user_month_profile, bigfunction, domain, status, project"
-  order_by="count(distinct user) desc"
   limit="15"
   horizontal="true">
 </bar-chart-grid>
