@@ -100,6 +100,10 @@ class ChartElement extends HTMLElement {
     CHART_ELEMENTS.push(this);
   }
 
+  disconnectedCallback() {
+    console.log('DISCONNECTED');
+  }
+
   init_html() {
     this.attachShadow({ mode: 'open' });
     this.userContent = this.textContent ? markdown2html(this.textContent) : '';
