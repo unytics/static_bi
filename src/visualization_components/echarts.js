@@ -139,6 +139,7 @@ class Chart extends ChartElement {
     );
 
     const chart_config = {
+      useUTC: true,
       dataset: {source: data},
       // title: {text: `${this.measure} by ${this.by}`, bottom: 0},
       tooltip: (this.chart_type === 'line') || (label_type === 'time') ? {trigger: 'axis'} : {},
