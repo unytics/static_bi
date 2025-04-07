@@ -58,7 +58,12 @@ class DuckDB {
     return Object.values(columns)[0][0];
   }
 
-  async create_table(name, file_url) {
+  async query2console(query) {
+    const result = await this.query(query);
+    console.table(result);
+  }
+
+  async create_table(name, file_url, columns) {
     if (name in this.tables) {
       return;
     }
@@ -70,7 +75,11 @@ class DuckDB {
     const buffer = await res.arrayBuffer();
     const uint8_array = new Uint8Array(buffer);
     await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
-    await this.query(`create view ${name} as select * from parquet_scan('${name}.parquet')`);
+    await this.query(`
+      create view ${name} as
+      select ${columns ? columns : '*'}
+      from parquet_scan('${name}.parquet')
+    `);
     this.tables[name] = await this.list_columns(`${name}`);
   }
 

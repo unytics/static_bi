@@ -1,7 +1,6 @@
 import {
     ChartElement,
     humanize,
-    slugify,
   } from './base_chart.js';
 
 class TableChart extends ChartElement {

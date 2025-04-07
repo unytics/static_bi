@@ -1,7 +1,5 @@
 import {
   ChartElement,
-  humanize,
-  slugify,
 } from './base_chart.js';
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
 
@@ -16,6 +14,7 @@ class Chart extends ChartElement {
   constructor() {
     super();
     this.chart_type = this.getAttribute('type');
+    this.order_by = this.getAttribute('order_by') || 'by';
   }
 
   init_html() {
@@ -29,7 +28,10 @@ class Chart extends ChartElement {
       self.chart.resize();
     });
     this.chart.on('click', function(params) {
-      self.set_filter([self.by, '=', params.name]);
+      console.log('CLICK', params);
+      if (params.name) {
+        self.set_filter([self.by, '=', params.name]);
+      }
       // if(self.breakdown_by) {
       //   self.filters.push([self.breakdown_by, '=', params.seriesName])
       // }
@@ -41,11 +43,14 @@ class Chart extends ChartElement {
       }
     });
     this.chart.on('brushEnd', function (params) {
+      console.log('BRUSH', params);
       if (!params.areas || !params.areas[0]) {
         return;
       }
       const indexes = params.areas[0].coordRange;
-      console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
+      console.log('indexes', indexes);
+      console.log('date range', new Date(indexes[0]));
+      // console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
     });
   }
 
@@ -87,15 +92,44 @@ class Chart extends ChartElement {
     else {
       query = `
         select
-          ${this.by} as ${slugify(this.by)},
-          ${this.measure} as ${slugify(this.measure)},
+          ${this.by} as by,
+          ${this.measure} as measure,
         from ${this.table}
         ${this.where_clause}
         group by 1
         order by ${this.order_by}
         limit ${this.limit}
       `;
+    //   if (this.by === 'date') {
+    //     query = `
+    //       with
+
+    //       data as (
+    //         ${query}
+    //       ),
+
+    //       date_boundaries as (
+    //         select
+    //           min(by) as min_date,
+    //           max(by) as max_date,
+    //         from data
+    //       ),
+
+    //       dates as (
+    //         select unnest(generate_series(min_date, max_date, INTERVAL 1 DAY))::date as by
+    //         from date_boundaries
+    //       )
+
+    //       select
+    //         by,
+    //         ifnull(measure, 0) as measure,
+    //       from dates
+    //       left join data using (by)
+    //       order by by
+    //     `;
+    //   }
     }
+
     const data = await window.db.query2columns(query);
     return data;
   }
@@ -104,6 +138,7 @@ class Chart extends ChartElement {
     const columns = Object.keys(data);
     const label_column = columns[0];
     const labels = Object.values(data)[0];
+    const label_type = labels[0] instanceof Date ? 'time' : 'category';
     const self = this;
     let clicked_indexes = [];
     if (this.filter !== undefined) {
@@ -115,8 +150,11 @@ class Chart extends ChartElement {
       }
     }
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
-        name: serie_name,
+        name: Object.keys(data).length > 2 ? serie_name : undefined,
         type: this.chart_type,
+        symbol: 'circle',
+        // symbol: labels.length > 100 ? 'none' : 'circle',
+        connectNulls: false,
         encode: this.is_horizontal ? {
           x: columns[k + 1],
           y: label_column,
@@ -134,30 +172,40 @@ class Chart extends ChartElement {
     );
 
     const chart_config = {
+      useUTC: true,
       dataset: {source: data},
       // title: {text: `${this.measure} by ${this.by}`, bottom: 0},
-      tooltip: this.chart_type === 'line' ? {trigger: 'axis'} : {},
+      tooltip: (this.chart_type === 'line') || (label_type === 'time') ? {trigger: 'axis'} : {},
       legend: {},
       grid: {containLabel: true},
       animation: false,
-      // brush: this.is_horizontal ? {
-      //   toolbox: ['lineY'],
-      //   xAxisIndex: 1,
-      // } : {
-      //   toolbox: ['lineX'],
-      //   xAxisIndex: 0,
-      // },
-      xAxis: this.is_horizontal ? {} : {
+      brush: this.is_horizontal ? {
+        toolbox: ['lineY'],
+        xAxisIndex: 1,
+      } : {
+        toolbox: ['lineX'],
+        xAxisIndex: 0,
+      },
+      xAxis: this.is_horizontal ? {
+        name: this.measure,
+        nameLocation: 'middle',
+        nameTextStyle: {padding: [10, 0, 0, 0], fontWeight: 'bold'},
+      } : {
         name: this.by,
-        type: this.by === 'date' ? 'time' : 'category',
+        nameLocation: 'middle',
+        nameTextStyle: {padding: [10, 0, 0, 0], fontWeight: 'bold'},
+        type: label_type,
       },
       yAxis: this.is_horizontal ? {
         name: this.by,
         nameLocation: 'start',
         nameTextStyle: {align: 'right', fontWeight: 'bold'},
-        type: this.by === 'date' ? 'time' : 'category',
+        type: label_type,
         inverse: true,
-      } : {},
+      } : {
+        name: this.measure,
+        nameTextStyle: {align: 'right', fontWeight: 'bold'},
+      },
       series: series,
       toolbox: this.select_tool ? {
         feature: {
@@ -195,6 +243,9 @@ class BarChart extends Chart {
   constructor() {
     super();
     this.chart_type = 'bar';
+    this.order_by = (
+      this.getAttribute('order_by') || (this.is_horizontal ? 'measure desc' : 'by')
+    );
   }
 
 }
@@ -274,17 +325,15 @@ class BarChartGrid extends ChartElement {
           id="line-month"
           table="${this.table}"
           measure="${this.measure}"
-          by="strftime(date, '%Y-%m')"
-          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-          order_by="strftime(date, '%Y-%m')">
+          by="month"
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
         <line-chart
           id="line-day"
           table="${this.table}"
           measure="${this.measure}"
           by="date"
-          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-          order_by="date">
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
       </div>
       ` +
@@ -294,7 +343,7 @@ class BarChartGrid extends ChartElement {
           table="${this.table}"
           by="${column}"
           measure="${this.measure}"
-          order_by="${this.order_by}"
+          order_by="${this.getAttribute('order_by') || ''}"
           limit="${this.limit}"
           ${this.is_horizontal ? 'horizontal="true"' : ''}
           select_tool="${column}"

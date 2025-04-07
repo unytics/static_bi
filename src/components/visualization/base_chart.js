@@ -70,13 +70,6 @@ class ChartElement extends HTMLElement {
 
   constructor() {
     super();
-  }
-
-  get rerender_when_filter_changes() {
-    return true;
-  }
-
-  connectedCallback() {
     this.table = this.getAttribute('table');
     this.by = this.getAttribute('by');
     this.breakdown_by = this.getAttribute('breakdown_by');
@@ -89,6 +82,13 @@ class ChartElement extends HTMLElement {
     this.is_horizontal = this.getAttribute('horizontal') === "true";
     this.select_tool = this.getAttribute('select_tool');
     this.filter = undefined;
+  }
+
+  get rerender_when_filter_changes() {
+    return true;
+  }
+
+  connectedCallback() {
     this.init_html();
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
@@ -98,6 +98,10 @@ class ChartElement extends HTMLElement {
     }
     // this.addEventListener("visibilitychange", (event) => {this.render();});
     CHART_ELEMENTS.push(this);
+  }
+
+  disconnectedCallback() {
+    console.log('DISCONNECTED');
   }
 
   init_html() {
