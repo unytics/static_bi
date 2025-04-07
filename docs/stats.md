@@ -7,7 +7,11 @@ hide:
 
 # Stats
 
-<source-table name="stats" file="../data/2025-03-28_stats.parquet"></source-table>
+<source-table
+  name="stats"
+  file="../data/2025-03-28_stats.parquet"
+  columns="*, date_trunc('month', date) as month">
+</source-table>
 
 
 

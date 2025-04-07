@@ -9,6 +9,7 @@ class SourceTable extends HTMLElement {
   async connectedCallback() {
     this.name = this.getAttribute('name');
     this.file = this.getAttribute('file');
+    this.columns = this.getAttribute('columns');
     const loaded = await this.load();
     if (!loaded) {
       document.addEventListener(('db-ready'), (event) => {this.load();});
@@ -19,7 +20,7 @@ class SourceTable extends HTMLElement {
     if (window.db === undefined) {
       return false;
     }
-    await window.db.create_table(this.name, this.file);
+    await window.db.create_table(this.name, this.file, this.columns);
     console.log('EMITTED', `data-loaded:${this.name}`);
     this.dispatchEvent(new CustomEvent(`data-loaded:${this.name}`, {bubbles: true, composed: true}));
     this.dispatchEvent(new CustomEvent(`data-loaded`, {bubbles: true, composed: true}));

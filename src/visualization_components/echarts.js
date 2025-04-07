@@ -48,6 +48,7 @@ class Chart extends ChartElement {
       }
       const indexes = params.areas[0].coordRange;
       console.log('indexes', indexes);
+      console.log('date range', new Date(indexes[0]));
       // console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
     });
   }
@@ -98,7 +99,36 @@ class Chart extends ChartElement {
         order by ${this.order_by}
         limit ${this.limit}
       `;
+    //   if (this.by === 'date') {
+    //     query = `
+    //       with
+
+    //       data as (
+    //         ${query}
+    //       ),
+
+    //       date_boundaries as (
+    //         select
+    //           min(by) as min_date,
+    //           max(by) as max_date,
+    //         from data
+    //       ),
+
+    //       dates as (
+    //         select unnest(generate_series(min_date, max_date, INTERVAL 1 DAY))::date as by
+    //         from date_boundaries
+    //       )
+
+    //       select
+    //         by,
+    //         ifnull(measure, 0) as measure,
+    //       from dates
+    //       left join data using (by)
+    //       order by by
+    //     `;
+    //   }
     }
+
     const data = await window.db.query2columns(query);
     return data;
   }
@@ -121,7 +151,9 @@ class Chart extends ChartElement {
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
         name: Object.keys(data).length > 2 ? serie_name : undefined,
         type: this.chart_type,
-        symbol: 'none',
+        symbol: 'circle',
+        // symbol: labels.length > 100 ? 'none' : 'circle',
+        connectNulls: false,
         encode: this.is_horizontal ? {
           x: columns[k + 1],
           y: label_column,
@@ -289,17 +321,15 @@ class BarChartGrid extends ChartElement {
           id="line-month"
           table="${this.table}"
           measure="${this.measure}"
-          by="date_trunc('month', date)"
-          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-          order_by="date_trunc('month', date)">
+          by="month"
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
         <line-chart
           id="line-day"
           table="${this.table}"
           measure="${this.measure}"
           by="date"
-          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}
-          order_by="date">
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
       </div>
       ` +
