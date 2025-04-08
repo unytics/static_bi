@@ -40,6 +40,10 @@ class DatePicker extends HTMLElement {
       border-bottom-right-radius: 0.375rem;
       border-left: none;
     }
+
+    select:invalid {
+      color: grey;
+    }
     `;
 
 
@@ -47,7 +51,7 @@ class DatePicker extends HTMLElement {
     <style>${style}</style>
     <div id="container">
       <input id="picker" autocomplete="off" placeholder="Custom Date Range">
-      <select>
+      <select required>
         <option value="" disabled selected>Select</option>
         <option>Last 7 days</option>
         <option>Last 30 days</option>
@@ -55,6 +59,8 @@ class DatePicker extends HTMLElement {
         <option disabled>──────────</option>
         <option>£</option>
         <option>€</option>
+        <option disabled>──────────</option>
+        <option>All Time</option>
       </select>
     </div>
     `;
