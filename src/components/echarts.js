@@ -58,7 +58,8 @@ class Chart extends ChartElement {
       }
       const indexes = params.areas[0].coordRange;
       console.log('indexes', indexes);
-      console.log('date range', new Date(indexes[0]));
+      console.log(new Date(indexes[0]).toISOString());
+      console.log(new Date(indexes[1]).toISOString());
       // console.log('indexes', labels[indexes[0]], labels[indexes[1]]);
     });
   }
@@ -151,11 +152,31 @@ class Chart extends ChartElement {
     const self = this;
     let clicked_indexes = [];
     if (this.filter !== undefined) {
-      if (Array.isArray(this.filter[2])) {
-        clicked_indexes = labels.map((label, i) => (this.filter[2].includes(label)) ? i : '').filter(String);
+      const [_, filter_ope, filter_value] = this.filter;
+      if (label_type === 'category') {
+        if (Array.isArray(filter_value)) {
+          clicked_indexes = labels.map((label, i) => (filter_value.includes(label)) ? i : '').filter(String);
+        }
+        else {
+          clicked_indexes = [labels.findIndex((label) => label === filter_value)];
+        }
       }
-      else {
-        clicked_indexes = [labels.findIndex((label) => label === this.filter[2])];
+      else if (label_type === 'time') {
+        if (Array.isArray(filter_value)) {
+          if (filter_ope === 'between') {
+            const min_time = new Date(filter_value[0]).getTime();
+            const max_time = new Date(filter_value[1]).getTime();
+            clicked_indexes = labels.map((label, i) => (label.getTime() >= min_time && label.getTime() <= max_time) ? i : '').filter(String);
+          }
+          else if (filter_ope === 'in') {
+            const selected_times = filter_value.map((value) => new Date(value).getTime());
+            clicked_indexes = labels.map((label, i) => (selected_times.includes(label.getTime())) ? i : '').filter(String);
+          }
+        }
+        else {
+          const time = (new Date(filter_value)).getTime();
+          clicked_indexes = [labels.findIndex((label) => label.getTime() === time)];
+        }
       }
     }
     const series = Object.keys(data).slice(1).map((serie_name, k) => ({
