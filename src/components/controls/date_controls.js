@@ -58,6 +58,8 @@ class DatePicker extends HTMLElement {
         <option disabled>-</option>
         <option>Month To Date</option>
         <option>Year To Date</option>
+        <option disabled>-</option>
+        <option>Custom</option>
       </select>
     </div>
     `;
