@@ -9,7 +9,7 @@ class DatePicker extends HTMLElement {
 
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    // this.shadowRoot.adoptedStyleSheets = [sheet];
     const style = `
     #container {
       display: flex
@@ -20,6 +20,7 @@ class DatePicker extends HTMLElement {
       border-color: hsl(221deg, 14%, 86%);
       border-style: solid;
       border-width: 1px;
+      border-radius: 0px;
       box-sizing: border-box;
       margin: 0;
       padding: calc(0.5em - 1px) calc(0.75em - 1px);
@@ -39,9 +40,6 @@ class DatePicker extends HTMLElement {
       border-left: none;
     }
 
-    select:invalid {
-      color: grey;
-    }
     `;
 
 
@@ -49,17 +47,17 @@ class DatePicker extends HTMLElement {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
     <style>${style}</style>
     <div id="container">
-      <input id="picker" autocomplete="off" placeholder="Custom Date Range">
-      <select required>
-        <option value="" disabled selected>Select</option>
+      <input id="picker" placeholder="Date Range" readonly>
+      <select>
+        <option>All Time</option>
+        <option disabled>-</option>
         <option>Last 7 days</option>
         <option>Last 30 days</option>
         <option>Last 90 days</option>
-        <option disabled>──────────</option>
-        <option>£</option>
-        <option>€</option>
-        <option disabled>──────────</option>
-        <option>All Time</option>
+        <option>Last 365 days</option>
+        <option disabled>-</option>
+        <option>Month To Date</option>
+        <option>Year To Date</option>
       </select>
     </div>
     `;
