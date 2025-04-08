@@ -5,6 +5,7 @@ hide:
 
 # Welcome to Static BI!
 
+
 ## Examples
 
 
@@ -15,7 +16,7 @@ hide:
 </source-table>
 
 
-<date-picker></date-picker>
+Date Range: <date-range-picker></date-range-picker>
 
 
 ## hey
@@ -183,8 +184,8 @@ hide:
 </bar-chart-grid>
 
 <script type="module" src="../src/connectors/duckdb.js"></script>
-<script type="module" src="../src/components/data/source_tables.js"></script>
-<script type="module" src="../src/components/visualization/echarts.js"></script>
-<script type="module" src="../src/components/visualization/datatable.js"></script>
-<script type="module" src="../src/components/visualization/score_cards.js"></script>
-<script type="module" src="../src/components/controls/date_controls.js"></script>
+<script type="module" src="../src/components/source_tables.js"></script>
+<script type="module" src="../src/components/echarts.js"></script>
+<script type="module" src="../src/components/datatable.js"></script>
+<script type="module" src="../src/components/score_cards.js"></script>
+<script type="module" src="../src/components/date_range_picker.js"></script>

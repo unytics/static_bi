@@ -1,7 +1,7 @@
 import AirDatepicker from 'https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/+esm';
 
 
-class DatePicker extends HTMLElement {
+class DateRangePicker extends HTMLElement {
 
   constructor() {
     super();
@@ -12,7 +12,7 @@ class DatePicker extends HTMLElement {
     // this.shadowRoot.adoptedStyleSheets = [sheet];
     const style = `
     #container {
-      display: flex
+      display: inline-flex;
     }
 
     input, select {
@@ -29,15 +29,20 @@ class DatePicker extends HTMLElement {
       height: 2.5em;
     }
 
-    input {
+    select {
       border-top-left-radius: 0.375rem;
       border-bottom-left-radius: 0.375rem;
     }
 
-    select {
+    input {
       border-top-right-radius: 0.375rem;
       border-bottom-right-radius: 0.375rem;
       border-left: none;
+    }
+
+    .air-datepicker-buttons {
+       grid-template-columns: repeat(4, 1fr)!important;
+       grid-auto-flow: row!important;
     }
 
     `;
@@ -47,7 +52,6 @@ class DatePicker extends HTMLElement {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
     <style>${style}</style>
     <div id="container">
-      <input id="picker" placeholder="Date Range" readonly>
       <select>
         <option>All Time</option>
         <option disabled>-</option>
@@ -61,6 +65,7 @@ class DatePicker extends HTMLElement {
         <option disabled>-</option>
         <option>Custom</option>
       </select>
+      <input id="picker" placeholder="Date Range" readonly>
     </div>
     `;
     this.containerElement = this.shadowRoot.getElementById('container');
@@ -68,22 +73,46 @@ class DatePicker extends HTMLElement {
     this.picker = new AirDatepicker(this.pickerElement, {
       container: this.containerElement,
       range: true,
+      multipleDatesSeparator: ' to ',
       locale: {
-          days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-          daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          daysMin: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-          months: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
-          monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          today: 'Today',
-          clear: 'Clear',
-          dateFormat: 'yyyy-MM-dd',
-          timeFormat: 'hh:ii aa',
-          firstDay: 0
-      }
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        daysMin: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        months: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        today: 'Today',
+        clear: 'Clear',
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: 'hh:ii aa',
+        firstDay: 0,
+      },
+      buttons: [
+        {content: '7days', onClick: (dp) => {this.setRange('7days')}},
+        {content: '30days', onClick: (dp) => {this.setRange('30days')}},
+        {content: '90days', onClick: (dp) => {this.setRange('90days')}},
+        {content: '180days', onClick: (dp) => {this.setRange('180days')}},
+        {content: 'All', onClick: (dp) => {this.setRange('All')}},
+      ],
     })
+  }
+
+
+  setRange(range) {
+    const today = new Date();
+    let previous_day = new Date();
+    const nb_days = range.match(/(\d+)days/);
+    if (nb_days) {
+      previous_day.setDate(today.getDate() - parseInt(nb_days[1]));
+      this.picker.clear({silent: true});
+      this.picker.selectDate([previous_day, today]);
+    }
+    else {
+      this.picker.clear();
+    }
+    this.picker.hide();
   }
 
 }
 
 
-customElements.define("date-picker", DatePicker);
+customElements.define("date-range-picker", DateRangePicker);
