@@ -9,7 +9,7 @@ class DatePicker extends HTMLElement {
 
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    // this.shadowRoot.adoptedStyleSheets = [sheet];
     const style = `
     #container {
       display: flex
