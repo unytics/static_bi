@@ -1,5 +1,7 @@
-import moment from 'https://cdn.jsdelivr.net/npm/moment@2.30.1/+esm';
-import { DateRangePicker } from '../../third_parties/vanilla-datetimerange-picker.js';
+import AirDatepicker from 'https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/+esm';
+import sheet from 'https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css' with { type: 'css' };
+
+
 
 class DatePicker extends HTMLElement {
 
@@ -9,58 +11,74 @@ class DatePicker extends HTMLElement {
 
   connectedCallback() {
     this.attachShadow({ mode: 'open' });
+    this.shadowRoot.adoptedStyleSheets = [sheet];
+    const style = `
+    #container {
+      display: flex
+    }
+
+    input, select {
+      background-color: hsl(221deg, 14%, 100%);
+      border-color: hsl(221deg, 14%, 86%);
+      border-style: solid;
+      border-width: 1px;
+      box-sizing: border-box;
+      margin: 0;
+      padding: calc(0.5em - 1px) calc(0.75em - 1px);
+      color: hsl(221deg, 14%, 29%);
+      line-height: 2.5em;
+      height: 2.5em;
+    }
+
+    input {
+      border-top-left-radius: 0.375rem;
+      border-bottom-left-radius: 0.375rem;
+    }
+
+    select {
+      border-top-right-radius: 0.375rem;
+      border-bottom-right-radius: 0.375rem;
+      border-left: none;
+    }
+    `;
+
+
     this.shadowRoot.innerHTML = `
-      <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alumuko/vanilla-datetimerange-picker@latest/dist/vanilla-datetimerange-picker.css">
-      <div id="container">
-        <input type="text" id="picker" size="24" style="text-align:center">
-      </div>
+    <style>${style}</style>
+    <div id="container">
+      <input id="picker" autocomplete="off" placeholder="Custom Date Range">
+      <select>
+        <option value="" disabled selected>Select</option>
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+        <option>Last 90 days</option>
+        <option disabled>──────────</option>
+        <option>£</option>
+        <option>€</option>
+      </select>
+    </div>
     `;
     this.containerElement = this.shadowRoot.getElementById('container');
     this.pickerElement = this.shadowRoot.getElementById('picker');
-    this.picker = new DateRangePicker(this.pickerElement, {
-      parentEl: this.containerElement,
-      ranges: {
-        'Today': [moment().startOf('day'), moment().endOf('day')],
-        'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-        'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
-        'This Month': [moment().startOf('month').startOf('day'), moment().endOf('month').endOf('day')],
-      },
-    });
-    // this.picker = flatpickr(this.pickerElement, {
-    //   // appendTo: this.containerElement,
-    //   static: true,
-    //   mode: 'range',
-    //   defaultDate: ['2025-03-07', '2025-04-07'],
-    //   // allowInput: true,
-    // });
+    this.picker = new AirDatepicker(this.pickerElement, {
+      container: this.containerElement,
+      range: true,
+      locale: {
+          days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          daysMin: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+          months: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
+          monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          today: 'Today',
+          clear: 'Clear',
+          dateFormat: 'yyyy-MM-dd',
+          timeFormat: 'hh:ii aa',
+          firstDay: 0
+      }
+    })
   }
 
 }
 
-// import flatpickr from 'https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/+esm';
-
-// class DatePicker extends HTMLElement {
-
-//   constructor() {
-//     super();
-//   }
-
-//   connectedCallback() {
-//     this.attachShadow({ mode: 'open' });
-//     this.shadowRoot.innerHTML = `
-//       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
-//       <input id="picker">
-//     `;
-//     this.pickerElement = this.shadowRoot.getElementById('picker');
-//     this.picker = flatpickr(this.pickerElement, {
-//       // appendTo: this.containerElement,
-//       static: true,
-//       mode: 'range',
-//       defaultDate: ['2025-03-07', '2025-04-07'],
-//       // allowInput: true,
-//     });
-//   }
-
-// }
 
 customElements.define("date-picker", DatePicker);
