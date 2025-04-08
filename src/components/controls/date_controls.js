@@ -49,7 +49,7 @@ class DatePicker extends HTMLElement {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
     <style>${style}</style>
     <div id="container">
-      <input id="picker" autocomplete="off" placeholder="Custom Date Range">
+      <input id="picker" placeholder="Date Range" readonly>
       <select required>
         <option value="" disabled selected>Select</option>
         <option>Last 7 days</option>
