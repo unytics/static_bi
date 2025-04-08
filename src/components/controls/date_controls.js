@@ -1,6 +1,4 @@
 import AirDatepicker from 'https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/+esm';
-import sheet from 'https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css' with { type: 'css' };
-
 
 
 class DatePicker extends HTMLElement {
@@ -48,6 +46,7 @@ class DatePicker extends HTMLElement {
 
 
     this.shadowRoot.innerHTML = `
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
     <style>${style}</style>
     <div id="container">
       <input id="picker" autocomplete="off" placeholder="Custom Date Range">
