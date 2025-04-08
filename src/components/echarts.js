@@ -32,6 +32,15 @@ class Chart extends ChartElement {
       if (params.name) {
         self.set_filter([self.by, '=', params.name]);
       }
+      else if (params.value && params.value.length && (params.value[0] instanceof Date)) {
+        const selected_date = params.value[0].toISOString();
+        if (['date', 'month'].includes(self.by.toLowerCase())) {
+          self.set_filter([self.by, '=', selected_date.split('T')[0]]);
+        }
+        else {
+          self.set_filter([self.by, '=', selected_date]);
+        }
+      }
       // if(self.breakdown_by) {
       //   self.filters.push([self.breakdown_by, '=', params.seriesName])
       // }
