@@ -1,5 +1,12 @@
 # Static BI
 
+Postgrest:
+
+```bash
+docker run --rm -p 3000:3000 -e PGRST_DB_URI="postgres://cube:12345@demo-db.cube.dev/ecom" -e PGRST_DB_ANON_ROLE=cube -e PGRST_DB_AGGREGATES_ENABLED=true postgrest/postgrest
+```
+
+
 [![Static BI Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-brightgreen?style=for-the-badge)](https://unytics.io/static_bi/) <!-- Placeholder - Update with actual demo link if available -->
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue?style=for-the-badge&logo=github)](https://github.com/unytics/static_bi) <!-- Placeholder - Update with actual repo link -->
 
