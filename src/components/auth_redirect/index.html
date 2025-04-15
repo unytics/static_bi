@@ -10,11 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://unytics.io/static_bi/src/components/auth_wip/">
+        <link rel="canonical" href="https://unytics.io/static_bi/src/components/auth_redirect/">
       
       
-        <link rel="prev" href="../auth_redirect/">
+        <link rel="prev" href="../../../docs/stats/">
       
+      
+        <link rel="next" href="../auth_wip/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +24,7 @@
     
     
       
-        <title>Auth wip - Static BI</title>
+        <title>Auth with Redirect - Static BI</title>
       
     
     
@@ -71,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#auth-with-redirect" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -103,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Auth wip
+              Auth with Redirect
             
           </span>
         </div>
@@ -370,28 +377,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../auth_redirect/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Auth with Redirect
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -401,8 +386,33 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Auth with Redirect
+    
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auth_wip/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -412,7 +422,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -450,6 +459,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -468,16 +479,14 @@
   
 
 
-  <h1>Auth wip</h1>
-
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+<h1 id="auth-with-redirect">Auth with Redirect<a class="headerlink" href="#auth-with-redirect" title="Permanent link">¶</a></h1>
 <style>
   .hidden {
     display: none!important;
   }
 </style>
 
+<p>hello!</p>
 <p><button id="sign-in" class="md-button md-button--primary">Sign In</button>
 <button id="sign-out" class="hidden md-button md-button--primary">Sign Out</button>
 <button id="download" class="hidden md-button md-button--primary">Download</button></p>
@@ -491,11 +500,11 @@
 
   const firebaseConfig = {
     apiKey: "AIzaSyD5n2R6a5w9FU9aKbq2GbiP2rVPC9vCXsA",
-    authDomain: "unytics.cloud",
+    authDomain: "auth.unytics.io",
     projectId: "unytics-cloud",
     storageBucket: "unytics-cloud.firebasestorage.app",
     messagingSenderId: "1014985713601",
-    appId: "1:1014985713601:web:b3e42d577f70ad07fab140"
+    appId: "1:1014985713601:web:d4a6dca56df92834fab140"
   };
 
   // Initialize Firebase
@@ -516,6 +525,10 @@
 
   getRedirectResult(auth)
   .then((result) => {
+    console.log('REDIRECT RESULT!', result);
+    if (!result) {
+      return;
+    }
     // This gives you a Google Access Token. You can use it to access Google APIs.
     console.log('HELLO', result);
     const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -570,6 +583,7 @@
   }
 
   onAuthStateChanged(auth, (user) => {
+    console.log('STATE CHANGED!', user);
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
