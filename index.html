@@ -353,6 +353,123 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Src
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Src
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Components
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="src/components/auth_wip/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auth wip
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -426,6 +543,9 @@
 
 
 <h1 id="static-bi">Static BI<a class="headerlink" href="#static-bi" title="Permanent link">¶</a></h1>
+<p>Postgrest:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">3000</span>:3000<span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_URI</span><span class="o">=</span><span class="s2">&quot;postgres://cube:12345@demo-db.cube.dev/ecom&quot;</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_ANON_ROLE</span><span class="o">=</span>cube<span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_AGGREGATES_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>postgrest/postgrest
+</code></pre></div>
 <p><a href="https://unytics.io/static_bi/"><img alt="Static BI Demo" src="https://img.shields.io/badge/Live%20Demo-Visit%20Site-brightgreen?style=for-the-badge" /></a> <!-- Placeholder - Update with actual demo link if available -->
 <a href="https://github.com/unytics/static_bi"><img alt="GitHub Repo" src="https://img.shields.io/badge/GitHub-Repo-blue?style=for-the-badge&amp;logo=github" /></a> <!-- Placeholder - Update with actual repo link --></p>
 <p>Create interactive, filterable dashboards using only static files. This project leverages the power of <strong>DuckDB-WASM</strong> for in-browser data processing, <strong>ECharts</strong> for rich visualizations, and <strong>Web Components</strong> for modular, declarative UI elements.</p>
