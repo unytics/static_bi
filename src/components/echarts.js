@@ -56,11 +56,12 @@ class Chart extends ChartElement {
       if (!params.areas || !params.areas[0]) {
         return;
       }
-      const [min_time, max_time] = params.areas[0].coordRange;
-      const [min_date, max_date] = [new Date(min_time), new Date(max_time)];
-      HERE
-      if (['date', 'month'].includes(self.by.toLowerCase())) {
-        self.set_filter([self]
+      // const [min_time, max_time] = params.areas[0].coordRange;
+      // const [min_date, max_date] = [new Date(min_time), new Date(max_time)];
+      // HERE
+      // if (['date', 'month'].includes(self.by.toLowerCase())) {
+      //   self.set_filter([self]
+      const indexes = params.areas[0].coordRange;
       console.log('indexes', indexes);
       console.log(new Date(indexes[0]).toISOString());
       console.log(new Date(indexes[1]).toISOString());
