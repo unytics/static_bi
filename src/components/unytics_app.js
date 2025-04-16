@@ -1,4 +1,4 @@
-import app from './authm.js';
+import app from '../connectors/unytics_app.js';
 
 
 class UnyticsApp extends HTMLElement {
@@ -10,9 +10,14 @@ class UnyticsApp extends HTMLElement {
   async connectedCallback() {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = `
-      <button id="sign-in" class="md-button md-button--primary">Sign In</button>
-      <button id="sign-out" class="hidden md-button md-button--primary">Sign Out</button>
-      <button id="download" class="hidden md-button md-button--primary">Download</button>
+      <style>
+        .hidden {
+          display: none!important;
+        }
+      </style>
+      <button id="sign-in" class="hidden">Sign In</button>
+      <button id="sign-out">Sign Out</button>
+      <button id="download">Download</button>
       <p id="logs"></p>
     `;
     this.signInButton = this.shadowRoot.getElementById('sign-in');
@@ -27,7 +32,16 @@ class UnyticsApp extends HTMLElement {
   }
 
   on_auth_change(user) {
-    this.logsElement.innerHTML += '<p>AUTH CHANGE: ' + JSON.stringify(user) + '</p><hr>';
+    if (user) {
+      this.signInButton.classList.add('hidden');
+      this.signOutButton.classList.remove('hidden');
+      this.downloadButton.classList.remove('hidden');
+    }
+    else {
+      this.signInButton.classList.remove('hidden');
+      this.signOutButton.classList.add('hidden');
+      this.downloadButton.classList.add('hidden');
+    }
   }
 
   async load() {
