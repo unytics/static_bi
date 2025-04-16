@@ -1,7 +1,8 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js'
-import { getAuth, getRedirectResult, signInWithRedirect, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js'
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js'
-import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+import { initializeApp } from 'https://unytics.io/__/firebase/11.6.0/firebase-app.js'
+import { getAuth, getRedirectResult, signInWithRedirect, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'https://unytics.io/__/firebase/11.6.0/firebase-auth.js'
+import { getFirestore } from 'https://unytics.io/__/firebase/11.6.0/firebase-firestore.js'
+import { getStorage, ref, getDownloadURL } from "https://unytics.io/__/firebase/11.6.0/firebase-storage.js";
+
 
 
 const firebaseConfig = {
@@ -17,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth();
+const auth = getAuth(app);
 auth.useDeviceLanguage();
 
 const signInButton = document.getElementById('sign-in');
