@@ -142,12 +142,10 @@ class UnyticsApp extends HTMLElement {
       </style>
       ${signInButtonHTML}
       <button id="sign-out">Sign Out</button>
-      <button id="download">Download</button>
       <p id="logs"></p>
     `;
     this.signInButton = this.shadowRoot.getElementById('sign-in');
     this.signOutButton = this.shadowRoot.getElementById('sign-out');
-    this.downloadButton = this.shadowRoot.getElementById('download');
     this.logsElement = this.shadowRoot.getElementById('logs');
     this.signInButton.onclick = app.signin;
     this.signOutButton.onclick = app.signout;
@@ -160,7 +158,6 @@ class UnyticsApp extends HTMLElement {
     if (user) {
       this.signInButton.classList.add('hidden');
       this.signOutButton.classList.remove('hidden');
-      this.downloadButton.classList.remove('hidden');
       const download_url = await app.download('gs://unytics_foo/stocks.parquet');
       this.name = 'stocks';
       this.file = download_url;
@@ -172,7 +169,6 @@ class UnyticsApp extends HTMLElement {
     else {
       this.signInButton.classList.remove('hidden');
       this.signOutButton.classList.add('hidden');
-      this.downloadButton.classList.add('hidden');
     }
   }
 
