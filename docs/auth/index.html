@@ -10,22 +10,28 @@
       
       
       
+        <link rel="canonical" href="https://unytics.io/static_bi/docs/auth/">
       
       
+        <link rel="prev" href="../">
       
-      <link rel="icon" href="/static_bi/assets/images/favicon.png">
+      
+        <link rel="next" href="../stats/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
     
     
       
-        <title>Static BI</title>
+        <title>Auth with Redirect - Static BI</title>
       
     
     
-      <link rel="stylesheet" href="/static_bi/assets/stylesheets/main.4af4bdda.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
       
         
-        <link rel="stylesheet" href="/static_bi/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,7 +50,7 @@
       
     
     
-    <script>__md_scope=new URL("/static_bi/",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -67,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#auth-with-redirect" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -79,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/static_bi/." title="Static BI" class="md-header__button md-logo" aria-label="Static BI" data-md-component="logo">
+    <a href="../.." title="Static BI" class="md-header__button md-logo" aria-label="Static BI" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -99,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Auth with Redirect
             
           </span>
         </div>
@@ -149,7 +160,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/static_bi/." title="Static BI" class="md-nav__button md-logo" aria-label="Static BI" data-md-component="logo">
+    <a href="../.." title="Static BI" class="md-nav__button md-logo" aria-label="Static BI" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -179,7 +190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/static_bi/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -198,6 +209,8 @@
       
   
   
+    
+  
   
   
     
@@ -215,15 +228,15 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="/static_bi/docs/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -242,7 +255,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Docs
@@ -255,10 +268,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/static_bi/docs/auth/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -269,6 +291,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -281,7 +304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/static_bi/docs/stats/" class="md-nav__link">
+      <a href="../stats/" class="md-nav__link">
         
   
   
@@ -321,6 +344,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -332,8 +357,40 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+  
+  
+
+
+<h1 id="auth-with-redirect">Auth with Redirect<a class="headerlink" href="#auth-with-redirect" title="Permanent link">¶</a></h1>
+<style>
+  .hidden {
+    display: none!important;
+  }
+</style>
+
+<p>hello!</p>
+<p><button id="sign-in" class="md-button md-button--primary">Sign In</button>
+<button id="sign-out" class="hidden md-button md-button--primary">Sign Out</button>
+<button id="download" class="hidden md-button md-button--primary">Download</button></p>
+<p id="logs"></p>
+
+<script type="module" src="../src/components/auth.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -375,10 +432,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "/static_bi/", "features": ["tabs", "content.tabs.link", "content.code.copy", "navigation.instant", "navigation.tracking", "navigation.indexes", "navigation.hide"], "search": "/static_bi/assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["tabs", "content.tabs.link", "content.code.copy", "navigation.instant", "navigation.tracking", "navigation.indexes", "navigation.hide"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="/static_bi/assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
