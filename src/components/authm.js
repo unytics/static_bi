@@ -14,10 +14,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const firebase_app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(app);
+const auth = getAuth(firebase_app);
 auth.useDeviceLanguage();
 
 
@@ -62,7 +62,7 @@ const download = async () => {
 };
 
 
-export {
+export default {
   signin,
   signout,
   get_user,

@@ -1,11 +1,4 @@
-import {
-  signin,
-  signout,
-  get_user,
-  on_auth_change,
-  download,
-  get_redirect_result,
-} from './authm.js';
+import app from './authm.js';
 
 
 const signInButton = document.getElementById('sign-in');
@@ -13,9 +6,9 @@ const signOutButton = document.getElementById('sign-out');
 const downloadButton = document.getElementById('download');
 const logsElement = document.getElementById('logs');
 
-signInButton.onclick = signin;
-signOutButton.onclick = signout;
-on_auth_change((user) => {
+signInButton.onclick = app.signin;
+signOutButton.onclick = app.signout;
+app.on_auth_change((user) => {
   console.log('AUTH CHANGED', user);
   logsElement.innerHTML += 'AUTH CHANGED: ' + JSON.stringify(user) + '<br>';
 
@@ -32,7 +25,7 @@ on_auth_change((user) => {
 
 
 document.addEventListener('DOMContentLoaded', async (event) => {
-  const result = await get_redirect_result();
+  const result = await app.get_redirect_result();
   console.log('REDIRECT RESULT', null);
   logsElement.innerHTML += 'REDIRECT RESULT: ' + JSON.stringify(result) + '<br>';
 });
