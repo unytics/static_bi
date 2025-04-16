@@ -22,7 +22,12 @@ auth.useDeviceLanguage();
 
 
 const signin = () => {
-  signInWithRedirect(auth, provider);
+  if (location.host === 'unytics.io') {
+    signInWithRedirect(auth, provider);
+  }
+  else {
+    signInWithPopup(auth, provider);
+  }
 };
 
 const get_redirect_result = async () => {
