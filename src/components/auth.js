@@ -4,6 +4,7 @@ import { getFirestore } from 'https://unytics.io/__/firebase/11.6.0/firebase-fir
 import { getStorage, ref, getDownloadURL } from "https://unytics.io/__/firebase/11.6.0/firebase-storage.js";
 
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyD5n2R6a5w9FU9aKbq2GbiP2rVPC9vCXsA",
     authDomain: "unytics.io",
@@ -17,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth();
+const auth = getAuth(app);
 auth.useDeviceLanguage();
 
 const signInButton = document.getElementById('sign-in');
