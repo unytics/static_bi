@@ -5,6 +5,10 @@ hide:
 
 # Welcome to Static BI!
 
+## Unytics App
+
+<unytics-app></unytics-app>
+
 
 ## Examples
 
@@ -183,6 +187,7 @@ Date Range: <date-range-picker></date-range-picker>
   order_by="count(*) desc">
 </bar-chart-grid>
 
+<script type="module" src="../src/components/unytics_app.js"></script>
 <script type="module" src="../src/connectors/duckdb.js"></script>
 <script type="module" src="../src/components/source_tables.js"></script>
 <script type="module" src="../src/components/echarts.js"></script>
