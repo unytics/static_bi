@@ -360,7 +360,7 @@ class BarChartGrid extends ChartElement {
           id="line-month"
           table="${this.table}"
           measure="${this.measure}"
-          by="month"
+          by="date_trunc('month', date)"
           ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
         <line-chart

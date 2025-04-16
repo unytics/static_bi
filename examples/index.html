@@ -22,7 +22,7 @@
     
     
       
-        <title>Unytics App - Static BI</title>
+        <title>Index - Static BI</title>
       
     
     
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Unytics App
+              Index
             
           </span>
         </div>
@@ -149,7 +149,9 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -353,7 +355,9 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -393,36 +397,29 @@
               <article class="md-content__inner md-typeset">
                 
                   
+  
+
 
 
   
   
 
+
+<style>
+.md-grid {
+    max-width: none!important;
+}
+</style>
 
 <h1 id="unytics-app">Unytics App<a class="headerlink" href="#unytics-app" title="Permanent link">¶</a></h1>
 <p><unytics-app></unytics-app></p>
 <h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">¶</a></h3>
-<div class="grid cards">
-<ul>
-<li>
-<p><bar-chart
-      table="stocks"
-      measure="max(Close)"
-      by="Symbol"
-      limit="10"
-      order_by="max(Close) desc">
-    </bar-chart></p>
-</li>
-<li>
-<p><line-chart
-      table="stocks"
-      measure="max(close)"
-      by="Date"
-      breakdown_by="Symbol">
-    </line-chart></p>
-</li>
-</ul>
-</div>
+<p><bar-chart-grid
+  table="stocks"
+  measure="sum(nb)"
+  limit="15"
+  horizontal="true">
+</bar-chart-grid></p>
 <script type="module" src="../src/components/unytics_app.js"></script>
 <script type="module" src="../src/connectors/duckdb.js"></script>
 <script type="module" src="../src/components/echarts.js"></script>
@@ -433,8 +430,13 @@
 
 
 
+  
+  
 
 
+
+
+  
 
 
 

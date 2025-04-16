@@ -158,7 +158,8 @@ class UnyticsApp extends HTMLElement {
     if (user) {
       this.signInButton.classList.add('hidden');
       this.signOutButton.classList.remove('hidden');
-      const download_url = await app.download('gs://unytics_foo/stocks.parquet');
+      console.log('USER', user.email);
+      const download_url = await app.download('gs://unytics_foo/subscriptions_grouped000000000000.parquet');
       this.name = 'stocks';
       this.file = download_url;
       const loaded = await this.load();
