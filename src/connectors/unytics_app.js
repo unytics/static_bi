@@ -13,7 +13,6 @@ const firebaseConfig = {
   appId: "1:1014985713601:web:b3e42d577f70ad07fab140"
 };
 
-// Initialize Firebase
 const firebase_app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
@@ -59,11 +58,10 @@ const on_auth_change = (callback) => {
   onAuthStateChanged(auth, callback);
 };
 
-const download = async () => {
+const download = async (url) => {
   const storage = getStorage();
-  const gsReference = ref(storage, 'gs://unytics_foo/hello.txt');
-  const url = await getDownloadURL(gsReference);
-  console.log('URL', url);
+  const gsReference = ref(storage, url);
+  return await getDownloadURL(gsReference);
 };
 
 

@@ -365,6 +365,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -384,7 +401,31 @@
 
 <h1 id="unytics-app">Unytics App<a class="headerlink" href="#unytics-app" title="Permanent link">¶</a></h1>
 <p><unytics-app></unytics-app></p>
+<h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">¶</a></h3>
+<div class="grid cards">
+<ul>
+<li>
+<p><bar-chart
+      table="stocks"
+      measure="max(Close)"
+      by="Symbol"
+      limit="10"
+      order_by="max(Close) desc">
+    </bar-chart></p>
+</li>
+<li>
+<p><line-chart
+      table="stocks"
+      measure="max(close)"
+      by="Date"
+      breakdown_by="Symbol">
+    </line-chart></p>
+</li>
+</ul>
+</div>
 <script type="module" src="../src/components/unytics_app.js"></script>
+<script type="module" src="../src/connectors/duckdb.js"></script>
+<script type="module" src="../src/components/echarts.js"></script>
 
 
 

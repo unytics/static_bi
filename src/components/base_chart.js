@@ -1,5 +1,5 @@
-import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
-import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
+// import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
+// import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
 
 
 
@@ -21,9 +21,9 @@ function humanize(value) {
   return value;
 }
 
-function markdown2html(markdown_content) {
-  return DOMPurify.sanitize(marked.parse(markdown_content));
-}
+// function markdown2html(markdown_content) {
+//   return DOMPurify.sanitize(marked.parse(markdown_content));
+// }
 
 function filter2string(filter) {
   const [dimension, operator, value] = filter;
@@ -106,8 +106,9 @@ class ChartElement extends HTMLElement {
 
   init_html() {
     this.attachShadow({ mode: 'open' });
-    this.userContent = this.textContent ? markdown2html(this.textContent) : '';
-    this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
+    // this.userContent = this.textContent ? markdown2html(this.textContent) : '';
+    // this.shadowRoot.innerHTML = this.userContent + '\nINITIALIZING!';
+    this.shadowRoot.innerHTML = 'INITIALIZING!';
   }
 
   get table_columns() {
