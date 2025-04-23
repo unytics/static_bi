@@ -1,7 +1,11 @@
 import app from '../connectors/unytics_app.js';
 
-const signInButtonHTML = `
+const html = `
 <style>
+.hidden {
+  display: none!important;
+}
+
 .gsi-material-button {
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -122,6 +126,12 @@ const signInButtonHTML = `
     <span style="display: none;">Sign in with Google</span>
   </div>
 </button>
+<button id="sign-out" class="gsi-material-button">
+  <div class="gsi-material-button-state"></div>
+  <div class="gsi-material-button-content-wrapper">
+    <span class="gsi-material-button-contents">Sign out</span>
+  </div>
+</button>
 `;
 
 
@@ -134,23 +144,7 @@ class UnyticsApp extends HTMLElement {
 
   async connectedCallback() {
     this.attachShadow({ mode: 'open' });
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          position: absolute;
-          top: 10px;
-          z-index: 9999;
-          width: 100%;
-          text-align: center;
-        }
-        .hidden {
-          display: none!important;
-        }
-      </style>
-      ${signInButtonHTML}
-      <button id="sign-out">Sign Out</button>
-      <p id="logs"></p>
-    `;
+    this.shadowRoot.innerHTML = html;
     this.signInButton = this.shadowRoot.getElementById('sign-in');
     this.signOutButton = this.shadowRoot.getElementById('sign-out');
     this.logsElement = this.shadowRoot.getElementById('logs');

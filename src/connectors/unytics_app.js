@@ -40,6 +40,7 @@ const get_redirect_result = async () => {
 
 const signout = () => {
   signOut(auth).then(() => {
+    window.location.reload();
     // Sign-out successful.
   }).catch((error) => {
     console.error("Sign-out error:", error);

@@ -10,9 +10,7 @@ hide:
 }
 </style>
 
-# BigQuery Finops
-
-<unytics-app></unytics-app>
+# BigQuery Finops <unytics-app></unytics-app>
 
 
 <score-card
