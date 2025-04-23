@@ -44,3 +44,10 @@ Ideal for embedding analytics directly into static websites, documentation (like
 3.  **Data Querying:** When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., `table`, `measure`, `by`, `breakdown_by`) and the current global filters. It sends this query to the `data_manager`.
 4.  **Rendering:** The component receives query results from DuckDB via the `data_manager` and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).
 5.  **Interactivity:** Click events on chart elements trigger a filter update. The `base_chart.js` logic updates the global filter state and dispatches an event, causing relevant components to re-query data and re-render.
+
+
+## Inspiration
+
+- Lightdash
+- Evidence
+- Mosaic

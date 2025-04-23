@@ -136,6 +136,13 @@ class UnyticsApp extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = `
       <style>
+        :host {
+          position: absolute;
+          top: 10px;
+          z-index: 9999;
+          width: 100%;
+          text-align: center;
+        }
         .hidden {
           display: none!important;
         }
@@ -158,7 +165,8 @@ class UnyticsApp extends HTMLElement {
     if (user) {
       this.signInButton.classList.add('hidden');
       this.signOutButton.classList.remove('hidden');
-      const download_url = await app.download('gs://unytics_foo/stocks.parquet');
+      console.log('USER', user.email);
+      const download_url = await app.download('gs://data.europe-west1.unytics.io/tikamoon/finops/daily_jobs_cost.parquet');
       this.name = 'stocks';
       this.file = download_url;
       const loaded = await this.load();

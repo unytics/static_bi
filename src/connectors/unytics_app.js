@@ -5,12 +5,10 @@ import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebas
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD5n2R6a5w9FU9aKbq2GbiP2rVPC9vCXsA",
+  apiKey: "AIzaSyAHHoqOYTih6Rszsd4dZX5zxTZAUjPA13I",
   authDomain: "unytics.io",
-  projectId: "unytics-cloud",
-  storageBucket: "unytics-cloud.firebasestorage.app",
-  messagingSenderId: "1014985713601",
-  appId: "1:1014985713601:web:b3e42d577f70ad07fab140"
+  projectId: "unytics",
+  appId: "1:168539290305:web:8545e2183131610a233240"
 };
 
 const firebase_app = initializeApp(firebaseConfig);
