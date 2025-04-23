@@ -160,7 +160,7 @@ class UnyticsApp extends HTMLElement {
       this.signInButton.classList.add('hidden');
       this.signOutButton.classList.remove('hidden');
       console.log('USER', user.email);
-      const download_url = await app.download('gs://data.europe-west1.unytics.io/tikamoon/finops/daily_jobs_cost.parquet');
+      const download_url = await app.download('gs://data.europe-west1.unytics.io/nickel/finops/daily_jobs_cost.parquet');
       this.name = 'stocks';
       this.file = download_url;
       const loaded = await this.load();

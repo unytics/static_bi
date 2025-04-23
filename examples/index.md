@@ -12,30 +12,29 @@ hide:
 
 # BigQuery Finops <unytics-app></unytics-app>
 
+<div class="grid cards" markdown>
 
-<score-card
-  title="Cost ($)"
-  table="stocks"
-  value="sum(cost)"
-  format='$#,##0'>
-</score-card>
-<score-card
-  title="Nb queries"
-  table="stocks"
-  value="sum(nb)"
-  format='#,##0.0,"k"'>
-</score-card>
-<score-card
-  title="Nb users"
-  table="stocks"
-  value="count(distinct user_email)">
-</score-card>
-<score-card
-  title="Top User"
-  table="stocks"
-  value="user_email"
-  order_by="sum(cost) desc">
-</score-card>
+-   <score-card
+      title="Cost ($)"
+      table="stocks"
+      value="sum(cost)"
+      format='$#,##0'>
+    </score-card>
+
+-   <score-card
+      title="Nb queries"
+      table="stocks"
+      value="sum(nb)"
+      format='#,##0.0,"k"'>
+    </score-card>
+
+-   <score-card
+      title="Nb users"
+      table="stocks"
+      value="count(distinct user_email)">
+    </score-card>
+
+</div>
 
 
 
@@ -47,6 +46,9 @@ hide:
   limit="15"
   horizontal="true">
 </bar-chart-grid>
+
+
+> More style [here](https://philipwalton.github.io/solved-by-flexbox/)
 
 
 <script type="module" src="../src/components/unytics_app.js"></script>
