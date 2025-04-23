@@ -124,7 +124,7 @@ class ChartElement extends HTMLElement {
   }
 
   show_loading() {
-    this.shadowRoot.innerHTML = this.userContent + '\nLOADING...';
+    this.shadowRoot.innerHTML = 'LOADING...';
   }
 
   async render() {
