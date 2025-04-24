@@ -145,9 +145,9 @@ class UnyticsApp extends HTMLElement {
   async connectedCallback() {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = html;
+    this.tables = (this.getAttribute('tables') || '').split(',').map((table) => table.trim());
     this.signInButton = this.shadowRoot.getElementById('sign-in');
     this.signOutButton = this.shadowRoot.getElementById('sign-out');
-    this.logsElement = this.shadowRoot.getElementById('logs');
     this.signInButton.onclick = app.signin;
     this.signOutButton.onclick = app.signout;
     app.on_auth_change((user) => { this.on_auth_change(user); });
@@ -159,10 +159,7 @@ class UnyticsApp extends HTMLElement {
     if (user) {
       this.signInButton.classList.add('hidden');
       this.signOutButton.classList.remove('hidden');
-      console.log('USER', user.email);
-      const download_url = await app.download('gs://data.europe-west1.unytics.io/nickel/finops/daily_jobs_cost.parquet');
-      this.name = 'stocks';
-      this.file = download_url;
+      console.log('LOGIN OK!', user.email);
       const loaded = await this.load();
       if (!loaded) {
         document.addEventListener(('db-ready'), (event) => {this.load();});
@@ -178,10 +175,16 @@ class UnyticsApp extends HTMLElement {
     if (window.db === undefined) {
       return false;
     }
-    await window.db.create_table(this.name, this.file, this.columns);
-    console.log('EMITTED', `data-loaded:${this.name}`);
-    this.dispatchEvent(new CustomEvent(`data-loaded:${this.name}`, {bubbles: true, composed: true}));
-    this.dispatchEvent(new CustomEvent(`data-loaded`, {bubbles: true, composed: true}));
+    const urlParams = new URLSearchParams(window.location.search);
+    const location = urlParams.get('location') || 'europe-west1';
+    const dataset = urlParams.get('dataset') || 'nickel.finops';
+    for (const table of this.tables) {
+      const download_url = await app.download(`gs://data.${location}.unytics.io/${dataset.replace('.', '/')}/${table}.parquet`);
+      await window.db.create_table(table, download_url, null);
+      console.log('EMITTED', `data-loaded:${table}`);
+      this.dispatchEvent(new CustomEvent(`data-loaded:${table}`, {bubbles: true, composed: true}));
+      this.dispatchEvent(new CustomEvent(`data-loaded`, {bubbles: true, composed: true}));
+    }
     return true;
   }
 

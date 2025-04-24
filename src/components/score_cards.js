@@ -15,6 +15,7 @@ class ScoreCard extends ChartElement {
   constructor() {
     super();
     this.value = this.getAttribute('value');
+    this.style_value = this.getAttribute('style_value') || '';
     this.format = this.getAttribute('format');
   }
 
@@ -49,6 +50,7 @@ class ScoreCard extends ChartElement {
         font-size: 1.2rem;
         font-weight: 500;
         white-space: pre-line;
+        ${this.style_value}
       }
     `;
     const title = titleify(this.title || this.value);

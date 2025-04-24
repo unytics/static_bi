@@ -10,27 +10,29 @@ hide:
 }
 </style>
 
-# BigQuery Finops <unytics-app></unytics-app>
+
+# BigQuery Finops <unytics-app tables="daily_jobs_cost"></unytics-app>
+
 
 <div class="grid cards" markdown>
 
 -   <score-card
       title="Cost ($)"
-      table="stocks"
+      table="daily_jobs_cost"
       value="sum(cost)"
       format='$#,##0'>
     </score-card>
 
 -   <score-card
       title="Nb queries"
-      table="stocks"
+      table="daily_jobs_cost"
       value="sum(nb)"
       format='#,##0.0,"k"'>
     </score-card>
 
 -   <score-card
       title="Nb users"
-      table="stocks"
+      table="daily_jobs_cost"
       value="count(distinct user_email)">
     </score-card>
 
@@ -40,7 +42,7 @@ hide:
 
 
 <bar-chart-grid
-  table="stocks"
+  table="daily_jobs_cost"
   measure="sum(cost)"
   by="user_email,node_type,node_id"
   limit="15"
@@ -52,8 +54,18 @@ hide:
 
 -   <score-card
       title="Top Query Cost"
-      table="stocks"
+      table="daily_jobs_cost"
       value="sum(cost)"
+      where="query is not null"
+      by="query"
+      order_by="sum(cost) desc"
+      format="$#,##0">
+    </score-card>
+
+-   <score-card
+      title="Top Query User"
+      table="daily_jobs_cost"
+      value="any_value(user_email)"
       where="query is not null"
       by="query"
       order_by="sum(cost) desc">
@@ -62,10 +74,11 @@ hide:
 
 -   <score-card
       title="Top Query"
-      table="stocks"
+      table="daily_jobs_cost"
       value="query"
       where="query is not null"
-      order_by="sum(cost) desc">
+      order_by="sum(cost) desc"
+      style_value="font-size: 0.5rem; text-align: left;">
     </score-card>
 
 </div>
