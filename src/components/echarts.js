@@ -82,7 +82,7 @@ class Chart extends ChartElement {
         __top_groups__ as (
           select ${this.breakdown_by} as top_group
           from ${this.table}
-          ${this.where_clause}
+          where ${this.where_clause}
           group by 1
           order by ${this.measure} desc
           limit ${this.breakdown_limit}
@@ -94,7 +94,7 @@ class Chart extends ChartElement {
             ${this.breakdown_by} as breakdown_by,
             ${this.measure} as measure,
           from ${this.table}
-          ${this.where_clause} and ${this.breakdown_by} in (select top_group from __top_groups__)
+          where ${this.where_clause} and ${this.breakdown_by} in (select top_group from __top_groups__)
           group by 1, 2
           order by ${this.order_by}
         )
@@ -110,7 +110,7 @@ class Chart extends ChartElement {
           ${this.by} as by,
           ${this.measure} as measure,
         from ${this.table}
-        ${this.where_clause}
+        where ${this.where_clause}
         group by 1
         order by ${this.order_by}
         limit ${this.limit}

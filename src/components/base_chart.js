@@ -75,6 +75,7 @@ class ChartElement extends HTMLElement {
     this.breakdown_by = this.getAttribute('breakdown_by');
     this.measure = this.getAttribute('measure');
     this.measures = this.getAttribute('measures');
+    this.where = this.getAttribute('where') || '1 = 1';
     this.limit = this.getAttribute('limit');
     this.breakdown_limit = this.getAttribute('breakdown_limit') || 6;
     this.order_by = this.getAttribute('order_by');
@@ -191,13 +192,7 @@ class ChartElement extends HTMLElement {
       (chart.filter !== undefined)
       // && columns.includes(chart.filter[0])
     );
-    if (!filters.length) {
-      return 'where 1 = 1';
-    }
-    const clause = 'where ' + filters
-    .map((chart) => filter2string(chart.filter))
-    .join(' and ');
-    return clause;
+    return this.where + filters.map((chart) => ' and ' + filter2string(chart.filter)).join('');
   }
 
 }

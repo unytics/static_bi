@@ -15,6 +15,7 @@ class ScoreCard extends ChartElement {
   constructor() {
     super();
     this.value = this.getAttribute('value');
+    this.style_value = this.getAttribute('style_value') || '';
     this.format = this.getAttribute('format');
   }
 
@@ -22,8 +23,9 @@ class ScoreCard extends ChartElement {
     const query = `
       select ${this.value}
       from ${this.table}
-      ${this.where_clause}
-      ${this.order_by ? 'group by 1' : ''}
+      where ${this.where_clause}
+      ${this.by ? 'group by ' + this.by : ''}
+      ${this.order_by && !this.by ? 'group by 1' : ''}
       ${this.order_by ? 'order by ' + this.order_by : ''}
     `;
     const data = await window.db.query2value(query);
@@ -33,18 +35,8 @@ class ScoreCard extends ChartElement {
   generate_html(data) {
     const style = `
       .container {
-        display: inline-block;
-        min-width: 17%;
         text-align: center;
-        // border: .05rem solid #00000012;
-        // padding: .8rem;
-        // transition: border 0.25s, box-shadow 0.25s;
       }
-
-      // .container:hover {
-      //   border-color: #0000;
-      //   box-shadow: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
-      // }
 
       p {
         margin: 0;
@@ -57,6 +49,8 @@ class ScoreCard extends ChartElement {
       .value {
         font-size: 1.2rem;
         font-weight: 500;
+        white-space: pre-line;
+        ${this.style_value}
       }
     `;
     const title = titleify(this.title || this.value);
@@ -65,7 +59,7 @@ class ScoreCard extends ChartElement {
       <style>${style}</style>
       <div class="container">
           <p class="title">${title}</p>
-          <p class="value">${formatted_value}</p>
+          <p class="value"><code>${formatted_value}</code></p>
       </div>
     `;
   }
