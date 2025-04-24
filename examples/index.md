@@ -48,6 +48,29 @@ hide:
 </bar-chart-grid>
 
 
+<div class="grid cards" markdown>
+
+-   <score-card
+      title="Top Query Cost"
+      table="stocks"
+      value="sum(cost)"
+      where="query is not null"
+      by="query"
+      order_by="sum(cost) desc">
+    </score-card>
+
+
+-   <score-card
+      title="Top Query"
+      table="stocks"
+      value="query"
+      where="query is not null"
+      order_by="sum(cost) desc">
+    </score-card>
+
+</div>
+
+
 > More style [here](https://philipwalton.github.io/solved-by-flexbox/)
 
 

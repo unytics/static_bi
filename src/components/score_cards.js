@@ -22,8 +22,9 @@ class ScoreCard extends ChartElement {
     const query = `
       select ${this.value}
       from ${this.table}
-      ${this.where_clause}
-      ${this.order_by ? 'group by 1' : ''}
+      where ${this.where_clause}
+      ${this.by ? 'group by ' + this.by : ''}
+      ${this.order_by && !this.by ? 'group by 1' : ''}
       ${this.order_by ? 'order by ' + this.order_by : ''}
     `;
     const data = await window.db.query2value(query);
@@ -47,6 +48,7 @@ class ScoreCard extends ChartElement {
       .value {
         font-size: 1.2rem;
         font-weight: 500;
+        white-space: pre-line;
       }
     `;
     const title = titleify(this.title || this.value);
@@ -55,7 +57,7 @@ class ScoreCard extends ChartElement {
       <style>${style}</style>
       <div class="container">
           <p class="title">${title}</p>
-          <p class="value">${formatted_value}</p>
+          <p class="value"><code>${formatted_value}</code></p>
       </div>
     `;
   }
