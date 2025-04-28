@@ -11,7 +11,7 @@ hide:
 </style>
 
 
-# Acquisition Dashboard <unytics-app tables="subscriptions_grouped"></unytics-app>
+# FR Acquisition Dashboard <unytics-app tables="subscriptions_grouped"></unytics-app>
 
 <div class="grid cards" markdown>
 
