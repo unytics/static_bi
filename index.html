@@ -238,6 +238,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#create-your-first-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create your first dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-features" class="md-nav__link">
     <span class="md-ellipsis">
       Key Features
@@ -268,6 +277,15 @@
   <a href="#inspiration" class="md-nav__link">
     <span class="md-ellipsis">
       Inspiration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO
     </span>
   </a>
   
@@ -490,6 +508,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#create-your-first-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create your first dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-features" class="md-nav__link">
     <span class="md-ellipsis">
       Key Features
@@ -525,6 +552,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -545,18 +581,45 @@
 
 
 <h1 id="static-bi">Static BI<a class="headerlink" href="#static-bi" title="Permanent link">¶</a></h1>
-<p>Postgrest:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">3000</span>:3000<span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_URI</span><span class="o">=</span><span class="s2">&quot;postgres://cube:12345@demo-db.cube.dev/ecom&quot;</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_ANON_ROLE</span><span class="o">=</span>cube<span class="w"> </span>-e<span class="w"> </span><span class="nv">PGRST_DB_AGGREGATES_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>postgrest/postgrest
-</code></pre></div>
-<p><a href="https://unytics.io/static_bi/"><img alt="Static BI Demo" src="https://img.shields.io/badge/Live%20Demo-Visit%20Site-brightgreen?style=for-the-badge" /></a> <!-- Placeholder - Update with actual demo link if available -->
-<a href="https://github.com/unytics/static_bi"><img alt="GitHub Repo" src="https://img.shields.io/badge/GitHub-Repo-blue?style=for-the-badge&amp;logo=github" /></a> <!-- Placeholder - Update with actual repo link --></p>
-<p>Create interactive, filterable dashboards using only static files. This project leverages the power of <strong>DuckDB-WASM</strong> for in-browser data processing, <strong>ECharts</strong> for rich visualizations, and <strong>Web Components</strong> for modular, declarative UI elements.</p>
+<p>Create interactive, filterable dashboards using only static files.</p>
+<p>This project leverages the power of <strong>DuckDB-WASM</strong> for in-browser data processing, <strong>ECharts</strong> for rich visualizations, and <strong>Web Components</strong> for modular, declarative UI elements.</p>
 <p>Ideal for embedding analytics directly into static websites, documentation (like the included MkDocs site), or any environment where a backend analytics server is not feasible or desired.</p>
+<h2 id="create-your-first-dashboard">Create your first dashboard<a class="headerlink" href="#create-your-first-dashboard" title="Permanent link">¶</a></h2>
+<p>All you need is to write some html components &amp; include <code>static_bi</code> javascript.</p>
+<p>For example, to follow the evolution of stocks value over time, create a file named <code>my_first_dashboard.html</code> with the following content.</p>
+<div class="highlight"><pre><span></span><code>&lt;source-table
+  name=&quot;stocks&quot;
+  file=&quot;https://idl.uw.edu/mosaic/data/stocks.parquet&quot;
+  columns=&quot;*, Close as stock_value, date_trunc(&#39;month&#39;, Date) as month&quot;&gt;
+&lt;/source-table&gt;
+
+&lt;bar-chart
+  table=&quot;stocks&quot;
+  measure=&quot;avg(stock_value)&quot;
+  by=&quot;Symbol&quot;&gt;
+&lt;/bar-chart&gt;
+
+&lt;line-chart
+  table=&quot;stocks&quot;
+  measure=&quot;avg(stock_value)&quot;
+  by=&quot;month&quot;
+  order_by=&quot;month&quot;&gt;
+&lt;/line-chart&gt;
+
+
+&lt;script type=&quot;module&quot; src=&quot;https://unytics.io/static_bi/src/connectors/duckdb.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://unytics.io/static_bi/src/components/source_tables.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://unytics.io/static_bi/src/components/echarts.js&quot;&gt;&lt;/script&gt;
+</code></pre></div>
+<p>Open the file in Google Chrome (or any browser) and you'll get this simple dashboard:</p>
+<p><img alt="simple_dashboard" src="docs/assets/simple_dashboard.png" /></p>
+<p>The dashboard is interactive! Click on <code>AMZN</code> bar in the bar chart to filter the data in other charts:</p>
+<p><img alt="simple_dashboard_filtered" src="docs/assets/simple_dashboard_filtered.png" /></p>
 <h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">¶</a></h2>
 <ul>
 <li><strong>Serverless Analytics:</strong> Runs entirely in the browser after loading static assets (HTML, JS, CSS, data files).</li>
 <li><strong>Interactive Filtering:</strong> Click on chart elements (bars, lines, pie slices) to filter the data across other components on the page. Supports multi-select with <code>Ctrl</code>/<code>Cmd</code> key.</li>
-<li><strong>Declarative UI:</strong> Define data sources and charts using simple custom HTML tags (e.g., <code>&lt;bar-chart&gt;</code>, <code>&lt;score-card&gt;</code>, <code>&lt;data-manager&gt;</code>).</li>
+<li><strong>Declarative UI:</strong> Define data sources and charts using simple custom HTML tags (e.g., <code>&lt;bar-chart&gt;</code>, <code>&lt;score-card&gt;</code>, <code>&lt;source-table&gt;</code>).</li>
 <li><strong>In-Browser Data Engine:</strong> Uses DuckDB-WASM to query and aggregate data (e.g., from Parquet files) directly within the user's browser using familiar SQL.</li>
 <li><strong>Rich Component Library:</strong> Includes:<ul>
 <li><code>&lt;score-card&gt;</code>: Display key metrics with formatting.</li>
@@ -565,7 +628,7 @@
 <li><code>&lt;bar-chart-grid&gt;</code>: Automatically generate a grid of bar charts for multiple dimensions.</li>
 </ul>
 </li>
-<li><strong>Static Data Sources:</strong> Load data directly from static files (like <code>.parquet</code>) hosted alongside your site or from external URLs. Define complex views using SQL within <code>&lt;data-manager-view&gt;</code>.</li>
+<li><strong>Static Data Sources:</strong> Load data directly from static files (like <code>.parquet</code>) hosted alongside your site or from external URLs.</li>
 <li><strong>Static Site Generator Friendly:</strong> Designed to integrate seamlessly with static site generators like MkDocs, Jekyll, Hugo, etc.</li>
 </ul>
 <h2 id="core-technologies">Core Technologies<a class="headerlink" href="#core-technologies" title="Permanent link">¶</a></h2>
@@ -579,17 +642,33 @@
 </ul>
 <h2 id="how-it-works">How it Works<a class="headerlink" href="#how-it-works" title="Permanent link">¶</a></h2>
 <ol>
-<li><strong>Data Management:</strong> The <code>&lt;data-manager&gt;</code> component initializes DuckDB-WASM. Child elements like <code>&lt;data-manager-table file="..."&gt;</code> or <code>&lt;data-manager-view sql="..."&gt;</code> instruct it to load data (e.g., fetch a Parquet file) or create SQL views within the in-browser database.</li>
+<li><strong>Data Management:</strong> The <code>&lt;source-table&gt;</code> components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.</li>
 <li><strong>Component Initialization:</strong> Custom elements like <code>&lt;bar-chart&gt;</code>, <code>&lt;score-card&gt;</code>, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.</li>
-<li><strong>Data Querying:</strong> When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., <code>table</code>, <code>measure</code>, <code>by</code>, <code>breakdown_by</code>) and the current global filters. It sends this query to the <code>data_manager</code>.</li>
-<li><strong>Rendering:</strong> The component receives query results from DuckDB via the <code>data_manager</code> and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).</li>
+<li><strong>Data Querying:</strong> When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., <code>table</code>, <code>measure</code>, <code>by</code>, <code>breakdown_by</code>) and the current global filters. It sends this query to <code>DuckDB</code>.</li>
+<li><strong>Rendering:</strong> The component receives query results from DuckDB and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).</li>
 <li><strong>Interactivity:</strong> Click events on chart elements trigger a filter update. The <code>base_chart.js</code> logic updates the global filter state and dispatches an event, causing relevant components to re-query data and re-render.</li>
 </ol>
 <h2 id="inspiration">Inspiration<a class="headerlink" href="#inspiration" title="Permanent link">¶</a></h2>
 <ul>
-<li>Lightdash</li>
+<li>Rill Data</li>
 <li>Evidence</li>
 <li>Mosaic</li>
+<li>Lightdash</li>
+</ul>
+<h2 id="todo">TODO<a class="headerlink" href="#todo" title="Permanent link">¶</a></h2>
+<ul>
+<li>Add Documentation</li>
+<li>Add controls such as date-range or dimension selection.</li>
+<li>Create a playground to edit dashboard code online and see result in realtime</li>
+<li>Add connectors to:<ul>
+<li>cubejs</li>
+<li>supabase</li>
+<li>Postgrest: <code>docker run --rm -p 3000:3000 -e PGRST_DB_URI="postgres://cube:12345@demo-db.cube.dev/ecom" -e PGRST_DB_ANON_ROLE=cube -e PGRST_DB_AGGREGATES_ENABLED=true postgrest/postgrest</code></li>
+<li>buckets</li>
+<li>data-warehouses...</li>
+<li>unytics</li>
+</ul>
+</li>
 </ul>
 
 
