@@ -10,10 +10,7 @@ Ideal for embedding analytics directly into static websites, documentation (like
 
 ## Create your first dashboard
 
-All you need is to write some html components & include `static_bi` js libraries.
-
-**No Install is Needed!**.
-
+All you need is to write some html components & include `static_bi` javascript.
 
 For example, to follow the evolution of stocks value over time, create a file named `my_first_dashboard.html` with the following content.
 
