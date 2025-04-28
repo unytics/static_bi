@@ -309,7 +309,7 @@ class BarChartGrid extends ChartElement {
     super();
     this.addEventListener('custom-select', (event) => {
       this.breakdown_by = this.breakdown_by === event.detail ? undefined : event.detail;
-      const ids_to_render = ['line-day'];
+      const ids_to_render = ['line-day', 'line-month'];
       for (const id of ids_to_render) {
         const elem = this.shadowRoot.getElementById(id);
         elem.breakdown_by = this.breakdown_by;
@@ -361,6 +361,13 @@ class BarChartGrid extends ChartElement {
           table="${this.table}"
           measure="${this.measure}"
           by="date"
+          ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
+        </line-chart>
+        <line-chart
+          id="line-month"
+          table="${this.table}"
+          measure="${this.measure}"
+          by="date_trunc('month', date)"
           ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
         </line-chart>
       </div>
