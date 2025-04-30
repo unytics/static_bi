@@ -1,3 +1,7 @@
+---
+title: Get Started
+---
+
 # Static BI
 
 ![logo](docs/assets/static_bi_logo_and_name.svg)
@@ -9,11 +13,11 @@
 
 ---
 
-<br>
 
 ## Static BI?
 
-Create interactive dashboards as code using only static files.
+- **The easiest way to embed interactive dashboards in your website.**
+- **Powered by duckDB-WASM, Echarts and Web Components.**
 
 
 ## Create your first dashboard
@@ -24,6 +28,7 @@ No install is needed:
 2. Open the file in a browser,
 3. Play with your dashboard,
 3. Deploy Anywhere.
+
 
 ### 1. Create a HTML file
 

@@ -24,8 +24,9 @@ theme:
     # - navigation.tabs
     - navigation.tracking
     - navigation.indexes
-    - navigation.hide
-    # - navigation.expand
+    # - navigation.hide
+    - navigation.expand
+    - navigation.sections
 markdown_extensions:
   - attr_list
   - md_in_html
