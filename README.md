@@ -101,7 +101,7 @@ You can deploy your website anywhere you can deploy static pages such as:
 
 ## How it Works
 <details>
-  <summary>More details jow Static BI work</summary>
+  <summary>Static BI under the hood</summary>
   
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
