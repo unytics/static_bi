@@ -24,13 +24,13 @@ title: Get Started
 
 No install is needed:
 
-1. Add components in a html file,
+1. Add BI components in a html file,
 2. Open the file in a browser,
 3. Play with your dashboard,
 4. Deploy Anywhere.
 
 
-### 1. Add components in a html file
+### 1. Add BI components in a html file
 
 To follow the evolution of stocks value of some companies over time, create an html file with:
 
