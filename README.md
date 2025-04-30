@@ -135,7 +135,7 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
 
 - Add a ⭐ on the repo to show your support
 - [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q) and talk with us
-- Raise an issue [there](https://github.com/unytics/bigfunctions/issues/new/choose)
+- [Raise an issue](https://github.com/unytics/bigfunctions/issues/new/choose)
 - Open a Pull-Request!
 
 
