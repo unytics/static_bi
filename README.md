@@ -32,7 +32,7 @@ No install is needed:
 
 ### 1. Add BI components in a html file
 
-To follow the evolution of stocks value of some companies over time, create an html file with:
+To follow the evolution of stocks value of some companies over time, create an html file with this content:
 
 
 ``` html title="my_first_dashboard.html"
