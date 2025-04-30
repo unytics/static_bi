@@ -1,4 +1,28 @@
-# Static BI
+<style>
+h1 {
+    display: none;
+}
+
+:root {
+--md-primary-fg-color: #0b5394ff!important;
+--md-typeset-a-color: #0b5394ff!important;
+}
+
+
+
+</style>
+
+![logo](docs/assets/static_bi_logo_and_name.svg)
+
+
+<p align="center">
+    <em>Fast Dashboards from Static Files</em>
+</p>
+
+---
+
+<br>
+
 
 Create interactive, filterable dashboards using only static files.
 
