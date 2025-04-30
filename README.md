@@ -20,7 +20,7 @@ title: Get Started
 - **Powered by duckDB-WASM, Echarts and Web Components.**
 
 
-## Create your first dashboard
+## Your first dashboard
 
 No install is needed:
 
