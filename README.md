@@ -135,7 +135,7 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
 
 
 <details>
-  <summary>Next Actions in mind</summary>
+  <summary>Todo Ideas</summary>
   
 - Add Documentation
 - Add controls such as date-range or dimension selection.
