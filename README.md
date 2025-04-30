@@ -1,55 +1,46 @@
-<style>
-h1 {
-    display: none;
-}
-
-:root {
---md-primary-fg-color: #0b5394ff!important;
---md-typeset-a-color: #0b5394ff!important;
-}
-
-
-
-</style>
+# Static BI
 
 ![logo](docs/assets/static_bi_logo_and_name.svg)
 
 
 <p align="center">
-    <em>Fast Dashboards from Static Files</em>
+    <em>Embed Analytics Everywhere</em>
 </p>
 
 ---
 
 <br>
 
+## Static BI?
 
-Create interactive, filterable dashboards using only static files.
-
-This project leverages the power of **DuckDB-WASM** for in-browser data processing, **ECharts** for rich visualizations, and **Web Components** for modular, declarative UI elements.
-
-Ideal for embedding analytics directly into static websites, documentation (like the included MkDocs site), or any environment where a backend analytics server is not feasible or desired.
-
+Create interactive dashboards as code using only static files.
 
 
 ## Create your first dashboard
 
-All you need is to write some html components & include `static_bi` javascript.
+No install is needed:
 
-For example, to follow the evolution of stocks value over time, create a file named `my_first_dashboard.html` with the following content.
+1. Add some components in a html file,
+2. Open the file in a browser,
+3. Play with your dashboard,
+3. Deploy Anywhere.
+
+### 1. Create a HTML file
+
+To follow the evolution of stocks value of some companies over time, create an html file with:
 
 
-```
+``` html title="my_first_dashboard.html"
 <source-table
   name="stocks"
   file="https://idl.uw.edu/mosaic/data/stocks.parquet"
-  columns="*, Close as stock_value, date_trunc('month', Date) as month">
+  columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month">
 </source-table>
 
 <bar-chart
   table="stocks"
   measure="avg(stock_value)"
-  by="Symbol">
+  by="company">
 </bar-chart>
 
 <line-chart
@@ -65,14 +56,32 @@ For example, to follow the evolution of stocks value over time, create a file na
 <script type="module" src="https://unytics.io/static_bi/src/components/echarts.js"></script>
 ```
 
+### 2. Open the HTML file in your browser
+
 Open the file in Google Chrome (or any browser) and you'll get this simple dashboard:
 
 ![simple_dashboard](docs/assets/simple_dashboard.png)
 
 
+### 3. Play with the interactive dashboard
+
 The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the data in other charts:
 
 ![simple_dashboard_filtered](docs/assets/simple_dashboard_filtered.png)
+
+
+### 4. Deploy Anywhere
+
+You can deploy your website anywhere you can deploy static pages such as:
+
+- Your own website, web app
+- github pages
+- gitlab pages
+- s3
+- google cloud storage
+- netlify
+- vercel
+- etc
 
 
 ## Key Features
@@ -93,7 +102,7 @@ The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the
 
 *   [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview): In-browser SQL OLAP database.
 *   [ECharts](https://echarts.apache.org/): Powerful charting and visualization library.
-*   [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components): Standard for creating reusable custom HTML elements.
+*   [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components): Javascript Standard for creating reusable custom HTML elements.
 *   [MkDocs](https://www.mkdocs.org/) (with Material Theme): Used for the example documentation/dashboard site.
 *   [Marked](https://marked.js.org/), [DOMPurify](https://github.com/cure53/DOMPurify): Used internally for rendering Markdown content within components.
 *   [SSF](https://github.com/SheetJS/ssf): For flexible number and date formatting in scorecards.
@@ -109,10 +118,20 @@ The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the
 
 ## Inspiration
 
-- Rill Data
-- Evidence
-- Mosaic
-- Lightdash
+- [Evidence](https://evidence.dev/)
+- [Rill Data](https://www.rilldata.com/)
+- [Mosaic](https://idl.uw.edu/mosaic/)
+- [Lightdash](http://lightdash.com/)
+
+
+## Contribute!
+
+Static BI is fully open-source (MIT License). Any contribution is more than welcome 🤗!
+
+- Add a ⭐ on the repo to show your support
+- [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q) and talk with us
+- Raise an issue [there](https://github.com/unytics/bigfunctions/issues/new/choose)
+- Open a Pull-Request!
 
 
 ## TODO
@@ -127,3 +146,10 @@ The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the
     - buckets
     - data-warehouses...
     - unytics
+
+
+<style>
+h1 {
+  display: none!important;
+}
+</style>
