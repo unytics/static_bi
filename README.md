@@ -1,8 +1,3 @@
----
-title: Get Started
----
-
-# Static BI
 
 ![logo](docs/assets/static_bi_logo_and_name.svg)
 
@@ -151,10 +146,6 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
     - buckets
     - data-warehouses...
     - unytics
-
-
-<style>
-h1 {
-  display: none!important;
-}
-</style>
+  - Add layout components?
+    - tabs
+    - grid / columns
