@@ -100,6 +100,7 @@ You can deploy your website anywhere you can deploy static pages such as:
 
 
 ## How it Works
+
 <details>
   <summary>Static BI under the hood</summary>
   
@@ -135,6 +136,9 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
 
 ## TODO
 
+<details>
+  <summary>Next Actions</summary>
+  
 - Add Documentation
 - Add controls such as date-range or dimension selection.
 - Create a playground to edit dashboard code online and see result in realtime
@@ -148,3 +152,7 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
   - Add layout components?
     - tabs
     - grid / columns
+
+</details>
+
+
