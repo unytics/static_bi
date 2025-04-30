@@ -98,13 +98,20 @@ You can deploy your website anywhere you can deploy static pages such as:
 *   **Static Data Sources:** Load data directly from static files (like `.parquet`) hosted alongside your site or from external URLs.
 *   **Static Site Generator Friendly:** Designed to integrate seamlessly with static site generators like MkDocs, Jekyll, Hugo, etc.
 
-## How it Works
 
+<details>
+  <summary>How it Works</summary>
+  
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
 3.  **Data Querying:** When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., `table`, `measure`, `by`, `breakdown_by`) and the current global filters. It sends this query to `DuckDB`.
 4.  **Rendering:** The component receives query results from DuckDB and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).
 5.  **Interactivity:** Click events on chart elements trigger a filter update. The `base_chart.js` logic updates the global filter state and dispatches an event, causing relevant components to re-query data and re-render.
+
+</details>
+
+
+
 
 
 ## Inspiration
