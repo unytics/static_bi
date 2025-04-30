@@ -27,10 +27,10 @@ No install is needed:
 1. Add some components in a html file,
 2. Open the file in a browser,
 3. Play with your dashboard,
-3. Deploy Anywhere.
+4. Deploy Anywhere.
 
 
-### 1. Create a HTML file
+### 1. Add some components in a html file
 
 To follow the evolution of stocks value of some companies over time, create an html file with:
 
@@ -61,14 +61,14 @@ To follow the evolution of stocks value of some companies over time, create an h
 <script type="module" src="https://unytics.io/static_bi/src/components/echarts.js"></script>
 ```
 
-### 2. Open the HTML file in your browser
+### 2. Open the file in a browser
 
 Open the file in Google Chrome (or any browser) and you'll get this simple dashboard:
 
 ![simple_dashboard](docs/assets/simple_dashboard.png)
 
 
-### 3. Play with the interactive dashboard
+### 3. Play with your dashboard
 
 The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the data in other charts:
 
