@@ -9,8 +9,10 @@ docs_dir: '..'
 site_dir: '../../site'
 theme:
   name: material
+  logo: docs/assets/static_bi_logo_dark.svg
+  favicon: /assets/favicon.ico
   palette:
-    primary: indigo
+    primary: cyan
   features:
     - tabs
     - content.tabs.link
@@ -22,8 +24,9 @@ theme:
     # - navigation.tabs
     - navigation.tracking
     - navigation.indexes
-    - navigation.hide
-    # - navigation.expand
+    # - navigation.hide
+    - navigation.expand
+    - navigation.sections
 markdown_extensions:
   - attr_list
   - md_in_html
