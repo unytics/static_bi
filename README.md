@@ -88,24 +88,15 @@ You can deploy your website anywhere you can deploy static pages such as:
 
 *   **Serverless Analytics:** Runs entirely in the browser after loading static assets (HTML, JS, CSS, data files).
 *   **Interactive Filtering:** Click on chart elements (bars, lines, pie slices) to filter the data across other components on the page. Supports multi-select with `Ctrl`/`Cmd` key.
-*   **Declarative UI:** Define data sources and charts using simple custom HTML tags (e.g., `<bar-chart>`, `<score-card>`, `<source-table>`).
-*   **In-Browser Data Engine:** Uses DuckDB-WASM to query and aggregate data (e.g., from Parquet files) directly within the user's browser using familiar SQL.
+*   **Declarative UI:** Define data sources and charts using simple custom HTML tags (e.g., `<bar-chart>`, `<score-card>`, `<source-table>`) based on [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components) Javascript Standard.
+*   **In-Browser Data Engine:** Uses [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview) to query and aggregate data (e.g., from Parquet files) directly within the user's browser using familiar SQL.
 *   **Rich Component Library:** Includes:
     *   `<score-card>`: Display key metrics with formatting.
-    *   `<line-chart>`, `<bar-chart>`, `<pie-chart>`, `<doughnut-chart>`: Various ECharts visualizations with options for stacking, grouping, orientation, and breakdowns.
+    *   `<line-chart>`, `<bar-chart>`, `<pie-chart>`, `<doughnut-chart>`: Various [ECharts](https://echarts.apache.org/) visualizations with options for stacking, grouping, orientation, and breakdowns.
     *   `<table-chart>`, `<table-description-chart>`, `<tables-list-chart>`: Display raw data, table schemas, or available tables.
     *   `<bar-chart-grid>`: Automatically generate a grid of bar charts for multiple dimensions.
 *   **Static Data Sources:** Load data directly from static files (like `.parquet`) hosted alongside your site or from external URLs.
 *   **Static Site Generator Friendly:** Designed to integrate seamlessly with static site generators like MkDocs, Jekyll, Hugo, etc.
-
-## Core Technologies
-
-*   [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview): In-browser SQL OLAP database.
-*   [ECharts](https://echarts.apache.org/): Powerful charting and visualization library.
-*   [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components): Javascript Standard for creating reusable custom HTML elements.
-*   [MkDocs](https://www.mkdocs.org/) (with Material Theme): Used for the example documentation/dashboard site.
-*   [Marked](https://marked.js.org/), [DOMPurify](https://github.com/cure53/DOMPurify): Used internally for rendering Markdown content within components.
-*   [SSF](https://github.com/SheetJS/ssf): For flexible number and date formatting in scorecards.
 
 ## How it Works
 
