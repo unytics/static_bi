@@ -99,8 +99,9 @@ You can deploy your website anywhere you can deploy static pages such as:
 *   **Static Site Generator Friendly:** Designed to integrate seamlessly with static site generators like MkDocs, Jekyll, Hugo, etc.
 
 
+## How it Works
 <details>
-  <summary>How it Works</summary>
+  <summary>More details jow Static BI work</summary>
   
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
