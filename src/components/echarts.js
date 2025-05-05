@@ -199,7 +199,7 @@ class Chart extends ChartElement {
         },
         stack: this.stacked ? 'total' : undefined,
         // barWidth: this.stacked ? '60%' : undefined,
-        barWidth: '90%',
+        // barWidth: '90%',
         itemStyle: clicked_indexes.length ? {
           color: (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
         } : {},

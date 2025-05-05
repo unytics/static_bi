@@ -113,13 +113,13 @@ class DuckDB {
 
 
 if (window.db === undefined) {
-    console.log('INIT DUCKDB');
-    const db = new DuckDB();
-    await db.init();
-    window.db = db;
-    console.log('DUCKDB READY');
-    document.dispatchEvent(new CustomEvent(`db-ready`, {bubbles: true, composed: true}));
+  console.log('INIT DUCKDB');
+  const db = new DuckDB();
+  await db.init();
+  window.db = db;
+  console.log('DUCKDB READY');
+  document.dispatchEvent(new CustomEvent(`db-ready`, {bubbles: true, composed: true}));
 }
 else {
-    console.log('DUCKDB ALREADY INITIALIZED!');
+  console.log('DUCKDB ALREADY INITIALIZED!');
 }
