@@ -1,3 +1,13 @@
+---
+hide:
+  - navigation
+---
+
+<style>
+.md-typeset h1 {
+  font-size: 0px;
+}
+</style>
 
 ![logo](docs/assets/static_bi_logo_and_name.svg)
 

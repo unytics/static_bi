@@ -67,7 +67,7 @@ theme:
     - navigation.instant.progress
 
     # - navigation.path
-    # - navigation.tabs
+    - navigation.tabs
     - navigation.tracking
     - navigation.indexes
     # - navigation.hide
