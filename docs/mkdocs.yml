@@ -9,35 +9,9 @@ docs_dir: '..'
 site_dir: '../../site'
 nav:
   - Get Started: README.md
-  - Core Concepts:
-    - Motivation: docs/core_concepts/motivation.md
-    - Data Sources: docs/core_concepts/data_sources.md
-    - BI Components: docs/core_concepts/bi_components.md
-    - Cross Filtering: docs/core_concepts/cross_filtering.md
-    - Integrations: docs/core_concepts/integrations.md
-    - Deployment: docs/core_concepts/deployment.md
-  - Data Sources:
-    - docs/data_sources/index.md
-    - Data Files: docs/data_sources/data_files.md
-  - BI Components:
-    - docs/ui_components/index.md
-    - Score Cards: docs/ui_components/score_cards.md
-    - Line Charts: docs/ui_components/line_charts.md
-    - Bar Charts: docs/ui_components/bar_charts.md
-    - Pie Charts: docs/ui_components/pie_charts.md
-    - Data Tables: docs/ui_components/data_tables.md
-    - Grids: docs/ui_components/grids.md
-  - Integrations:
-    - docs/integrations/index.md
-    - Mkdocs: docs/integrations/mkdocs.md
-    - Docusaurus: docs/integrations/docusaurus.md
-    - Shoelace: docs/integrations/docusaurus.md
-  - Deployment:
-    - docs/deployment/index.md
-    - Github pages: docs/deployment/github_pages.md
-    - Netlify: docs/deployment/netlify.md
-    - Vercel: docs/deployment/vercel.md
-    - S3: docs/deployment/s3.md
+  - BI Components: docs/bi_components.md
+  - Integrations: docs/integrations.md
+  - Deployment: docs/deployment.md
 theme:
   name: material
   logo: docs/assets/static_bi_logo_dark.svg
@@ -62,7 +36,7 @@ theme:
     - tabs
     - content.tabs.link
     - content.code.copy
-    # - toc.integrate
+    - toc.integrate
     - navigation.instant
     - navigation.instant.progress
 
@@ -79,7 +53,7 @@ markdown_extensions:
   - md_in_html
   - tables
   - toc:
-      toc_depth: 4
+      toc_depth: 3
       permalink: "¶"
   - admonition
   - pymdownx.details

@@ -79,8 +79,8 @@ class ChartElement extends HTMLElement {
     this.limit = this.getAttribute('limit');
     this.breakdown_limit = this.getAttribute('breakdown_limit') || 6;
     this.order_by = this.getAttribute('order_by');
-    this.stacked = this.getAttribute('stacked');
-    this.is_horizontal = this.getAttribute('horizontal') === "true";
+    this.stacked = this.hasAttribute('stacked');
+    this.is_horizontal = this.hasAttribute('horizontal');
     this.select_tool = this.getAttribute('select_tool');
     this.filter = undefined;
   }
