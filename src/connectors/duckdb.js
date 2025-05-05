@@ -117,6 +117,7 @@ if (window.db === undefined) {
     const db = new DuckDB();
     await db.init();
     window.db = db;
+    console.log('DUCKDB READY');
     document.dispatchEvent(new CustomEvent(`db-ready`, {bubbles: true, composed: true}));
 }
 else {
