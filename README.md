@@ -1,8 +1,3 @@
----
-hide:
-  - navigation
----
-
 <style>
 .md-typeset h1 {
   font-size: 0px;
@@ -113,7 +108,7 @@ You can deploy your website anywhere you can deploy static pages such as:
 
 <details>
   <summary>Static BI under the hood</summary>
-  
+
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
 3.  **Data Querying:** When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., `table`, `measure`, `by`, `breakdown_by`) and the current global filters. It sends this query to `DuckDB`.
@@ -146,7 +141,7 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
 
 <details>
   <summary>Todo Ideas</summary>
-  
+
 - Add Documentation
 - Add controls such as date-range or dimension selection.
 - Create a playground to edit dashboard code online and see result in realtime
@@ -162,5 +157,3 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
     - grid / columns
 
 </details>
-
-

@@ -62,12 +62,12 @@ theme:
     - tabs
     - content.tabs.link
     - content.code.copy
-    # - toc.integrate
+    - toc.integrate
     - navigation.instant
     - navigation.instant.progress
 
     # - navigation.path
-    - navigation.tabs
+    # - navigation.tabs
     - navigation.tracking
     - navigation.indexes
     # - navigation.hide
