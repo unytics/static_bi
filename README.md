@@ -106,7 +106,7 @@ You can deploy your website anywhere you can deploy static pages such as:
 
 ## How it Works
 
-<details>
+<details markdown>
   <summary>Static BI under the hood</summary>
 
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
@@ -139,7 +139,7 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
 - Open a Pull-Request!
 
 
-<details>
+<details markdown>
   <summary>Todo Ideas</summary>
 
 - Add Documentation
