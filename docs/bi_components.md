@@ -35,7 +35,7 @@
 === "Code"
     ``` html
     <score-card
-      title="Nb companys"
+      title="Nb companies"
       table="stocks"
       value="count(distinct company)">
     </score-card>
@@ -91,7 +91,7 @@
     ```
 
 
-### Grouped
+### Multi
 
 === "UI"
     <bar-chart
@@ -114,7 +114,7 @@
     ```
 
 
-### Grouped Horizontal
+### Multi Horizontal
 
 === "UI"
     <bar-chart
@@ -218,7 +218,7 @@
     </line-chart>
     ```
 
-### Grouped
+### Multi
 
 === "UI"
     <line-chart
