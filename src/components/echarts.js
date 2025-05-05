@@ -197,8 +197,8 @@ class Chart extends ChartElement {
           x: label_column,
           y: columns[k + 1],
         },
-        stack: this.stacked === 'true' ? 'total' : undefined,
-        // barWidth: this.stacked === 'true' ? '60%' : undefined,
+        stack: this.stacked ? 'total' : undefined,
+        // barWidth: this.stacked ? '60%' : undefined,
         barWidth: '90%',
         itemStyle: clicked_indexes.length ? {
           color: (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
