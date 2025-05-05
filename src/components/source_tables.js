@@ -7,6 +7,7 @@ class SourceTable extends HTMLElement {
   }
 
   async connectedCallback() {
+    console.log('SOURCE TABLE CONNETED');
     this.name = this.getAttribute('name');
     this.file = this.getAttribute('file');
     this.columns = this.getAttribute('columns');
@@ -15,6 +16,11 @@ class SourceTable extends HTMLElement {
       document.addEventListener(('db-ready'), (event) => {this.load();});
     }
   }
+
+  disconnectedCallback() {
+    console.log('DISCONNECTED SOURCE TABLE');
+  }
+
 
   async load() {
     if (window.db === undefined) {

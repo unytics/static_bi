@@ -537,16 +537,15 @@
 </ul>
 <h2 id="how-it-works">How it Works<a class="headerlink" href="#how-it-works" title="Permanent link">¶</a></h2>
 <details>
-  <summary>Static BI under the hood</summary>
-
-1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
-2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
-3.  **Data Querying:** When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., `table`, `measure`, `by`, `breakdown_by`) and the current global filters. It sends this query to `DuckDB`.
-4.  **Rendering:** The component receives query results from DuckDB and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).
-5.  **Interactivity:** Click events on chart elements trigger a filter update. The `base_chart.js` logic updates the global filter state and dispatches an event, causing relevant components to re-query data and re-render.
-
+<summary>Static BI under the hood</summary>
+<ol>
+<li><strong>Data Management:</strong> The <code>&lt;source-table&gt;</code> components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.</li>
+<li><strong>Component Initialization:</strong> Custom elements like <code>&lt;bar-chart&gt;</code>, <code>&lt;score-card&gt;</code>, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.</li>
+<li><strong>Data Querying:</strong> When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., <code>table</code>, <code>measure</code>, <code>by</code>, <code>breakdown_by</code>) and the current global filters. It sends this query to <code>DuckDB</code>.</li>
+<li><strong>Rendering:</strong> The component receives query results from DuckDB and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).</li>
+<li><strong>Interactivity:</strong> Click events on chart elements trigger a filter update. The <code>base_chart.js</code> logic updates the global filter state and dispatches an event, causing relevant components to re-query data and re-render.</li>
+</ol>
 </details>
-
 <h2 id="inspiration">Inspiration<a class="headerlink" href="#inspiration" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://evidence.dev/">Evidence</a></li>
@@ -563,22 +562,26 @@
 <li>Open a Pull-Request!</li>
 </ul>
 <details>
-  <summary>Todo Ideas</summary>
-
-- Add Documentation
-- Add controls such as date-range or dimension selection.
-- Create a playground to edit dashboard code online and see result in realtime
-- Add connectors to:
-    - cubejs
-    - supabase
-    - Postgrest: `docker run --rm -p 3000:3000 -e PGRST_DB_URI="postgres://cube:12345@demo-db.cube.dev/ecom" -e PGRST_DB_ANON_ROLE=cube -e PGRST_DB_AGGREGATES_ENABLED=true postgrest/postgrest`
-    - buckets
-    - data-warehouses...
-    - unytics
-  - Add layout components?
-    - tabs
-    - grid / columns
-
+<summary>Todo Ideas</summary>
+<ul>
+<li>Add Documentation</li>
+<li>Add controls such as date-range or dimension selection.</li>
+<li>Create a playground to edit dashboard code online and see result in realtime</li>
+<li>Add connectors to:<ul>
+<li>cubejs</li>
+<li>supabase</li>
+<li>Postgrest: <code>docker run --rm -p 3000:3000 -e PGRST_DB_URI="postgres://cube:12345@demo-db.cube.dev/ecom" -e PGRST_DB_ANON_ROLE=cube -e PGRST_DB_AGGREGATES_ENABLED=true postgrest/postgrest</code></li>
+<li>buckets</li>
+<li>data-warehouses...</li>
+<li>unytics</li>
+</ul>
+</li>
+<li>Add layout components?<ul>
+<li>tabs</li>
+<li>grid / columns</li>
+</ul>
+</li>
+</ul>
 </details>
 
 

@@ -90,6 +90,7 @@ class ChartElement extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log('BASE CHART CONNECTED!');
     this.init_html();
     this.render();
     const event_to_listen = this.table ? `data-loaded:${this.table}` : 'data-loaded';
