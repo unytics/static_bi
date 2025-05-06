@@ -1,6 +1,5 @@
 # BI Components
 
-
 ## Bar Chart
 
 ### Simple Bar Chart
@@ -151,7 +150,7 @@
     ```
 
 
-
+<br>
 
 ## Line Chart
 
@@ -226,7 +225,31 @@
     ```
 
 
-## Score Card
+
+
+<br>
+
+## Data
+
+### Simple Value
+
+=== "UI"
+    <simple-value
+      table="stocks"
+      value="count(distinct company)">
+    </simple-value>
+
+=== "Code"
+    ``` html
+    <simple-value
+      table="stocks"
+      value="count(distinct company)">
+    </simple-value>
+    ```
+
+
+
+### Score Card
 
 === "UI"
     <score-card
@@ -242,32 +265,6 @@
       table="stocks"
       value="count(distinct company)">
     </score-card>
-    ```
-
-
-
-## Table Chart
-
-
-### Tables List
-
-=== "UI"
-    <tables-list-chart></tables-list-chart>
-
-=== "Code"
-    ``` html
-    <tables-list-chart></tables-list-chart>
-    ```
-
-
-### Table Schema
-
-=== "UI"
-    <table-description-chart table="stocks"></table-description-chart>
-
-=== "Code"
-    ``` html
-    <table-description-chart table="stocks"></table-description-chart>
     ```
 
 
@@ -294,6 +291,31 @@
     ```
 
 
+### Tables List
+
+=== "UI"
+    <tables-list-chart></tables-list-chart>
+
+=== "Code"
+    ``` html
+    <tables-list-chart></tables-list-chart>
+    ```
+
+
+### Table Schema
+
+=== "UI"
+    <table-description-chart table="stocks"></table-description-chart>
+
+=== "Code"
+    ``` html
+    <table-description-chart table="stocks"></table-description-chart>
+    ```
+
+
+
+<br>
+
 ## Source Table
 
 === "UI"
@@ -314,7 +336,7 @@
     ```
 
 
-
+<br>
 
 ## Controls
 
