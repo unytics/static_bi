@@ -13,10 +13,14 @@
 
 ---
 
+<br>
+
 
 ## Static BI?
 
 Static BI is the easiest way to **embed interactive dashboards in your website** (as far as we know).
+
+<br>
 
 
 ## Your first dashboard
@@ -28,6 +32,7 @@ To create a dashboard, you only need to:
 > 3. [Play with your dashboard](#3-play-with-your-dashboard)
 > 4. [Deploy Anywhere](#4-deploy-anywhere)
 
+<br>
 
 #### 1. Add BI components in a html file
 
@@ -59,6 +64,7 @@ To follow the evolution of stocks value of some companies over time, create an h
 <script type="module" src="https://unytics.io/static_bi/src/components/source_tables.js"></script>
 <script type="module" src="https://unytics.io/static_bi/src/components/echarts.js"></script>
 ```
+<br>
 
 #### 2. Open the file in a browser
 
@@ -66,6 +72,7 @@ Open the file in Google Chrome (or any browser) and you'll get this simple dashb
 
 ![simple_dashboard](docs/assets/simple_dashboard.png)
 
+<br>
 
 #### 3. Play with your dashboard
 
@@ -73,6 +80,7 @@ The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the
 
 ![simple_dashboard_filtered](docs/assets/simple_dashboard_filtered.png)
 
+<br>
 
 #### 4. Deploy Anywhere
 
@@ -80,6 +88,8 @@ You can deploy a website with Static BI components anywhere:
 
 - in your own website, web app
 - in static websites hosting services: github pages, gitlab pages, s3, google cloud storage, netlify, vercel, etc
+
+<br>
 
 
 ## Key Features
@@ -123,20 +133,23 @@ Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview)
 </details>
 
 
+<br>
+
 
 ## Contribute!
 
 Static BI is fully open-source (MIT License). Any contribution is more than welcome 🤗!
 
-- Add a ⭐ on the repo to show your support
-- [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q) and talk with us
-- [Raise an issue](https://github.com/unytics/bigfunctions/issues/new/choose)
+- Add a ⭐ on the [repo](https://github.com/unytics/static_bi){ target="_blank" } to show your support
+- [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q){ target="_blank" } and talk with us
+- [Raise an issue](https://github.com/unytics/static_bi/issues/new/choose){ target="_blank" }
 - Open a Pull-Request!
 
 
 <details markdown>
   <summary>Todo Ideas</summary>
 
+- Add Examples
 - Add Documentation
 - Add controls such as date-range or dimension selection.
 - Create a playground to edit dashboard code online and see result in realtime
@@ -152,3 +165,5 @@ Static BI is fully open-source (MIT License). Any contribution is more than welc
     - grid / columns
 
 </details>
+
+<br>
