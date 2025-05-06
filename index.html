@@ -589,8 +589,10 @@
 </p>
 
 <hr />
+<p><br></p>
 <h2 id="static-bi">Static BI?<a class="headerlink" href="#static-bi" title="Permanent link">¶</a></h2>
 <p>Static BI is the easiest way to <strong>embed interactive dashboards in your website</strong> (as far as we know).</p>
+<p><br></p>
 <h2 id="your-first-dashboard">Your first dashboard<a class="headerlink" href="#your-first-dashboard" title="Permanent link">¶</a></h2>
 <p>To create a dashboard, you only need to:</p>
 <blockquote>
@@ -601,9 +603,10 @@
 <li><a href="#4-deploy-anywhere">Deploy Anywhere</a></li>
 </ol>
 </blockquote>
+<p><br></p>
 <h4 id="1-add-bi-components-in-a-html-file">1. Add BI components in a html file<a class="headerlink" href="#1-add-bi-components-in-a-html-file" title="Permanent link">¶</a></h4>
 <p>To follow the evolution of stocks value of some companies over time, create an html file with this content:</p>
-<div class="highlight"><span class="filename">my_first_dashboard.html</span><pre><span></span><code><span class="p">&lt;</span><span class="nt">source-table</span>
+<p><div class="highlight"><span class="filename">my_first_dashboard.html</span><pre><span></span><code><span class="p">&lt;</span><span class="nt">source-table</span>
   <span class="na">name</span><span class="o">=</span><span class="s">&quot;stocks&quot;</span>
   <span class="na">url</span><span class="o">=</span><span class="s">&quot;https://idl.uw.edu/mosaic/data/stocks.parquet&quot;</span>
   <span class="na">columns</span><span class="o">=</span><span class="s">&quot;*, Symbol as company, Close as stock_value, date_trunc(&#39;month&#39;, Date) as month&quot;</span><span class="p">&gt;</span>
@@ -627,18 +630,22 @@
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unytics.io/static_bi/src/components/source_tables.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unytics.io/static_bi/src/components/echarts.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
+<br></p>
 <h4 id="2-open-the-file-in-a-browser">2. Open the file in a browser<a class="headerlink" href="#2-open-the-file-in-a-browser" title="Permanent link">¶</a></h4>
 <p>Open the file in Google Chrome (or any browser) and you'll get this simple dashboard:</p>
 <p><img alt="simple_dashboard" src="docs/assets/simple_dashboard.png" /></p>
+<p><br></p>
 <h4 id="3-play-with-your-dashboard">3. Play with your dashboard<a class="headerlink" href="#3-play-with-your-dashboard" title="Permanent link">¶</a></h4>
 <p>The dashboard is interactive! Click on <code>AMZN</code> bar in the bar chart to filter the data in other charts:</p>
 <p><img alt="simple_dashboard_filtered" src="docs/assets/simple_dashboard_filtered.png" /></p>
+<p><br></p>
 <h4 id="4-deploy-anywhere">4. Deploy Anywhere<a class="headerlink" href="#4-deploy-anywhere" title="Permanent link">¶</a></h4>
 <p>You can deploy a website with Static BI components anywhere:</p>
 <ul>
 <li>in your own website, web app</li>
 <li>in static websites hosting services: github pages, gitlab pages, s3, google cloud storage, netlify, vercel, etc</li>
 </ul>
+<p><br></p>
 <h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">¶</a></h2>
 <ol>
 <li><strong>Declarative UI</strong><ul>
@@ -677,17 +684,19 @@
 <li><a href="http://lightdash.com/" target="_blank">Lightdash</a></li>
 </ul>
 </details>
+<p><br></p>
 <h2 id="contribute">Contribute!<a class="headerlink" href="#contribute" title="Permanent link">¶</a></h2>
 <p>Static BI is fully open-source (MIT License). Any contribution is more than welcome 🤗!</p>
 <ul>
-<li>Add a ⭐ on the repo to show your support</li>
-<li><a href="https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q">Join our Slack</a> and talk with us</li>
-<li><a href="https://github.com/unytics/bigfunctions/issues/new/choose">Raise an issue</a></li>
+<li>Add a ⭐ on the <a href="https://github.com/unytics/static_bi" target="_blank">repo</a> to show your support</li>
+<li><a href="https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q" target="_blank">Join our Slack</a> and talk with us</li>
+<li><a href="https://github.com/unytics/static_bi/issues/new/choose" target="_blank">Raise an issue</a></li>
 <li>Open a Pull-Request!</li>
 </ul>
 <details>
 <summary>Todo Ideas</summary>
 <ul>
+<li>Add Examples</li>
 <li>Add Documentation</li>
 <li>Add controls such as date-range or dimension selection.</li>
 <li>Create a playground to edit dashboard code online and see result in realtime</li>
@@ -707,6 +716,7 @@
 </li>
 </ul>
 </details>
+<p><br></p>
 
 
 
