@@ -38,7 +38,7 @@ To follow the evolution of stocks value of some companies over time, create an h
 ``` html title="my_first_dashboard.html"
 <source-table
   name="stocks"
-  file="https://idl.uw.edu/mosaic/data/stocks.parquet"
+  url="https://idl.uw.edu/mosaic/data/stocks.parquet"
   columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month">
 </source-table>
 
@@ -109,7 +109,7 @@ You can deploy your website anywhere you can deploy static pages such as:
 <details markdown>
   <summary>Static BI under the hood</summary>
 
-1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file) within the in-browser database.
+1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file or fetch data from an API) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
 3.  **Data Querying:** When the page loads or filters change, each component constructs a SQL query based on its attributes (e.g., `table`, `measure`, `by`, `breakdown_by`) and the current global filters. It sends this query to `DuckDB`.
 4.  **Rendering:** The component receives query results from DuckDB and renders the visualization using ECharts or by generating appropriate HTML (for tables/scorecards).

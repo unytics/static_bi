@@ -9,11 +9,11 @@ hide:
 }
 </style>
 
-# Proposals Analysis
+# <strong><simple-value table="proposals" value="conference_name"></simple-value></strong> Conference Proposals
 
 <source-table
     name="_proposals"
-    file="https://unytics.io/api_integrations/conference_hall/forward-data/"
+    url="https://unytics.io/api_integrations/conference_hall/forward-data/"
     columns="name as conference_name, unnest(proposals) as proposal">
 </source-table>
 

@@ -28,10 +28,10 @@ document.getElementById('email_input_submit_button').onclick = async (event) => 
 ## Source Table
 
 === "UI"
-    > Source Table component is invisible on the page. The file is downloaded in the background and loaded into a DuckDB table.
+    > Source Table component is invisible on the page. The data is downloaded in the background and loaded into a DuckDB table.
     <source-table
       name="stocks"
-      file="https://idl.uw.edu/mosaic/data/stocks.parquet"
+      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
       columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
     </source-table>
 
@@ -39,7 +39,7 @@ document.getElementById('email_input_submit_button').onclick = async (event) => 
     ``` html
     <source-table
       name="stocks"
-      file="https://idl.uw.edu/mosaic/data/stocks.parquet"
+      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
       columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
     </source-table>
     ```
