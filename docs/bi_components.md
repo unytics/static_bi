@@ -1,6 +1,30 @@
 # BI Components
 
 
+<input id="email_input"></input>
+<button id="email_input_submit_button">Submit</button>
+
+<script>
+document.getElementById('email_input_submit_button').onclick = async (event) => {
+    alert('hello!');
+    const email = document.getElementById('email_input_submit_button').value;
+    alert(email);
+    const google_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLSe03sAb8y_h4YWTNujH3vFpYFkgAAsGeH8l3kK6wOygIqV08w/viewform?usp=pp_url&entry.1010327462=';
+    const submission_url = google_form_url + email;
+    const response = await fetch(
+        submission_url,
+        {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }
+    );
+    alert('Thanks');
+</script>
+
+
 ## Source Table
 
 === "UI"
@@ -44,7 +68,7 @@
 
 ## Bar Chart
 
-### Simple
+### Simple Bar Chart
 
 === "UI"
     <bar-chart
@@ -66,7 +90,7 @@
     </bar-chart>
     ```
 
-### Horizontal
+### Horizontal Bar Chart
 
 === "UI"
     <bar-chart
@@ -91,7 +115,7 @@
     ```
 
 
-### Multi
+### Multi Bar Chart
 
 === "UI"
     <bar-chart
@@ -114,7 +138,7 @@
     ```
 
 
-### Multi Horizontal
+### Multi Horizontal Bar Chart
 
 === "UI"
     <bar-chart
@@ -140,7 +164,7 @@
 
 
 
-### Stacked
+### Stacked Bar Chart
 
 === "UI"
     <bar-chart
@@ -165,7 +189,7 @@
     ```
 
 
-### Stacked Horizontal
+### Stacked Horizontal Bar Chart
 
 === "UI"
     <bar-chart
@@ -196,7 +220,7 @@
 
 ## Line Chart
 
-### Simple
+### Simple Line Chart
 
 === "UI"
     <line-chart
@@ -218,7 +242,7 @@
     </line-chart>
     ```
 
-### Multi
+### Multi Line Chart
 
 === "UI"
     <line-chart
@@ -242,7 +266,7 @@
 
 
 
-### Stacked
+### Stacked Line Chart
 
 === "UI"
     <line-chart

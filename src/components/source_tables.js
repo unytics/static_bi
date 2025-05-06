@@ -45,6 +45,7 @@ class SourceView extends HTMLElement {
   async connectedCallback() {
     this.name = this.getAttribute('name');
     this.sql = this.textContent;
+    this.textContent = '';
     this.source_tables = extractTableNames(this.sql);
     const loaded = await this.load();
     if (!loaded) {

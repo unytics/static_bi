@@ -25,7 +25,15 @@ class DuckDB {
   }
 
   async query(query) {
-    const arrow_table = await this.conn.query(query);
+    let arrow_table;
+    try {
+      arrow_table = await this.conn.query(query);
+    }
+    catch (error) {
+      console.error('ERROR in QUERY', query);
+      console.error(error);
+      throw error;
+    }
     const array = arrow_table.toArray();
     const result = array.map((row) => row.toJSON());
     return result;
@@ -67,19 +75,37 @@ class DuckDB {
     if (name in this.tables) {
       return;
     }
+    console.log('CREATE TABLE ' + name);
     if (!file_url) {
         console.error('Undefined or null file url');
     }
-    // await this.query(`create table ${name} as select * from "${file_url}"`);
-    const res = await fetch(file_url, { cache: "force-cache" });
-    const buffer = await res.arrayBuffer();
-    const uint8_array = new Uint8Array(buffer);
-    await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
-    await this.query(`
-      create view ${name} as
-      select ${columns ? columns : '*'}
-      from parquet_scan('${name}.parquet')
-    `);
+    if (file_url.includes('.parquet')) {
+      console.log('PARQUET', file_url);
+      // await this.query(`create table ${name} as select * from "${file_url}"`);
+      const res = await fetch(file_url, { cache: "force-cache" });
+      const buffer = await res.arrayBuffer();
+      const uint8_array = new Uint8Array(buffer);
+      await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
+      await this.query(`
+        create view ${name} as
+        select ${columns ? columns : '*'}
+        from parquet_scan('${name}.parquet')
+      `);
+    }
+    else {
+      console.log('JSON', file_url);
+      const resp = await fetch(file_url, { cache: "force-cache" });
+      let res = await resp.json();
+      await this.db.registerFileText(
+        'rows.json',
+        JSON.stringify(Array.isArray(res) ? res : [res]),
+      );
+      await this.query(`
+        create view ${name} as
+        select ${columns ? columns : '*'}
+        from read_json('rows.json', auto_detect=true)
+      `);
+    }
     this.tables[name] = await this.list_columns(`${name}`);
   }
 
@@ -96,7 +122,10 @@ class DuckDB {
   }
 
   async describe_table(name) {
-    return await this.query(`describe table ${name}`);
+    return await this.query(`
+      select name as column_name, type as column_type
+      from pragma_table_info('${name}\')
+    `);
   }
 
   async list_columns(table_name) {
