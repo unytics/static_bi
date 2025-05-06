@@ -18,7 +18,7 @@
 
 ## Static BI?
 
-Static BI is the easiest way to **embed interactive dashboards in your website** (as far as we know).
+Static BI = **the easiest way to embed <u>Interactive Dashboards</u> in your website**.
 
 <br>
 
