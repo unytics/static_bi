@@ -71,18 +71,17 @@ class DuckDB {
     console.table(result);
   }
 
-  async create_table(name, file_url, columns) {
+  async create_table(name, source_url, columns) {
     if (name in this.tables) {
       return;
     }
     console.log('CREATE TABLE ' + name);
-    if (!file_url) {
-        console.error('Undefined or null file url');
+    if (!source_url) {
+        console.error('Undefined or null source_url');
     }
-    if (file_url.includes('.parquet')) {
-      console.log('PARQUET', file_url);
-      // await this.query(`create table ${name} as select * from "${file_url}"`);
-      const res = await fetch(file_url, { cache: "force-cache" });
+    if (source_url.includes('.parquet')) {
+      // await this.query(`create table ${name} as select * from "${source_url}"`);
+      const res = await fetch(source_url, { cache: "force-cache" });
       const buffer = await res.arrayBuffer();
       const uint8_array = new Uint8Array(buffer);
       await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
@@ -93,8 +92,7 @@ class DuckDB {
       `);
     }
     else {
-      console.log('JSON', file_url);
-      const resp = await fetch(file_url, { cache: "force-cache" });
+      const resp = await fetch(source_url, { cache: "force-cache" });
       let res = await resp.json();
       await this.db.registerFileText(
         'rows.json',

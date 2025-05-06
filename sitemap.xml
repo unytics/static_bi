@@ -9,31 +9,7 @@
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/docs/one/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/stats/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/core_concepts/bi_components/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/core_concepts/cross_filtering/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/core_concepts/data_sources/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/core_concepts/motivation/</loc>
-         <lastmod>2025-05-06</lastmod>
-    </url>
-    <url>
-         <loc>https://unytics.io/static_bi/docs/data_sources/</loc>
+         <loc>https://unytics.io/static_bi/docs/customization/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
@@ -45,23 +21,27 @@
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/docs/ui_components/</loc>
+         <loc>https://unytics.io/static_bi/docs/stats/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/examples/</loc>
+         <loc>https://unytics.io/static_bi/docs/examples/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/examples/acquisition/</loc>
+         <loc>https://unytics.io/static_bi/docs/examples/acquisition/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/examples/conference_hall/</loc>
+         <loc>https://unytics.io/static_bi/docs/examples/conference_hall/forward_data_conference/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
     <url>
-         <loc>https://unytics.io/static_bi/examples/finops/</loc>
+         <loc>https://unytics.io/static_bi/docs/examples/finops_bigquery/overview/</loc>
+         <lastmod>2025-05-06</lastmod>
+    </url>
+    <url>
+         <loc>https://unytics.io/static_bi/docs/examples/finops_bigquery/storage_costs/</loc>
          <lastmod>2025-05-06</lastmod>
     </url>
 </urlset>

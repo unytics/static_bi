@@ -4,7 +4,7 @@ import {
 import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js';
 
 
-const DEFAULT_COLORS = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+const DEFAULT_COLORS = ['#00bdd6', '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
 const SELECTED_COLOR = '#a90000';
 
 
@@ -200,9 +200,11 @@ class Chart extends ChartElement {
         stack: this.stacked ? 'total' : undefined,
         // barWidth: this.stacked ? '60%' : undefined,
         // barWidth: '90%',
-        itemStyle: clicked_indexes.length ? {
-          color: (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
-        } : {},
+        itemStyle: {
+          color: clicked_indexes.length ? (
+            (param) => clicked_indexes.includes(param.dataIndex) ? SELECTED_COLOR : DEFAULT_COLORS[k]
+          ) : DEFAULT_COLORS[k]
+        },
       })
     );
 

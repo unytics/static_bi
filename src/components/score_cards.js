@@ -9,8 +9,7 @@ import ssf from 'https://cdn.jsdelivr.net/npm/ssf@0.11.2/+esm';
 // https://docs.evidence.dev/core-concepts/formatting
 
 
-
-class ScoreCard extends ChartElement {
+class SimpleValue extends ChartElement {
 
   constructor() {
     super();
@@ -31,6 +30,16 @@ class ScoreCard extends ChartElement {
     const data = await window.db.query2value(query);
     return data;
   }
+
+  generate_html(data) {
+    this.shadowRoot.innerHTML = this.format ? ssf.format(this.format, data) : data;
+  }
+
+}
+
+
+
+class ScoreCard extends SimpleValue {
 
   generate_html(data) {
     const style = `
@@ -66,4 +75,5 @@ class ScoreCard extends ChartElement {
 
 }
 
+customElements.define("simple-value", SimpleValue);
 customElements.define("score-card", ScoreCard);

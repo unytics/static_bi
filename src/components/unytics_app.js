@@ -177,9 +177,11 @@ class UnyticsApp extends HTMLElement {
     }
     const urlParams = new URLSearchParams(window.location.search);
     const location = urlParams.get('location') || 'europe-west1';
-    const dataset = urlParams.get('dataset') || 'nickel/finops';
+    const dataset = urlParams.get('dataset') || this.getAttribute('dataset') || 'nickel.eu/subscriptions';
     for (const table of this.tables) {
+      console.log('STORAGE URL', `gs://data.${location}.unytics.io/${dataset}/${table}.parquet`);
       const download_url = await app.download(`gs://data.${location}.unytics.io/${dataset}/${table}.parquet`);
+      console.log('DOWNLOAD URL', download_url);
       await window.db.create_table(table, download_url, null);
       console.log('EMITTED', `data-loaded:${table}`);
       this.dispatchEvent(new CustomEvent(`data-loaded:${table}`, {bubbles: true, composed: true}));

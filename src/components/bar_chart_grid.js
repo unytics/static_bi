@@ -32,7 +32,7 @@ class BarChartGrid extends ChartElement {
         .container {
           display: grid;
           grid-gap: .4rem;
-          grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
           margin: 1em 0;
         }
 
