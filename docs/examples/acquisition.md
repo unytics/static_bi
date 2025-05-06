@@ -43,9 +43,9 @@ hide:
 <table-description-chart table="subscriptions_grouped"></table-description-chart>
 </div>
 
-<script type="module" src="../../src/components/unytics_app.js"></script>
-<script type="module" src="../../src/connectors/duckdb.js"></script>
-<script type="module" src="../../src/components/echarts.js"></script>
-<script type="module" src="../../src/components/bar_chart_grid.js"></script>
-<script type="module" src="../../src/components/datatable.js"></script>
-<script type="module" src="../../src/components/score_cards.js"></script>
+<script type="module" src="../../../src/components/unytics_app.js"></script>
+<script type="module" src="../../../src/connectors/duckdb.js"></script>
+<script type="module" src="../../../src/components/echarts.js"></script>
+<script type="module" src="../../../src/components/bar_chart_grid.js"></script>
+<script type="module" src="../../../src/components/datatable.js"></script>
+<script type="module" src="../../../src/components/score_cards.js"></script>
