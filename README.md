@@ -16,21 +16,20 @@
 
 ## Static BI?
 
-- **The easiest way to embed interactive dashboards in your website.**
-- **Powered by duckDB-WASM, Echarts and Web Components.**
+Static BI is the easiest way to **embed interactive dashboards in your website** (as far as we know).
 
 
 ## Your first dashboard
 
-No install is needed:
+To create a dashboard, you only need to:
 
-1. Add BI components in a html file,
-2. Open the file in a browser,
-3. Play with your dashboard,
-4. Deploy Anywhere.
+> 1. [Add BI components in a html file](#1-add-bi-components-in-a-html-file)
+> 2. [Open the file in a browser](#2-open-the-file-in-a-browser)
+> 3. [Play with your dashboard](#3-play-with-your-dashboard)
+> 4. [Deploy Anywhere](#4-deploy-anywhere)
 
 
-### 1. Add BI components in a html file
+#### 1. Add BI components in a html file
 
 To follow the evolution of stocks value of some companies over time, create an html file with this content:
 
@@ -61,53 +60,47 @@ To follow the evolution of stocks value of some companies over time, create an h
 <script type="module" src="https://unytics.io/static_bi/src/components/echarts.js"></script>
 ```
 
-### 2. Open the file in a browser
+#### 2. Open the file in a browser
 
 Open the file in Google Chrome (or any browser) and you'll get this simple dashboard:
 
 ![simple_dashboard](docs/assets/simple_dashboard.png)
 
 
-### 3. Play with your dashboard
+#### 3. Play with your dashboard
 
 The dashboard is interactive! Click on `AMZN` bar in the bar chart to filter the data in other charts:
 
 ![simple_dashboard_filtered](docs/assets/simple_dashboard_filtered.png)
 
 
-### 4. Deploy Anywhere
+#### 4. Deploy Anywhere
 
-You can deploy your website anywhere you can deploy static pages such as:
+You can deploy a website with Static BI components anywhere:
 
-- Your own website, web app
-- github pages
-- gitlab pages
-- s3
-- google cloud storage
-- netlify
-- vercel
-- etc
+- in your own website, web app
+- in static websites hosting services: github pages, gitlab pages, s3, google cloud storage, netlify, vercel, etc
 
 
 ## Key Features
 
-*   **Serverless Analytics:** Runs entirely in the browser after loading static assets (HTML, JS, CSS, data files).
-*   **Interactive Filtering:** Click on chart elements (bars, lines, pie slices) to filter the data across other components on the page. Supports multi-select with `Ctrl`/`Cmd` key.
-*   **Declarative UI:** Define data sources and charts using simple custom HTML tags (e.g., `<bar-chart>`, `<score-card>`, `<source-table>`) based on [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components) Javascript Standard.
-*   **In-Browser Data Engine:** Uses [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview) to query and aggregate data (e.g., from Parquet files) directly within the user's browser using familiar SQL.
-*   **Rich Component Library:** Includes:
-    *   `<score-card>`: Display key metrics with formatting.
-    *   `<line-chart>`, `<bar-chart>`, `<pie-chart>`, `<doughnut-chart>`: Various [ECharts](https://echarts.apache.org/) visualizations with options for stacking, grouping, orientation, and breakdowns.
-    *   `<table-chart>`, `<table-description-chart>`, `<tables-list-chart>`: Display raw data, table schemas, or available tables.
-    *   `<bar-chart-grid>`: Automatically generate a grid of bar charts for multiple dimensions.
-*   **Static Data Sources:** Load data directly from static files (like `.parquet`) hosted alongside your site or from external URLs.
-*   **Static Site Generator Friendly:** Designed to integrate seamlessly with static site generators like MkDocs, Jekyll, Hugo, etc.
+1. **Declarative UI**
+    - *Define data sources and charts using simple custom HTML tags (e.g., `<bar-chart>`, `<score-card>`, `<source-table>`).*
+    - *Includes Rich & Customizable Component Library.*
+2. **Interactive Filtering**
+    - *Click on chart elements (bars, lines, pie slices) to filter the data across other components on the page.*
+    - *Supports multi-select with `Ctrl`/`Cmd` key.*
+3. **Serverless Analytics**
+    - *Runs entirely in the browser after loading static assets (HTML, JS, CSS, data files).*
+    - *Can be deployed anywhere*
 
 
-## How it Works
 
 <details markdown>
-  <summary>Static BI under the hood</summary>
+
+<summary>How it works</summary>
+
+Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview){ target="_blank" }, [ECharts](https://echarts.apache.org/){ target="_blank" } and [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components){ target="_blank" }.
 
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file or fetch data from an API) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
@@ -118,15 +111,17 @@ You can deploy your website anywhere you can deploy static pages such as:
 </details>
 
 
+<details markdown>
 
+<summary>Inspiration</summary>
 
+- [Evidence](https://evidence.dev/){ target="_blank" }
+- [Rill Data](https://www.rilldata.com/){ target="_blank" }
+- [Mosaic](https://idl.uw.edu/mosaic/){ target="_blank" }
+- [Lightdash](http://lightdash.com/){ target="_blank" }
 
-## Inspiration
+</details>
 
-- [Evidence](https://evidence.dev/)
-- [Rill Data](https://www.rilldata.com/)
-- [Mosaic](https://idl.uw.edu/mosaic/)
-- [Lightdash](http://lightdash.com/)
 
 
 ## Contribute!
