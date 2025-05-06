@@ -105,7 +105,7 @@ You can deploy a website with Static BI components anywhere:
 
 <summary>How it works</summary>
 
-Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview){ target="_blank" }, [ECharts](https://echarts.apache.org/){ target="_blank" } and [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components){ target="_blank" }.
+Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview), [ECharts](https://echarts.apache.org/) and [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_Components).
 
 1.  **Data Management:** The `<source-table>` components initializes DuckDB-WASM and instruct it to load data (e.g., fetch a Parquet file or fetch data from an API) within the in-browser database.
 2.  **Component Initialization:** Custom elements like `<bar-chart>`, `<score-card>`, etc., are defined in JavaScript modules and used directly in the HTML/Markdown content.
@@ -120,10 +120,10 @@ Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview)
 
 <summary>Inspiration</summary>
 
-- [Evidence](https://evidence.dev/){ target="_blank" }
-- [Rill Data](https://www.rilldata.com/){ target="_blank" }
-- [Mosaic](https://idl.uw.edu/mosaic/){ target="_blank" }
-- [Lightdash](http://lightdash.com/){ target="_blank" }
+- [Evidence](https://evidence.dev/)
+- [Rill Data](https://www.rilldata.com/)
+- [Mosaic](https://idl.uw.edu/mosaic/)
+- [Lightdash](http://lightdash.com/)
 
 </details>
 
@@ -135,9 +135,9 @@ Static BI is Powered by [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview)
 
 Static BI is fully open-source (MIT License). Any contribution is more than welcome 🤗!
 
-- Add a ⭐ on the [repo](https://github.com/unytics/static_bi){ target="_blank" } to show your support
-- [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q){ target="_blank" } and talk with us
-- [Raise an issue](https://github.com/unytics/static_bi/issues/new/choose){ target="_blank" }
+- Add a ⭐ on the [repo](https://github.com/unytics/static_bi) to show your support
+- [Join our Slack](https://join.slack.com/t/unytics/shared_invite/zt-1gbv491mu-cs03EJbQ1fsHdQMcFN7E1Q) and talk with us
+- [Raise an issue](https://github.com/unytics/static_bi/issues/new/choose)
 - Open a Pull-Request!
 
 
