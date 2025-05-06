@@ -352,66 +352,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Bar Chart">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#simple" class="md-nav__link">
-    <span class="md-ellipsis">
-      Simple
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#horizontal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Horizontal
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi-horizontal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi Horizontal
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stacked" class="md-nav__link">
-    <span class="md-ellipsis">
-      Stacked
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stacked-horizontal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Stacked Horizontal
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -420,39 +360,6 @@
       Line Chart
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Line Chart">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#simple_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Simple
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stacked_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Stacked
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -463,39 +370,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Table Chart">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tables-list" class="md-nav__link">
-    <span class="md-ellipsis">
-      Tables List
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#table-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      Table Schema
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#table-chart_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Table Chart
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -504,21 +378,6 @@
       Controls
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Controls">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#date-range" class="md-nav__link">
-    <span class="md-ellipsis">
-      Date Range
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -594,6 +453,28 @@
 
 
 <h1 id="bi-components">BI Components<a class="headerlink" href="#bi-components" title="Permanent link">¶</a></h1>
+<p><input id="email_input"></input>
+<button id="email_input_submit_button">Submit</button></p>
+<script>
+document.getElementById('email_input_submit_button').onclick = async (event) => {
+    alert('hello!');
+    const email = document.getElementById('email_input_submit_button').value;
+    alert(email);
+    const google_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLSe03sAb8y_h4YWTNujH3vFpYFkgAAsGeH8l3kK6wOygIqV08w/viewform?usp=pp_url&entry.1010327462=';
+    const submission_url = google_form_url + email;
+    const response = await fetch(
+        submission_url,
+        {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }
+    );
+    alert('Thanks');
+</script>
+
 <h2 id="source-table">Source Table<a class="headerlink" href="#source-table" title="Permanent link">¶</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">UI</label><label for="__tabbed_1_2">Code</label></div>
 <div class="tabbed-content">

@@ -70,16 +70,27 @@ class DuckDB {
     if (!file_url) {
         console.error('Undefined or null file url');
     }
-    // await this.query(`create table ${name} as select * from "${file_url}"`);
-    const res = await fetch(file_url, { cache: "force-cache" });
-    const buffer = await res.arrayBuffer();
-    const uint8_array = new Uint8Array(buffer);
-    await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
-    await this.query(`
-      create view ${name} as
-      select ${columns ? columns : '*'}
-      from parquet_scan('${name}.parquet')
-    `);
+    if (file_url.endsWith('.parquet')) {
+      // await this.query(`create table ${name} as select * from "${file_url}"`);
+      const res = await fetch(file_url, { cache: "force-cache" });
+      const buffer = await res.arrayBuffer();
+      const uint8_array = new Uint8Array(buffer);
+      await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
+      await this.query(`
+        create view ${name} as
+        select ${columns ? columns : '*'}
+        from parquet_scan('${name}.parquet')
+      `);
+    }
+    else {
+      const resp = await fetch(file_url, { cache: "force-cache" });
+      let res = await resp.json();
+      await this.db.registerFileText(
+        'rows.json',
+        JSON.stringify(Array.isArray(res) ? res : [res]),
+      );
+      await this.conn.insertJSONFromPath('rows.json', { name: name });
+    }
     this.tables[name] = await this.list_columns(`${name}`);
   }
 

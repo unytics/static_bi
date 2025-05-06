@@ -2,62 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://unytics.io/static_bi/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/bi_components/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/one/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/stats/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/core_concepts/bi_components/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/core_concepts/cross_filtering/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/core_concepts/data_sources/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/core_concepts/motivation/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/data_sources/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/deployment/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/integrations/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/ui_components/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/examples/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/examples/acquisition/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
+    </url>
+    <url>
+         <loc>https://unytics.io/static_bi/examples/conference_hall/</loc>
+         <lastmod>2025-05-06</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/examples/finops/</loc>
-         <lastmod>2025-05-05</lastmod>
+         <lastmod>2025-05-06</lastmod>
     </url>
 </urlset>
