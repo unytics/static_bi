@@ -1,5 +1,5 @@
-// import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
-// import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
+import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js/+esm';
+import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js/+esm';
 
 
 
@@ -18,12 +18,15 @@ function humanize(value) {
   if (value instanceof Date) {
     return value.toISOString().replace('T00:00:00.000Z', '');
   }
+  if (typeof value === 'string') {
+    return markdown2html(value);
+  }
   return value;
 }
 
-// function markdown2html(markdown_content) {
-//   return DOMPurify.sanitize(marked.parse(markdown_content));
-// }
+function markdown2html(markdown_content) {
+  return DOMPurify.sanitize(marked.parse(markdown_content));
+}
 
 function filter2string(filter) {
   const [dimension, operator, value] = filter;

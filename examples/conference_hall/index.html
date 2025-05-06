@@ -20,7 +20,7 @@
     
     
       
-        <title>Conference Hall Dashboard - Static BI</title>
+        <title>Conference hall - Static BI</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#conference-hall-dashboard" class="md-skip">
+        <a href="#proposals-analysis" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Conference Hall Dashboard
+              Conference hall
             
           </span>
         </div>
@@ -214,7 +214,9 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -348,32 +350,99 @@
               <article class="md-content__inner md-typeset">
                 
                   
+  
+
 
 
   
   
 
 
-<h1 id="conference-hall-dashboard">Conference Hall Dashboard<a class="headerlink" href="#conference-hall-dashboard" title="Permanent link">¶</a></h1>
+<style>
+.md-grid {
+    max-width: none!important;
+}
+</style>
+
+<h1 id="proposals-analysis">Proposals Analysis<a class="headerlink" href="#proposals-analysis" title="Permanent link">¶</a></h1>
 <p><source-table
-    name="conference"
-    file="https://unytics.io/api_integrations/conference_hall/forward-data/">
+    name="_proposals"
+    file="https://unytics.io/api_integrations/conference_hall/forward-data/"
+    columns="name as conference_name, unnest(proposals) as proposal">
 </source-table></p>
-<h3 id="table-schema">Table Schema<a class="headerlink" href="#table-schema" title="Permanent link">¶</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">UI</label><label for="__tabbed_1_2">Code</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><table-description-chart table="conference"></table-description-chart></p>
+<p><source-view name="proposals" style="display: none">
+    select
+        conference_name,
+        proposal.id,
+        proposal.title,
+        proposal.abstract,
+        (
+            '### ' || proposal.title || chr(10) ||
+            '<strong>by '  || unnest(proposal.speakers).name || ' (' || unnest(proposal.speakers).company || ')</strong>' || chr(10) || chr(10) ||
+            proposal.abstract
+        ) as content,
+        coalesce(proposal.level, 'NA') as level,
+        proposal.references as ref,
+        proposal.deliberationStatus as deliberation_status,
+        proposal.deliberationStatus as status,
+        proposal.confirmationStatus as confirmation_status,
+        proposal.publicationStatus as publication_status,
+        coalesce(unnest(proposal.categories), 'NA') as category,
+        unnest(proposal.tags)::VARCHAR as tag,
+        split_part(coalesce(unnest(proposal.formats), 'NA'), ' — (', 1) as format,
+        coalesce(unnest(proposal.languages), 'NA') as language,
+        unnest(proposal.speakers).name as speaker_name,
+        coalesce(unnest(proposal.speakers).company, 'NA') as speaker_company,
+        coalesce(unnest(proposal.speakers).location, 'NA') as speaker_location,
+        proposal.review.average as review_average,
+    from _proposals
+</source-view></p>
+<div class="grid cards">
+<ul>
+<li>
+<p><score-card
+      title="Nb Proposals"
+      table="proposals"
+      value="count(distinct id)"
+      format='#,##0'>
+    </score-card></p>
+</li>
+<li>
+<p><score-card
+      title="Nb Speakers"
+      table="proposals"
+      value="count(distinct speaker_name)"
+      format='#,##0'>
+    </score-card></p>
+</li>
+<li>
+<p><score-card
+      title="Nb Companies"
+      table="proposals"
+      value="count(distinct speaker_company)"
+      format='#,##0'>
+    </score-card></p>
+</li>
+</ul>
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table-description-chart</span> <span class="na">table</span><span class="o">=</span><span class="s">&quot;conference&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">table-description-chart</span><span class="p">&gt;</span>
-</code></pre></div>
-</div>
-</div>
-</div>
+<p><bar-chart-grid
+    table="proposals"
+    measure="count(distinct id)"
+    by="status, level, category, format, language, speaker_location, speaker_company, speaker_name"
+    limit="10"
+    horizontal>
+</bar-chart-grid></p>
+<h3 id="proposals">Proposals<a class="headerlink" href="#proposals" title="Permanent link">¶</a></h3>
+<p><table-chart
+    table="proposals"
+    by="content"
+    order_by="max(review_average) desc"
+    style="width: 100%; display: block; overflow-x: auto;">
+</table-chart></p>
 <script type="module" src="../../src/connectors/duckdb.js"></script>
 <script type="module" src="../../src/components/source_tables.js"></script>
 <script type="module" src="../../src/components/echarts.js"></script>
+<script type="module" src="../../src/components/bar_chart_grid.js"></script>
 <script type="module" src="../../src/components/datatable.js"></script>
 <script type="module" src="../../src/components/score_cards.js"></script>
 <script type="module" src="../../src/components/date_range_picker.js"></script>
@@ -384,8 +453,13 @@
 
 
 
+  
+  
 
 
+
+
+  
 
 
 

@@ -16,7 +16,8 @@ class TableChart extends ChartElement {
           ${this.measures ? this.measures + ',' : ''}
           ${(!this.by && !this.measures) ? '*' : ''}
         from ${this.table}
-        ${this.measures && this.by ? 'group by ' + this.by : ''}
+        where ${this.where_clause}
+        ${this.by ? 'group by ' + this.by : ''}
         ${this.order_by ? 'order by ' + this.order_by : ''}
         ${this.limit ? 'limit ' + this.limit : ''}
       `;
@@ -28,6 +29,20 @@ class TableChart extends ChartElement {
       const tableHeader = Object.keys(data[0]).map(key => `<th>${key}</th>`).join('');
       const tableRows = data.map(row => `<tr>${Object.values(row).map(value => `<td>${humanize(value)}</td>`).join('')}</tr>`).join('');
       this.shadowRoot.innerHTML = `
+        <style>
+          table {
+            width: 100%; /* Take up the full width of the container */
+            table-layout: fixed; /* Important for consistent word wrapping */
+            border-collapse: collapse; /* Optional: Remove spacing between cells */
+          }
+
+          th, td {
+            border: 1px solid #ddd; /* Optional: Add borders for clarity */
+            padding: 8px;
+            text-align: left;
+            overflow-wrap: break-word;
+          }
+        </style>
         <table>
           <thead><tr>${tableHeader}</tr></thead>
           <tbody>${tableRows}</tbody>
