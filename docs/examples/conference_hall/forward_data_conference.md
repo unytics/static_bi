@@ -72,10 +72,10 @@
 
 
 
-<script type="module" src="../../../src/connectors/duckdb.js"></script>
-<script type="module" src="../../../src/components/source_tables.js"></script>
-<script type="module" src="../../../src/components/echarts.js"></script>
-<script type="module" src="../../../src/components/bar_chart_grid.js"></script>
-<script type="module" src="../../../src/components/datatable.js"></script>
-<script type="module" src="../../../src/components/score_cards.js"></script>
-<script type="module" src="../../../src/components/date_range_picker.js"></script>
+<script type="module" src="../../../../src/connectors/duckdb.js"></script>
+<script type="module" src="../../../../src/components/source_tables.js"></script>
+<script type="module" src="../../../../src/components/echarts.js"></script>
+<script type="module" src="../../../../src/components/bar_chart_grid.js"></script>
+<script type="module" src="../../../../src/components/datatable.js"></script>
+<script type="module" src="../../../../src/components/score_cards.js"></script>
+<script type="module" src="../../../../src/components/date_range_picker.js"></script>

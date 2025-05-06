@@ -10,10 +10,16 @@ site_dir: '../../site'
 nav:
   - Get Started: README.md
   - Examples:
-    - docs/examples/conference_hall.md
+    - Conference-Hall Proposals:
+      - Forward Data Conference: docs/examples/conference_hall/forward_data_conference.md
+    - FinOps BigQuery:
+      - Overview: docs/examples/finops_bigquery/overview.md
+      - Storage Cost: docs/examples/finops_bigquery/storage_costs.md
   - BI Components: docs/bi_components.md
-  - Integrations: docs/integrations.md
-  - Deployment: docs/deployment.md
+  - More:
+    - Integrations: docs/integrations.md
+    - Customization: docs/customization.md
+    - Deployment: docs/deployment.md
 theme:
   name: material
   logo: docs/assets/static_bi_logo_dark.svg
@@ -29,7 +35,7 @@ theme:
     - navigation.instant.progress
 
     # - navigation.path
-    # - navigation.tabs
+    - navigation.tabs
     - navigation.tracking
     - navigation.indexes
     # - navigation.hide

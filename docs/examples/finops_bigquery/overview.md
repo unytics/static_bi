@@ -1,18 +1,10 @@
----
-hide:
-  - navigation
-  - toc
----
+# FinOps BigQuery <unytics-app dataset="nickel/finops" tables="daily_jobs_cost"></unytics-app>
 
 <style>
-.md-grid {
-    max-width: none!important;
+.md-typeset .grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 }
 </style>
-
-
-# BigQuery Finops <unytics-app tables="daily_jobs_cost"></unytics-app>
-
 
 <div class="grid cards" markdown>
 
@@ -87,8 +79,9 @@ hide:
 > More style [here](https://philipwalton.github.io/solved-by-flexbox/)
 
 
-<script type="module" src="../src/components/unytics_app.js"></script>
-<script type="module" src="../src/connectors/duckdb.js"></script>
-<script type="module" src="../src/components/echarts.js"></script>
-<script type="module" src="../src/components/datatable.js"></script>
-<script type="module" src="../src/components/score_cards.js"></script>
+<script type="module" src="../../../../src/components/unytics_app.js"></script>
+<script type="module" src="../../../../src/connectors/duckdb.js"></script>
+<script type="module" src="../../../../src/components/echarts.js"></script>
+<script type="module" src="../../../../src/components/bar_chart_grid.js"></script>
+<script type="module" src="../../../../src/components/datatable.js"></script>
+<script type="module" src="../../../../src/components/score_cards.js"></script>

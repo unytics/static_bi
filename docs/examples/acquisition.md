@@ -11,7 +11,9 @@ hide:
 </style>
 
 
-# FR Acquisition Dashboard <unytics-app tables="subscriptions_grouped"></unytics-app>
+# Acquisition Dashboard <unytics-app tables="subscriptions_grouped"></unytics-app>
+
+> Scope: French Subscriptions
 
 <div class="grid cards" markdown>
 
