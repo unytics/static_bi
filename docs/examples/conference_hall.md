@@ -1,15 +1,10 @@
----
-hide:
-  - navigation
----
+# <strong><simple-value table="proposals" value="conference_name"></simple-value></strong> Conference-Hall Proposals
 
 <style>
-.md-grid {
-    max-width: none!important;
+.md-typeset .grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 }
 </style>
-
-# <strong><simple-value table="proposals" value="conference_name"></simple-value></strong> Conference Proposals
 
 <source-table
     name="_proposals"

@@ -10,7 +10,6 @@ site_dir: '../../site'
 nav:
   - Get Started: README.md
   - Examples:
-    - docs/examples/index.md
     - docs/examples/conference_hall.md
   - BI Components: docs/bi_components.md
   - Integrations: docs/integrations.md
