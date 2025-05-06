@@ -1,71 +1,6 @@
 # BI Components
 
 
-<input id="email_input"></input>
-<button id="email_input_submit_button">Submit</button>
-
-<script>
-document.getElementById('email_input_submit_button').onclick = async (event) => {
-    alert('hello!');
-    const email = document.getElementById('email_input_submit_button').value;
-    alert(email);
-    const google_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLSe03sAb8y_h4YWTNujH3vFpYFkgAAsGeH8l3kK6wOygIqV08w/viewform?usp=pp_url&entry.1010327462=';
-    const submission_url = google_form_url + email;
-    const response = await fetch(
-        submission_url,
-        {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }
-    );
-    alert('Thanks');
-</script>
-
-
-## Source Table
-
-=== "UI"
-    > Source Table component is invisible on the page. The data is downloaded in the background and loaded into a DuckDB table.
-    <source-table
-      name="stocks"
-      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
-      columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
-    </source-table>
-
-=== "Code"
-    ``` html
-    <source-table
-      name="stocks"
-      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
-      columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
-    </source-table>
-    ```
-
-
-
-
-## Score Card
-
-=== "UI"
-    <score-card
-      title="Nb companies"
-      table="stocks"
-      value="count(distinct company)">
-    </score-card>
-
-=== "Code"
-    ``` html
-    <score-card
-      title="Nb companies"
-      table="stocks"
-      value="count(distinct company)">
-    </score-card>
-    ```
-
-
 ## Bar Chart
 
 ### Simple Bar Chart
@@ -291,6 +226,24 @@ document.getElementById('email_input_submit_button').onclick = async (event) => 
     ```
 
 
+## Score Card
+
+=== "UI"
+    <score-card
+      title="Nb companies"
+      table="stocks"
+      value="count(distinct company)">
+    </score-card>
+
+=== "Code"
+    ``` html
+    <score-card
+      title="Nb companies"
+      table="stocks"
+      value="count(distinct company)">
+    </score-card>
+    ```
+
 
 
 ## Table Chart
@@ -341,6 +294,25 @@ document.getElementById('email_input_submit_button').onclick = async (event) => 
     ```
 
 
+## Source Table
+
+=== "UI"
+    > Source Table component is invisible on the page. The data is downloaded in the background and loaded into a DuckDB table.
+    <source-table
+      name="stocks"
+      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
+      columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
+    </source-table>
+
+=== "Code"
+    ``` html
+    <source-table
+      name="stocks"
+      url="https://idl.uw.edu/mosaic/data/stocks.parquet"
+      columns="*, Symbol as company, Close as stock_value, date_trunc('month', Date) as month, strftime(date, '%Y') as year">
+    </source-table>
+    ```
+
 
 
 
@@ -358,6 +330,28 @@ document.getElementById('email_input_submit_button').onclick = async (event) => 
 
 
 
+<input id="email_input"></input>
+<button id="email_input_submit_button">Submit</button>
+
+<script>
+document.getElementById('email_input_submit_button').onclick = async (event) => {
+    alert('hello!');
+    const email = document.getElementById('email_input_submit_button').value;
+    alert(email);
+    const google_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLSe03sAb8y_h4YWTNujH3vFpYFkgAAsGeH8l3kK6wOygIqV08w/viewform?usp=pp_url&entry.1010327462=';
+    const submission_url = google_form_url + email;
+    const response = await fetch(
+        submission_url,
+        {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }
+    );
+    alert('Thanks');
+</script>
 
 
 <script type="module" src="../../src/connectors/duckdb.js"></script>
