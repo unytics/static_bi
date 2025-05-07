@@ -6,12 +6,11 @@ class BarChartGrid extends ChartElement {
       super();
       this.addEventListener('custom-select', (event) => {
         this.breakdown_by = this.breakdown_by === event.detail ? undefined : event.detail;
-        const ids_to_render = ['line-day', 'line-month'];
-        for (const id of ids_to_render) {
-          const elem = this.shadowRoot.getElementById(id);
-          elem.breakdown_by = this.breakdown_by;
+        this.shadowRoot.querySelectorAll('[table]').forEach(elem => {
+          elem.breakdown_by = elem.by !== this.breakdown_by ? this.breakdown_by : undefined;
+          elem.stacked = elem.chart_type === 'bar' && this.breakdown_by ? true : false;
           elem.render();
-        }
+        });
       });
     }
 
@@ -51,30 +50,28 @@ class BarChartGrid extends ChartElement {
       `);
       this.shadowRoot.adoptedStyleSheets.push(sheet);
       this.shadowRoot.innerHTML = (
-        // `
-        // <div class="container">
-        //   <line-chart
-        //     id="line-day"
-        //     table="${this.table}"
-        //     measure="${this.measure}"
-        //     by="date"
-        //     ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
-        //   </line-chart>
-        //   <line-chart
-        //     id="line-month"
-        //     table="${this.table}"
-        //     measure="${this.measure}"
-        //     by="date_trunc('month', date)"
-        //     ${this.breakdown_by ? 'breakdown_by="' + this.breakdown_by + '"' : ''}>
-        //   </line-chart>
-        // </div>
-        // ` +
+        `
+        <div class="container">
+          <line-chart
+            id="line-day"
+            table="${this.table}"
+            measure="${this.measure}"
+            by="date">
+          </line-chart>
+          <line-chart
+            id="line-month"
+            table="${this.table}"
+            measure="${this.measure}"
+            by="date_trunc('month', date)">
+          </line-chart>
+        </div>
+        ` +
         '<div class="container">' +
         dimension_columns.map(column => `
           <bar-chart
             table="${this.table}"
-            by="${column}"
             measure="${this.measure}"
+            by="${column}"
             order_by="${this.getAttribute('order_by') || ''}"
             ${this.limit ? 'limit="' + this.limit + '"' : ''}
             ${this.is_horizontal ? 'horizontal' : ''}
