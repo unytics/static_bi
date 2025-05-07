@@ -13,7 +13,7 @@
 
 ## Static BI?
 
-Static BI = **the easiest way to embed <u>Interactive Dashboards</u> in your website**.
+Static BI is **the easiest way to embed <u>Interactive Dashboards</u> in your website**.
 
 <br>
 
