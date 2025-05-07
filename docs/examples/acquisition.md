@@ -37,6 +37,7 @@ hide:
 <bar-chart-grid
   table="subscriptions_grouped"
   measure="sum(nb)"
+  time_by="date, month"
   limit="15"
   horizontal="true">
 </bar-chart-grid>

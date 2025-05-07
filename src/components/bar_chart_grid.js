@@ -49,38 +49,30 @@ class BarChartGrid extends ChartElement {
 
       `);
       this.shadowRoot.adoptedStyleSheets.push(sheet);
-      this.shadowRoot.innerHTML = (
-        `
-        <div class="container">
-          <line-chart
-            id="line-day"
-            table="${this.table}"
-            measure="${this.measure}"
-            by="date">
-          </line-chart>
-          <line-chart
-            id="line-month"
-            table="${this.table}"
-            measure="${this.measure}"
-            by="date_trunc('month', date)">
-          </line-chart>
-        </div>
-        ` +
-        '<div class="container">' +
-        dimension_columns.map(column => `
-          <bar-chart
-            table="${this.table}"
-            measure="${this.measure}"
-            by="${column}"
-            order_by="${this.getAttribute('order_by') || ''}"
-            ${this.limit ? 'limit="' + this.limit + '"' : ''}
-            ${this.is_horizontal ? 'horizontal' : ''}
-            select_tool="${column}"
-          >
-          </bar-chart>`
-        ).join('') +
-        '</div>'
-      );
+      const metrics_evolutions = this.getAttribute('time_by').split(',').map((by) => `
+        <line-chart
+          id="line-day"
+          table="${this.table}"
+          measure="${this.measure}"
+          by="${by.trim() === 'month' ? "date_trunc('month', date)" : by.trim()}">
+        </line-chart>
+      `).join('');
+      const bar_charts = dimension_columns.map(column => `
+        <bar-chart
+          table="${this.table}"
+          measure="${this.measure}"
+          by="${column}"
+          order_by="${this.getAttribute('order_by') || ''}"
+          ${this.limit ? 'limit="' + this.limit + '"' : ''}
+          ${this.is_horizontal ? 'horizontal' : ''}
+          select_tool="${column}"
+        >
+        </bar-chart>`
+      ).join('');
+      this.shadowRoot.innerHTML = `
+        ${metrics_evolutions ? '<div class="container">' + metrics_evolutions + '</div>': ''}
+        ${bar_charts ? '<div class="container">' + bar_charts + '</div>': ''}
+      `;
     }
 
 }
