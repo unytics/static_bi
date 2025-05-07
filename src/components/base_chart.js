@@ -83,6 +83,7 @@ class ChartElement extends HTMLElement {
     this.breakdown_limit = this.getAttribute('breakdown_limit') || 6;
     this.order_by = this.getAttribute('order_by');
     this.stacked = this.hasAttribute('stacked');
+    this.normalized = this.hasAttribute('normalized');
     this.is_horizontal = this.hasAttribute('horizontal');
     this.select_tool = this.getAttribute('select_tool');
     this.filter = undefined;

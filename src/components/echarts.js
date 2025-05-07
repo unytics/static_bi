@@ -76,32 +76,118 @@ class Chart extends ChartElement {
   async get_data() {
     let query;
     if (this.breakdown_by) {
+      if (this.normalized) {
+        query = `
+          with
+
+          __top_breakdowns__ as (
+            select ${this.breakdown_by} as top_breakdown
+            from ${this.table}
+            where ${this.where_clause}
+            group by 1
+            order by ${this.measure} desc
+            limit ${this.breakdown_limit}
+          ),
+
+          __top_bys__ as (
+            select ${this.by} as top_by
+            from ${this.table}
+            where ${this.where_clause}
+            group by 1
+            order by ${this.order_by}
+            limit ${this.limit}
+          ),
+
+          __groups__ as (
+            select
+              ${this.by} as by,
+              ${this.breakdown_by} as breakdown_by,
+              ${this.measure} as measure,
+              row_number() over () as _row_number,
+            from ${this.table}
+            where ${this.where_clause}
+            group by 1, 2
+            order by ${this.order_by}
+          ),
+
+          __groups_normalized__ as (
+            select
+              by,
+              breakdown_by,
+              measure / (sum(measure) over (partition by by)) as measure,
+              _row_number,
+            from __groups__
+          ),
+
+          __groups_normalized_only_tops__ as (
+            select
+              by,
+              breakdown_by,
+              measure,
+            from __groups_normalized__
+            where
+              breakdown_by in (select top_breakdown from __top_breakdowns__) and
+              by in (select top_by from __top_bys__)
+            order by _row_number
+          )
+
+          pivot __groups_normalized_only_tops__
+          on breakdown_by
+          using any_value(measure)
+        `;
+      }
+      else {
+        query = `
+          with
+
+          __top_breakdowns__ as (
+            select ${this.breakdown_by} as top_breakdown
+            from ${this.table}
+            where ${this.where_clause}
+            group by 1
+            order by ${this.measure} desc
+            ${this.breakdown_limit ? 'limit ' + this.breakdown_limit : ''}
+          ),
+
+          __groups__ as (
+            select
+              ${this.by} as by,
+              ${this.breakdown_by} as breakdown_by,
+              ${this.measure} as measure,
+            from ${this.table}
+            where ${this.where_clause} and ${this.breakdown_by} in (select top_breakdown from __top_breakdowns__)
+            group by 1, 2
+            order by ${this.order_by}
+          )
+
+          pivot __groups__
+          on breakdown_by
+          using any_value(measure)
+        `;
+      }
+    }
+    else if (this.normalized) {
       query = `
+
         with
 
-        __top_groups__ as (
-          select ${this.breakdown_by} as top_group
+        __grouped__ as (
+
+          select
+            ${this.by} as by,
+            ${this.measure} as measure,
           from ${this.table}
           where ${this.where_clause}
           group by 1
-          order by ${this.measure} desc
-          ${this.breakdown_limit ? 'limit ' + this.breakdown_limit : ''}
-        ),
-
-        __groups__ as (
-          select
-            ${this.by} as by,
-            ${this.breakdown_by} as breakdown_by,
-            ${this.measure} as measure,
-          from ${this.table}
-          where ${this.where_clause} and ${this.breakdown_by} in (select top_group from __top_groups__)
-          group by 1, 2
           order by ${this.order_by}
+
         )
 
-        pivot __groups__
-        on breakdown_by
-        using any_value(measure)
+        select
+          by,
+          measure / (sum(measure) over ()) as measure,
+        from __grouped__
+        ${this.limit ? 'limit ' + this.limit : ''}
       `;
     }
     else {
@@ -115,36 +201,7 @@ class Chart extends ChartElement {
         order by ${this.order_by}
         ${this.limit ? 'limit ' + this.limit : ''}
       `;
-    //   if (this.by === 'date') {
-    //     query = `
-    //       with
-
-    //       data as (
-    //         ${query}
-    //       ),
-
-    //       date_boundaries as (
-    //         select
-    //           min(by) as min_date,
-    //           max(by) as max_date,
-    //         from data
-    //       ),
-
-    //       dates as (
-    //         select unnest(generate_series(min_date, max_date, INTERVAL 1 DAY))::date as by
-    //         from date_boundaries
-    //       )
-
-    //       select
-    //         by,
-    //         ifnull(measure, 0) as measure,
-    //       from dates
-    //       left join data using (by)
-    //       order by by
-    //     `;
-    //   }
     }
-
     const data = await window.db.query2columns(query);
     return data;
   }
@@ -281,7 +338,7 @@ class BarChart extends Chart {
     super();
     this.chart_type = 'bar';
     this.order_by = (
-      this.getAttribute('order_by') || (this.is_horizontal ? 'measure desc' : 'by')
+      this.getAttribute('order_by') || (this.is_horizontal ? `${this.measure} desc` : 'by')
     );
   }
 
