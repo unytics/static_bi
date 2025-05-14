@@ -35,7 +35,7 @@
 
 <source-view name="release_notes" style="display: none">
     select
-        * except (entry),
+        * exclude(entry),
         regexp_extract(entry, '>([^<]*)</h3') as type,
     from _release_notes
     where entry != ''
