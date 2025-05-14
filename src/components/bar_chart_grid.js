@@ -49,14 +49,18 @@ class BarChartGrid extends ChartElement {
 
       `);
       this.shadowRoot.adoptedStyleSheets.push(sheet);
-      const metrics_evolutions = this.getAttribute('time_by').split(',').map((by) => `
-        <line-chart
-          id="line-day"
-          table="${this.table}"
-          measure="${this.measure}"
-          by="${by.trim() === 'month' ? "date_trunc('month', date)" : by.trim()}">
-        </line-chart>
-      `).join('');
+      let metrics_evolutions = '';
+      if (this.hasAttribute('time_by')) {
+        metrics_evolutions = this.getAttribute('time_by').split(',').map((by) => `
+          <line-chart
+            id="line-day"
+            table="${this.table}"
+            measure="${this.measure}"
+            by="${by.trim() === 'month' ? "date_trunc('month', date)" : by.trim()}">
+          </line-chart>
+        `).join('');
+      }
+      console.log('METRICS EVOL', metrics_evolutions ? '<div class="container">' + metrics_evolutions + '</div>': '');
       const bar_charts = dimension_columns.map(column => `
         <bar-chart
           table="${this.table}"
@@ -65,6 +69,7 @@ class BarChartGrid extends ChartElement {
           order_by="${this.getAttribute('order_by') || ''}"
           ${this.limit ? 'limit="' + this.limit + '"' : ''}
           ${this.is_horizontal ? 'horizontal' : ''}
+          normalized
           select_tool="${column}"
         >
         </bar-chart>`
