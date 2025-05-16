@@ -1,17 +1,30 @@
 # GitHub Stars
 
+Show the Stars History of any public GitHub repository.
+
+<div style="display: flex">
+    <input id="repo_input" placeholder="unytics/bigfunctions" style="border: 1px #c2f0f0 solid; font-size: 0.8rem; padding: 0.5rem; line-height: 1.6;"></input>
+    <button id="repo_input_submit_button" class="md-button md-button--primary">Get Stars</button>
+</div>
+
+
 <source-table
     name="stars_history"
     records="stars_history">
 </source-table>
 
+<score-card
+    table="stars_history"
+    title="Nb Stars"
+    value="max(nb_stars)">
+</score-card>
+
 <line-chart
     table="stars_history"
     by="date"
-    measure="any_value(count)"
+    measure="nb_stars"
     order_by="date">
 </line-chart>
-<table-description-chart table="stars_history"></table-description-chart>
 
 
 
@@ -125,7 +138,7 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
     starRecordsMap.forEach((v, k) => {
         starRecords.push({
             date: k,
-            count: v
+            nb_stars: v
         })
     })
 
