@@ -10,7 +10,6 @@ class SourceTable extends HTMLElement {
     console.log('SOURCE TABLE CONNETED');
     this.name = this.getAttribute('name');
     this.source_url = this.getAttribute('url');
-    this.source_records = this.getAttribute('records');
     this.columns = this.getAttribute('columns');
     const loaded = await this.load();
     if (!loaded) {
@@ -23,15 +22,15 @@ class SourceTable extends HTMLElement {
   }
 
 
-  async load() {
-    if (window.db === undefined) {
+  async load(force_reload=false) {
+    if (window.db === undefined || (!this.data && !this.source_url)) {
       return false;
     }
-    if (this.source_records) {
-      await window.db.create_table_from_records(this.name, window[this.source_records], this.columns);
+    if (this.data) {
+      await window.db.create_table_from_records(this.name, this.data, this.columns, force_reload);
     }
     else {
-      await window.db.create_table(this.name, this.source_url, this.columns);
+      await window.db.create_table(this.name, this.source_url, this.columns, force_reload);
     }
     console.log('EMITTED', `data-loaded:${this.name}`);
     this.dispatchEvent(new CustomEvent(`data-loaded:${this.name}`, {bubbles: true, composed: true}));

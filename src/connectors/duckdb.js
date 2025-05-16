@@ -71,8 +71,8 @@ class DuckDB {
     console.table(result);
   }
 
-  async create_table_from_records(name, records, columns) {
-    if (name in this.tables) {
+  async create_table_from_records(name, records, columns, force_reload=false) {
+    if (name in this.tables && !force_reload) {
       return;
     }
     console.log('CREATE TABLE ' + name);
@@ -84,15 +84,15 @@ class DuckDB {
       JSON.stringify(records),
     );
     await this.query(`
-      create view ${name} as
+      create or replace view ${name} as
       select ${columns ? columns : '*'}
       from read_json('rows.json', auto_detect=true)
     `);
     this.tables[name] = await this.list_columns(`${name}`);
   }
 
-  async create_table(name, source_url, columns) {
-    if (name in this.tables) {
+  async create_table(name, source_url, columns, force_reload=false) {
+    if (name in this.tables && !force_reload) {
       return;
     }
 
@@ -107,7 +107,7 @@ class DuckDB {
       const uint8_array = new Uint8Array(buffer);
       await this.db.registerFileBuffer(`${name}.parquet`, uint8_array);
       await this.query(`
-        create view ${name} as
+        create or replace view ${name} as
         select ${columns ? columns : '*'}
         from parquet_scan('${name}.parquet')
       `);
@@ -120,7 +120,7 @@ class DuckDB {
         JSON.stringify(Array.isArray(res) ? res : [res]),
       );
       await this.query(`
-        create view ${name} as
+        create or replace view ${name} as
         select ${columns ? columns : '*'}
         from read_json('rows.json', auto_detect=true)
       `);

@@ -3,15 +3,12 @@
 Show the Stars History of any public GitHub repository.
 
 <div style="display: flex">
-    <input id="repo_input" placeholder="unytics/bigfunctions" style="border: 1px #c2f0f0 solid; font-size: 0.8rem; padding: 0.5rem; line-height: 1.6;"></input>
-    <button id="repo_input_submit_button" class="md-button md-button--primary">Get Stars</button>
+    <input id="repo_input" placeholder="unytics/bigfunctions" value="unytics/bigfunctions" style="border: 1px #c2f0f0 solid; font-size: 0.8rem; padding: 0.5rem; line-height: 1.6;"></input>
+    <button id="submit_button" class="md-button md-button--primary">Get Stars</button>
 </div>
 
 
-<source-table
-    name="stars_history"
-    records="stars_history">
-</source-table>
+<source-table name="stars_history"></source-table>
 
 <score-card
     table="stars_history"
@@ -30,7 +27,30 @@ Show the Stars History of any public GitHub repository.
 
 
 <script>
-const DEFAULT_PER_PAGE = 30;
+
+const source_table = document.querySelector("source-table");
+const repo_input = document.getElementById("repo_input");
+const submit_button = document.getElementById("submit_button");
+
+const load_data = async () => {
+    const repo = repo_input.value;
+    if (!repo) {
+        return;
+    }
+    source_table.data = await getRepoStarRecords(repo);
+    await source_table.load(true);
+}
+
+submit_button.onclick = load_data;
+
+load_data();
+
+
+
+// ------------------------------------
+// Load Data Utils
+// Heavily inspired from https://github.com/star-history/star-history/
+// ------------------------------------
 
 function range(from, to) {
     const r = []
@@ -53,6 +73,13 @@ async function getGithubResource(url, token) {
             Authorization: token ? `token ${token}` : ""
         }
     })
+    if (!response.ok) {
+        alert('Error in Loading Data from Github: ' + response.status + ' ' + response.statusText);
+        throw {
+            status: response.status,
+            data: []
+        }
+    }
     const data = await response.json();
     return {
         data,
@@ -61,8 +88,8 @@ async function getGithubResource(url, token) {
     }
 }
 
-async function getRepoStargazers(repo, token, page=1) {
-    return await getGithubResource(`repos/${repo}/stargazers?per_page=${DEFAULT_PER_PAGE}&page=${page}`, token)
+async function getRepoStargazers(repo, token, per_page=30, page=1) {
+    return await getGithubResource(`repos/${repo}/stargazers?per_page=${per_page}&page=${page}`, token)
 }
 
 async function getRepoStargazersCount(repo, token) {
@@ -77,8 +104,8 @@ async function getRepoLogoUrl(repo, token) {
 }
 
 
-async function getRepoStarRecords(repo, token, maxRequestAmount) {
-    const {data, headers, status} = await getRepoStargazers(repo, token)
+async function getRepoStarRecords(repo, token, maxRequestAmount=15, per_page=30) {
+    const {data, headers, status} = await getRepoStargazers(repo, token, per_page)
 
     const headerLink = headers.get("link") || ""
 
@@ -112,7 +139,7 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
 
     const resArray = await Promise.all(
         requestPages.map((page) => {
-            return getRepoStargazers(repo, token, page)
+            return getRepoStargazers(repo, token, per_page, page)
         })
     )
 
@@ -132,7 +159,7 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
         resArray.map(({ data }, index) => {
             if (data.length > 0) {
                 const starRecord = data[0]
-                starRecordsMap.set(getDateString(starRecord.starred_at), DEFAULT_PER_PAGE * (requestPages[index] - 1))
+                starRecordsMap.set(getDateString(starRecord.starred_at), per_page * (requestPages[index] - 1))
             }
         })
     }
@@ -148,17 +175,9 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
             nb_stars: v
         })
     })
-
-    console.log(starRecords);
-    window.stars_history = starRecords;
     return starRecords
 }
 
-
-
-
-
-getRepoStarRecords('unytics/bigfunctions', undefined, 15);
 
 </script>
 
