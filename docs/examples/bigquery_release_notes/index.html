@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://unytics.io/static_bi/docs/examples/acquisition/">
+        <link rel="canonical" href="https://unytics.io/static_bi/docs/examples/bigquery_release_notes/">
       
       
       
@@ -20,7 +20,7 @@
     
     
       
-        <title>Acquisition - Static BI</title>
+        <title>BigQuery Release Notes - Static BI</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#acquisition-dashboard" class="md-skip">
+        <a href="#bigquery-release-notes" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Acquisition
+              BigQuery Release Notes
             
           </span>
         </div>
@@ -287,9 +287,7 @@
           
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -493,57 +491,51 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
 
 
   
   
 
 
-<style>
-.md-grid {
-    max-width: none!important;
-}
-</style>
-
-<h1 id="acquisition-dashboard">Acquisition Dashboard <unytics-app tables="subscriptions_grouped"></unytics-app><a class="headerlink" href="#acquisition-dashboard" title="Permanent link">¶</a></h1>
-<blockquote>
-<p>Scope: French Subscriptions</p>
-</blockquote>
-<div class="grid cards">
-<ul>
-<li>
-<p><score-card
-      title="Nb Subscriptions"
-      table="subscriptions_grouped"
-      value="sum(nb)"
-      format='#,##0'>
-    </score-card></p>
-</li>
-<li>
-<p><score-card
-      title="Nb Subscriptions per month"
-      table="subscriptions_grouped"
-      value="sum(nb) / count(distinct date_trunc('month', date))"
-      format='#,##0'>
-    </score-card></p>
-</li>
-</ul>
-</div>
-<p><bar-chart-grid
-  table="subscriptions_grouped"
-  measure="sum(nb)"
-  time_by="date, month"
-  limit="10"
-  horizontal="true">
-</bar-chart-grid></p>
-<div>
-<table-description-chart table="subscriptions_grouped"></table-description-chart>
-</div>
-
-<script type="module" src="../../../src/components/unytics_app.js"></script>
+<h1 id="bigquery-release-notes">BigQuery Release Notes<a class="headerlink" href="#bigquery-release-notes" title="Permanent link">¶</a></h1>
+<p><source-table
+    name="__release_notes"
+    url="https://xml2json.paul-marcombes.workers.dev/?url=https://cloud.google.com/feeds/bigquery-release-notes.xml"
+    columns='feed, unnest(feed.entry) as entry'>
+</source-table></p>
+<p><simple-value
+    table="release_notes"
+    value="entry">
+</simple-value></p>
+<p><table-chart
+    table="release_notes"
+    by="entry_title, entry_id, entry_date, entry_link, type"
+    limit="10">
+</table-chart></p>
+<p><source-view name="_release_notes" style="display: none">
+    select
+        feed.id as feed_id,
+        feed.title as feed_title,
+        feed.link."@_href" as feed_url,
+        feed.author.name as feed_author,
+        cast(feed.updated as date) as feed_date,
+        entry.title as entry_title,
+        entry.id as entry_id,
+        cast(entry.updated as date) as entry_date,
+        entry.link."@_href" as entry_link,
+        unnest(regexp_split_to_array(entry.content."#text", '&lt;h3')) as entry,
+    from __release_notes
+</source-view></p>
+<p><source-view name="release_notes" style="display: none">
+    select
+        * ,
+        regexp_extract(entry, '([^&lt;]*)&lt;/h3') as type,
+    from _release_notes
+    where entry != ''
+</source-view></p>
+<p><table-description-chart table="release_notes"></table-description-chart></p>
 <script type="module" src="../../../src/connectors/duckdb.js"></script>
+<script type="module" src="../../../src/components/source_tables.js"></script>
 <script type="module" src="../../../src/components/echarts.js"></script>
 <script type="module" src="../../../src/components/bar_chart_grid.js"></script>
 <script type="module" src="../../../src/components/datatable.js"></script>
@@ -555,13 +547,8 @@
 
 
 
-  
-  
 
 
-
-
-  
 
 
 

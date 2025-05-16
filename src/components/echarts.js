@@ -190,7 +190,7 @@ class Chart extends ChartElement {
         ${this.limit ? 'limit ' + this.limit : ''}
       `;
     }
-    else {
+    else if (this.measure.includes('(')) {
       query = `
         select
           ${this.by} as by,
@@ -200,6 +200,15 @@ class Chart extends ChartElement {
         group by 1
         order by ${this.order_by}
         ${this.limit ? 'limit ' + this.limit : ''}
+      `;
+    }
+    else {
+      query = `
+        select
+          ${this.by} as by,
+          ${this.measure} as measure,
+        from ${this.table}
+        where ${this.where_clause}
       `;
     }
     const data = await window.db.query2columns(query);

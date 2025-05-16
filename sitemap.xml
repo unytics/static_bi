@@ -2,46 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://unytics.io/static_bi/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/bi_components/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/customization/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/deployment/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/integrations/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/stats/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/examples/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/examples/acquisition/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
+    </url>
+    <url>
+         <loc>https://unytics.io/static_bi/docs/examples/bigquery_release_notes/</loc>
+         <lastmod>2025-05-16</lastmod>
+    </url>
+    <url>
+         <loc>https://unytics.io/static_bi/docs/examples/github_stars/</loc>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/examples/conference_hall/forward_data_conference/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/examples/finops_bigquery/overview/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
     <url>
          <loc>https://unytics.io/static_bi/docs/examples/finops_bigquery/storage_costs/</loc>
-         <lastmod>2025-05-07</lastmod>
+         <lastmod>2025-05-16</lastmod>
     </url>
 </urlset>
