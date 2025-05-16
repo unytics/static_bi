@@ -122,7 +122,7 @@ function getDateString(t, format = "yyyy/MM/dd hh:mm:ss") {
     return new Date(t).toISOString().substring(0, 10);
 }
 
-async function getGithubResource(url, token) {
+async function getGithubResource(url, token='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') {
     url = `https://api.github.com/${url}`;
 
     const response = await fetch(url, {
