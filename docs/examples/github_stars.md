@@ -29,7 +29,6 @@ Show the Stars History of any public GitHub repository.
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js" integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 const DEFAULT_PER_PAGE = 30;
 
@@ -45,35 +44,43 @@ function getDateString(t, format = "yyyy/MM/dd hh:mm:ss") {
     return new Date(t).toISOString().substring(0, 10);
 }
 
-async function getRepoStargazers(repo, token, page) {
-    let url = `https://api.github.com/repos/${repo}/stargazers?per_page=${DEFAULT_PER_PAGE}`
+async function getGithubResource(url, token) {
+    url = `https://api.github.com/${url}`;
 
-    if (page !== undefined) {
-        url = `${url}&page=${page}`
-    }
-    return axios.get(url, {
+    const response = await fetch(url, {
         headers: {
             Accept: "application/vnd.github.v3.star+json",
             Authorization: token ? `token ${token}` : ""
         }
     })
+    const data = await response.json();
+    return {
+        data,
+        headers: response.headers,
+        status: response.status,
+    }
+}
+
+async function getRepoStargazers(repo, token, page=1) {
+    return await getGithubResource(`repos/${repo}/stargazers?per_page=${DEFAULT_PER_PAGE}&page=${page}`, token)
 }
 
 async function getRepoStargazersCount(repo, token) {
-    const { data } = await axios.get(`https://api.github.com/repos/${repo}`, {
-        headers: {
-            Accept: "application/vnd.github.v3.star+json",
-            Authorization: token ? `token ${token}` : ""
-        }
-    })
-
+    const {data, headers, status} = await getGithubResource(`repos/${repo}`, token)
     return data.stargazers_count
 }
 
-async function getRepoStarRecords(repo, token, maxRequestAmount) {
-    const patchRes = await getRepoStargazers(repo, token)
+async function getRepoLogoUrl(repo, token) {
+    const owner = repo.split("/")[0]
+    const {data, headers, status} = await getGithubResource(`users/${owner}`, token)
+    return data.owner.avatar_url
+}
 
-    const headerLink = patchRes.headers["link"] || ""
+
+async function getRepoStarRecords(repo, token, maxRequestAmount) {
+    const {data, headers, status} = await getRepoStargazers(repo, token)
+
+    const headerLink = headers.get("link") || ""
 
     let pageCount = 1
     const regResult = /next.*&page=(\d*).*last/.exec(headerLink)
@@ -84,9 +91,9 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
         }
     }
 
-    if (pageCount === 1 && patchRes?.data?.length === 0) {
+    if (pageCount === 1 && data?.length === 0) {
         throw {
-            status: patchRes.status,
+            status: status,
             data: []
         }
     }
@@ -147,17 +154,8 @@ async function getRepoStarRecords(repo, token, maxRequestAmount) {
     return starRecords
 }
 
-async function getRepoLogoUrl(repo, token) {
-    const owner = repo.split("/")[0]
-    const { data } = await axios.get(`https://api.github.com/users/${owner}`, {
-        headers: {
-            Accept: "application/vnd.github.v3.star+json",
-            Authorization: token ? `token ${token}` : ""
-        }
-    })
 
-    return data.avatar_url
-}
+
 
 
 getRepoStarRecords('unytics/bigfunctions', undefined, 15);
