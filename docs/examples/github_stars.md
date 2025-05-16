@@ -42,9 +42,13 @@ const load_data = async () => {
 }
 
 submit_button.onclick = load_data;
+repo_input.addEventListener("keyup", ({key}) => {
+    if (key === "Enter") {
+        load_data();
+    }
+});
 
 load_data();
-
 
 
 // ------------------------------------
