@@ -71,10 +71,31 @@ class DuckDB {
     console.table(result);
   }
 
+  async create_table_from_records(name, records, columns) {
+    if (name in this.tables) {
+      return;
+    }
+    console.log('CREATE TABLE ' + name);
+    if (!records) {
+        console.error('Undefined or null records');
+    }
+    await this.db.registerFileText(
+      'rows.json',
+      JSON.stringify(records),
+    );
+    await this.query(`
+      create view ${name} as
+      select ${columns ? columns : '*'}
+      from read_json('rows.json', auto_detect=true)
+    `);
+    this.tables[name] = await this.list_columns(`${name}`);
+  }
+
   async create_table(name, source_url, columns) {
     if (name in this.tables) {
       return;
     }
+
     console.log('CREATE TABLE ' + name);
     if (!source_url) {
         console.error('Undefined or null source_url');
