@@ -81,7 +81,7 @@ Show the Stars History of any public GitHub repository.
 
 
 
-<script>
+<script type="module">
 
 const source_table = document.querySelector("source-table");
 const repo_input = document.getElementById("repo_input");
