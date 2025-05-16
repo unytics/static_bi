@@ -1,4 +1,4 @@
-# <strong><simple-value table="proposals" value="conference_name"></simple-value></strong> Conference-Hall Proposals
+# <strong><simple-value table="proposals" value="conference_name"></simple-value></strong> Conference Proposals
 
 <style>
 .md-typeset .grid {
