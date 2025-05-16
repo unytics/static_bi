@@ -10,6 +10,7 @@ site_dir: '../../site'
 nav:
   - Get Started: README.md
   - Examples:
+    - Google Cloud Release Notes: docs/examples/gcp_release_notes.md
     - GitHub Stars: docs/examples/github_stars.md
     - Conference-Hall Proposals:
       - Forward Data Conference: docs/examples/conference_hall/forward_data_conference.md
