@@ -13,6 +13,10 @@
         <link rel="canonical" href="https://unytics.io/static_bi/docs/examples/github_stars/">
       
       
+        <link rel="prev" href="../../..">
+      
+      
+        <link rel="next" href="../conference_hall/forward_data_conference/">
       
       
       <link rel="icon" href="/assets/favicon.ico">
@@ -201,18 +205,13 @@
   
   
   
-  
     
-    
-      
-  
-  
   
   
     
     
-      <li class="md-tabs__item">
-        <a href="../conference_hall/forward_data_conference/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -222,9 +221,6 @@
 
         </a>
       </li>
-    
-  
-
     
   
 
@@ -348,6 +344,146 @@
       
   
   
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Stars
+    
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../conference_hall/forward_data_conference/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    Conference-Hall Proposals
+    
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
   
   
     
@@ -375,16 +511,12 @@
   
   
   
-    
-  
-  
-  
-    <a href="../conference_hall/forward_data_conference/" class="md-nav__link">
+    <a href="../finops_bigquery/overview/" class="md-nav__link">
       
   
   
   <span class="md-ellipsis">
-    Examples
+    FinOps BigQuery
     
   </span>
   
@@ -395,8 +527,14 @@
     </a>
   
 
+      
+    </li>
   
 
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -516,6 +654,57 @@
     measure="nb_stars"
     order_by="date">
 </line-chart></p>
+<blockquote>
+<p>This example fetches data from GitHub API using javascript and then call <code>source_table.load</code> to load the data into the component.</p>
+</blockquote>
+<details class="info">
+<summary>See the code</summary>
+<div class="highlight"><pre><span></span><code># GitHub Stars
+
+Show the Stars History of any public GitHub repository.
+
+<span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;repo_input&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">input</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;submit_button&quot;</span><span class="p">&gt;</span>Get Stars<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+
+<span class="p">&lt;</span><span class="nt">source-table</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;stars_history&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">source-table</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">score-card</span>
+    <span class="na">table</span><span class="o">=</span><span class="s">&quot;stars_history&quot;</span>
+    <span class="na">title</span><span class="o">=</span><span class="s">&quot;Nb Stars&quot;</span>
+    <span class="na">value</span><span class="o">=</span><span class="s">&quot;max(nb_stars)&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">score-card</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">line-chart</span>
+    <span class="na">table</span><span class="o">=</span><span class="s">&quot;stars_history&quot;</span>
+    <span class="na">by</span><span class="o">=</span><span class="s">&quot;date&quot;</span>
+    <span class="na">measure</span><span class="o">=</span><span class="s">&quot;nb_stars&quot;</span>
+    <span class="na">order_by</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">line-chart</span><span class="p">&gt;</span>
+
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">source_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;source-table&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">repo_input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;repo_input&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">load_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">repo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">repo_input</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+<span class="w">        </span><span class="nx">source_table</span><span class="p">.</span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">getRepoStarRecords</span><span class="p">(</span><span class="nx">repo</span><span class="p">);</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">source_table</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">submit_button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;submit_button&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">submit_button</span><span class="p">.</span><span class="nx">onclick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">load_data</span><span class="p">;</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;../../../src/connectors/duckdb.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;../../../src/components/source_tables.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;../../../src/components/score_cards.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;../../../src/components/echarts.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
 <script>
 
 const source_table = document.querySelector("source-table");
@@ -677,10 +866,10 @@ async function getRepoStarRecords(repo, token, maxRequestAmount=15, per_page=30)
 
 <script type="module" src="../../../src/connectors/duckdb.js"></script>
 <script type="module" src="../../../src/components/source_tables.js"></script>
+<script type="module" src="../../../src/components/score_cards.js"></script>
 <script type="module" src="../../../src/components/echarts.js"></script>
 <script type="module" src="../../../src/components/bar_chart_grid.js"></script>
 <script type="module" src="../../../src/components/datatable.js"></script>
-<script type="module" src="../../../src/components/score_cards.js"></script>
 
 
 
