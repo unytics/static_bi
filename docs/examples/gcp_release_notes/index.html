@@ -681,7 +681,7 @@
 <span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">published_at</span>
 </code></pre></div>
 <p>2/ The query runs everyday with a scheduled query.</p>
-<p>3/ You can reproduce this page by simply copy-pasting the following elements in a html page:</p>
+<p>3/ You can reproduce this page by simply copy-pasting the following elements in a html page and opening it in a browser:</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">source-table</span>
     <span class="na">name</span><span class="o">=</span><span class="s">&quot;release_notes&quot;</span>
     <span class="na">url</span><span class="o">=</span><span class="s">&quot;https://storage.googleapis.com/public.unytics.io/gcp_release_notes/gcp_release_notes_000000000000.parquet&quot;</span><span class="p">&gt;</span>
@@ -716,7 +716,15 @@
     name="release_notes"
     url="https://storage.googleapis.com/public.unytics.io/bigquery/release_notes/2025-06-16_gcp_release_notes_000000000000.parquet">
 </source-table></p>
+<p><strong>Google Cloud Product Releases</strong></p>
+<blockquote>
+<ul>
+<li>We see that the number of release by months is increasing.</li>
+<li>When we filter on <code>FEATURE</code> release type (by clicking on <code>FEATURE</code> bar in bar chart) we see that most features are released for BigQuery</li>
+</ul>
+</blockquote>
 <p><bar-chart-grid
+    title="Number of Google Cloud Product Releases over time"
     table="release_notes"
     measure="count(*)"
     by="release_note_type, product_name"
